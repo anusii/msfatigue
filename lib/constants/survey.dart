@@ -44,3 +44,14 @@ List<String> questions = [
   "43. Because of my fatigue, I am having difficulty fulfilling my family/household responsibilities.",
   "44. Because of my fatigue, I find it hard to travel."
 ];
+
+/// List of answers for the general surveys.
+
+const List<String> subSurveyAnswers = [
+  "1. Strongly disagree",
+  "2. Disagree",
+  "3. Neither agree nor disagree",
+  "4. Agree",
+  "5. Strongly agree",
+  "6. Not applicable"
+];
