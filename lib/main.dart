@@ -1,6 +1,6 @@
 /// A Survey App for MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2024-08-16 11:30:31 +1000 Graham Williams>
+// Time-stamp: <Friday 2024-08-16 12:34:33 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -67,11 +67,11 @@ class MSFatigue extends StatelessWidget {
     return const MaterialApp(
       title: 'MS Fatigue',
       home: SolidLogin(
-        title: 'MANAGE YOUR POD',
-        image: AssetImage('assets/images/json.png'),
-        logo: AssetImage('assets/images/rtx.png'),
-        link: 'https://pub.dev/packages/solidpod',
-        webID: 'https://solid.empwr.au',
+        title: 'Survey to Pod',
+        image: AssetImage('assets/images/image.png'),
+        logo: AssetImage('assets/images/logo.png'),
+        link: 'https://solidcommunity.au',
+        webID: 'https://pods.solidcommunity.au',
         required: false,
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,
