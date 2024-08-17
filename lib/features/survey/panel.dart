@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/utils/load_survey_data.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
@@ -35,11 +36,8 @@ class _SurveyPanelState extends State<SurveyPanel> {
 
   // Load the survey data using the utils function.
   Future<void> _initializeSurveyData() async {
-    final loadedQuestions =
-        (await loadSurveyData('assets/markdown/fatigue_questionnaire.md'))
-            .first;
-    final loadedAnswers =
-        (await loadSurveyData('assets/markdown/fatigue_questionnaire.md')).last;
+    final loadedQuestions = (await loadSurveyData(surveyFilePath)).first;
+    final loadedAnswers = (await loadSurveyData(surveyFilePath)).last;
 
     setState(() {
       questions = loadedQuestions;
