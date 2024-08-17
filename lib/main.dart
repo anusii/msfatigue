@@ -66,6 +66,7 @@ class MSFatigue extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'MS Fatigue',
+      debugShowCheckedModeBanner: false,
       home: SolidLogin(
         title: 'Survey to Pod',
         image: AssetImage('assets/images/image.png'),

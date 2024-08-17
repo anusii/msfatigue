@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart';
+
 import 'package:msfatigue/features/history/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
+import 'package:msfatigue/main.dart';
 
 // Define the [NavigationRail] tabs for the home page.
 
@@ -27,7 +30,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-
   late TabController _tabController;
   @override
   void initState() {
@@ -44,12 +46,16 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.logout_sharp,
+              color: Colors.deepPurple,
+            ),
+            tooltip: 'Logout of your MS Fatigue Survey.',
+            onPressed: () async => logoutPopup(context, const MSFatigue()),
+          ),
+        ],
       ),
       body: Row(
         children: [
