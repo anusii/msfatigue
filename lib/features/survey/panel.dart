@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:msfatigue/constants/layout.dart';
-import 'package:msfatigue/constants/survey.dart';
+import 'package:msfatigue/utils/load_survey_data.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
 
@@ -13,10 +13,9 @@ class SurveyPanel extends StatefulWidget {
 }
 
 class _SurveyPanelState extends State<SurveyPanel> {
-  // The list of selected options for the survey. The initial value for each
-  // question is null.
-
-  List<int?> qChosenList = List.filled(questions.length, null);
+  List<String> questions = [];
+  List<String> surveyAnswers = [];
+  List<int?> qChosenList = [];
 
   // Update the list of selected options for the survey, with [index] specifying
   // the question being answered and [value] the selected option for the
@@ -25,6 +24,28 @@ class _SurveyPanelState extends State<SurveyPanel> {
   void onChanged(int index, int? value) {
     setState(() {
       qChosenList[index] = value;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeSurveyData();
+  }
+
+  // Load the survey data using the utils function.
+  Future<void> _initializeSurveyData() async {
+    final loadedQuestions =
+        (await loadSurveyData('assets/markdown/fatigue_questionnaire.md'))
+            .first;
+    final loadedAnswers =
+        (await loadSurveyData('assets/markdown/fatigue_questionnaire.md')).last;
+
+    setState(() {
+      questions = loadedQuestions;
+      surveyAnswers = loadedAnswers;
+      qChosenList = List.filled(questions.length,
+          null); // Initialize qChosenList based on questions length.
     });
   }
 
@@ -48,7 +69,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
                       children: [
                         RadioQuestion(
                           questions[index],
-                          subSurveyAnswers,
+                          surveyAnswers,
                           qChosenList[index],
                           (val) => onChanged(index, val),
                         ),
