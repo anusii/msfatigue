@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/constants/colors.dart';
-import 'package:msfatigue/features/history/panel.dart';
+import 'package:msfatigue/features/review/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
 import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/dialog/show_about.dart';
@@ -17,9 +17,9 @@ final List<Map<String, dynamic>> homeTabs = [
     'widget': const SurveyPanel(),
   },
   {
-    'title': 'History',
+    'title': 'Review',
     'icon': Icons.history,
-    'widget': const HistoryPanel(),
+    'widget': const ReviewPanel(),
   },
 ];
 
