@@ -77,7 +77,7 @@ class MSFatigue extends StatelessWidget {
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,
           tooltip: 'You need to connect to your Solid Pod\n'
-              'to save your saurvey results.',
+              'to save your survey results.',
         ),
         child: HomeScreen(),
       ),
