@@ -10,13 +10,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cupertino_icons: ^1.0.6
+  flutter_markdown: ^0.7.3+1
+  rename_app: ^1.6.1
   solidpod:
     git:
       url: https://github.com/anusii/solidpod
       ref: dev
-
-  cupertino_icons: ^1.0.6
-  rename_app: ^1.6.1
   window_manager: ^0.3.9
   universal_io: ^2.2.2
 

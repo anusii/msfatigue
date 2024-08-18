@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:msfatigue/constants/colors.dart';
 import 'package:msfatigue/features/history/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
 import 'package:msfatigue/main.dart';
+import 'package:msfatigue/widgets/dialog/show_about.dart';
 
 // Define the [NavigationRail] tabs for the home page.
 
@@ -50,10 +52,18 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: const Icon(
               Icons.logout_sharp,
-              color: Colors.deepPurple,
+              color: iconColor,
             ),
             tooltip: 'Logout of your MS Fatigue Survey.',
             onPressed: () async => logoutPopup(context, const MSFatigue()),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.info,
+              color: iconColor,
+            ),
+            tooltip: 'Popup the app About dialog.',
+            onPressed: () async => showAbout(context),
           ),
         ],
       ),
