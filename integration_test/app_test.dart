@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:msfatigue/features/review/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
 import 'package:msfatigue/main.dart';
-import 'package:msfatigue/screens/home.dart';
+import 'package:msfatigue/home.dart';
 
 void main() {
   group('Login Page Integration Test', () {

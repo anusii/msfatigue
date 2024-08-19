@@ -26,7 +26,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:msfatigue/screens/home.dart';
+import 'package:msfatigue/home.dart';
 import 'package:msfatigue/utils/is_desktop.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
