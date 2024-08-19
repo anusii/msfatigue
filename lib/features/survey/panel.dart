@@ -4,6 +4,7 @@ import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/utils/load_survey_data.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
+import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
 
 class SurveyPanel extends StatefulWidget {
@@ -81,7 +82,13 @@ class _SurveyPanelState extends State<SurveyPanel> {
             SubmitButton(
               buttonStr: 'Submit',
               onPressed: () {
-                print('');
+                // Check if all items in qChosenList are null.
+                if (qChosenList.every((element) => element == null)) {
+                  showWarning(context);
+                } else {
+                  // Proceed with the submission logic (e.g., save results or navigate)
+                  print('Proceeding with submission...');
+                }
               },
             ),
           ],

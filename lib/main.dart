@@ -72,8 +72,7 @@ class MSFatigue extends StatelessWidget {
         image: AssetImage('assets/images/image.png'),
         logo: AssetImage('assets/images/logo.png'),
         link: 'https://solidcommunity.au',
-        webID: 'https://pods.solidcommunity.au',
-        required: false,
+        webID: 'https://pods.dev.solidcommunity.au',
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,
           tooltip: 'You need to connect to your Solid Pod\n'
