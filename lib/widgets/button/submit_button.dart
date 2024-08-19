@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/constants/colors.dart';
+
 class SubmitButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String buttonStr;
@@ -21,7 +23,8 @@ class _SubmitButtonState extends State<SubmitButton> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey,
+          backgroundColor: iconColor,
+          foregroundColor: textColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -31,7 +34,6 @@ class _SubmitButtonState extends State<SubmitButton> {
         },
         child: Text(
           widget.buttonStr,
-          style: const TextStyle(color: Colors.black),
         ),
       ),
     );

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/layout.dart';
+import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/load_survey_data.dart';
+import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
@@ -48,18 +50,18 @@ class _SurveyPanelState extends State<SurveyPanel> {
     });
   }
 
-  // Create a mapping of questions to answers.
-  Map<String, String> _buildDataMap() {
-    Map<String, String> dataMap = {};
+  // Create a mapping of questions to answers using records.
+  List<({String key, dynamic value})> _buildDataRecords() {
+    List<({String key, dynamic value})> dataRecords = [];
 
     for (int i = 0; i < questions.length; i++) {
       if (qChosenList[i] != null) {
-        dataMap[questions[i]] = surveyAnswers[
-            qChosenList[i]! - 1]; 
+        dataRecords.add(
+            (key: questions[i], value: surveyAnswers[qChosenList[i]! - 1]));
       }
     }
 
-    return dataMap;
+    return dataRecords;
   }
 
   @override
@@ -95,16 +97,18 @@ class _SurveyPanelState extends State<SurveyPanel> {
             ),
             SubmitButton(
               buttonStr: 'Submit',
-              onPressed: () {
+              onPressed: () async {
                 // Check if all items in qChosenList are null.
                 if (qChosenList.every((element) => element == null)) {
-                  showWarning(context);
+                  showWarning('Incomplete Submission',
+                      'Please answer at least one question.', context);
                 } else {
                   // Build the data map of questions and selected answers.
-                  Map<String, String> dataMap = _buildDataMap();
+                  List<({String key, dynamic value})> dataRecords =
+                      _buildDataRecords();
+                  String fileName = createSurveyFilename();
 
-                  // Proceed with the submission logic.
-                  print('Submitting data: $dataMap');
+                  await saveToPod(dataRecords, fileName, context);
                 }
               },
             ),
