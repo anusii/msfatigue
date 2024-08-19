@@ -48,6 +48,20 @@ class _SurveyPanelState extends State<SurveyPanel> {
     });
   }
 
+  // Create a mapping of questions to answers.
+  Map<String, String> _buildDataMap() {
+    Map<String, String> dataMap = {};
+
+    for (int i = 0; i < questions.length; i++) {
+      if (qChosenList[i] != null) {
+        dataMap[questions[i]] = surveyAnswers[
+            qChosenList[i]! - 1]; 
+      }
+    }
+
+    return dataMap;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -86,8 +100,11 @@ class _SurveyPanelState extends State<SurveyPanel> {
                 if (qChosenList.every((element) => element == null)) {
                   showWarning(context);
                 } else {
-                  // Proceed with the submission logic (e.g., save results or navigate)
-                  print('Proceeding with submission...');
+                  // Build the data map of questions and selected answers.
+                  Map<String, String> dataMap = _buildDataMap();
+
+                  // Proceed with the submission logic.
+                  print('Submitting data: $dataMap');
                 }
               },
             ),
