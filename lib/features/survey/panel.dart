@@ -10,7 +10,8 @@ import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
 
 class SurveyPanel extends StatefulWidget {
-  const SurveyPanel({super.key});
+  final String? webId;
+  const SurveyPanel({required this.webId, super.key});
 
   @override
   State<SurveyPanel> createState() => _SurveyPanelState();
@@ -97,6 +98,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
             ),
             SubmitButton(
               buttonStr: 'Submit',
+              webId: widget.webId,
               onPressed: () async {
                 // Check if all items in qChosenList are null.
                 if (qChosenList.every((element) => element == null)) {

@@ -2,26 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/colors.dart';
 import 'package:msfatigue/features/review/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
 import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/dialog/show_about.dart';
-
-// Define the [NavigationRail] tabs for the home page.
-
-final List<Map<String, dynamic>> homeTabs = [
-  {
-    'title': 'Survey',
-    'icon': Icons.question_answer_rounded,
-    'widget': const SurveyPanel(),
-  },
-  {
-    'title': 'Review',
-    'icon': Icons.history,
-    'widget': const ReviewPanel(),
-  },
-];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,18 +19,40 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String? webId;
   @override
   void initState() {
     super.initState();
 
+    // Load the webId after the first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      webId = await getWebId();
+    });
+
     // Create the [tabController] to manage what happens on leaving/entering
     // tabs.
 
-    _tabController = TabController(length: homeTabs.length, vsync: this);
+    _tabController = TabController(length: numberTabs, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Define the [NavigationRail] tabs for the home page.
+
+    final List<Map<String, dynamic>> homeTabs = [
+      {
+        'title': 'Survey',
+        'icon': Icons.question_answer_rounded,
+        'widget': SurveyPanel(
+          webId: webId,
+        ),
+      },
+      {
+        'title': 'Review',
+        'icon': Icons.history,
+        'widget': const ReviewPanel(),
+      },
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),

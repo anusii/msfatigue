@@ -14,3 +14,6 @@ const String suffixWebID = 'profile/card#me';
 /// Location of the stored survey data in solid.
 
 const solidSurveyDataLoc = 'msfatigue/data';
+
+/// Number of tabs in homepage.
+const numberTabs = 2;
