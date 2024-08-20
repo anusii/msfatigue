@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:msfatigue/constants/layout.dart';
+import 'package:msfatigue/features/review/display.dart';
 import 'package:msfatigue/utils/solid_survey_data.dart';
-import 'package:msfatigue/widgets/title/title.dart';
 
 class ReviewPanel extends StatefulWidget {
   const ReviewPanel({super.key});
@@ -43,35 +42,9 @@ class _ReviewPanelState extends State<ReviewPanel> {
         } else if (snapshot.hasData) {
           var files = snapshot.data!.files;
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                pageTitle('Files'),
-                verticalMediumSpace(),
-                if (files.isEmpty)
-                  const Text('No files available.')
-                else
-                  ...files.map((file) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.insert_drive_file),
-                          const SizedBox(width: 8),
-                          Text(
-                            file,
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-              ],
-            ),
+          return ViewDisplay(
+            title: 'Files',
+            files: files,
           );
         } else {
           // Handle the case where no data is available.
