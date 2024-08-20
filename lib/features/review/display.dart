@@ -5,11 +5,9 @@ import 'package:msfatigue/widgets/file/file_row.dart';
 import 'package:msfatigue/widgets/title/title.dart';
 
 class ViewDisplay extends StatefulWidget {
-  final String title;
   final List<String> files;
 
   const ViewDisplay({
-    required this.title,
     required this.files,
     super.key,
   });
@@ -26,7 +24,7 @@ class _ViewDisplayState extends State<ViewDisplay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          pageTitle(widget.title),
+          pageTitle('Files'),
           verticalMediumSpace(),
           if (widget.files.isEmpty)
             const Text('No files available.')

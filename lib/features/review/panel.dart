@@ -43,7 +43,6 @@ class _ReviewPanelState extends State<ReviewPanel> {
           var files = snapshot.data!.files;
 
           return ViewDisplay(
-            title: 'Files',
             files: files,
           );
         } else {
