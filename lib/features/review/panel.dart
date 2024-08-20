@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/utils/solid_survey_data.dart';
+import 'package:msfatigue/widgets/title/title.dart';
 
 class ReviewPanel extends StatefulWidget {
   const ReviewPanel({super.key});
@@ -46,14 +48,8 @@ class _ReviewPanelState extends State<ReviewPanel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Files',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
+                pageTitle('Files'),
+                verticalMediumSpace(),
                 if (files.isEmpty)
                   const Text('No files available.')
                 else

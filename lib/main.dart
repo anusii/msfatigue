@@ -78,6 +78,7 @@ class MSFatigue extends StatelessWidget {
           tooltip: 'You need to connect to your Solid Pod\n'
               'to save your survey results.',
         ),
+        required: false,
         child: HomeScreen(),
       ),
     );

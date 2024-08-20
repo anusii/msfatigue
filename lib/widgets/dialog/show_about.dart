@@ -26,7 +26,7 @@ Future<void> showAbout(BuildContext context, {String? webId}) async {
 
           child: Column(
             children: [
-              verticalMediumSpace(context),
+              verticalMediumSpace(),
               const MarkdownBody(
                 selectable: true,
                 data: '''

@@ -56,8 +56,8 @@ class _SurveyPanelState extends State<SurveyPanel> {
 
     for (int i = 0; i < questions.length; i++) {
       if (qChosenList[i] != null) {
-        dataRecords.add(
-            (key: questions[i], value: surveyAnswers[qChosenList[i]!]));
+        dataRecords
+            .add((key: questions[i], value: surveyAnswers[qChosenList[i]!]));
       }
     }
 
@@ -88,7 +88,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
                           qChosenList[index],
                           (val) => onChanged(index, val),
                         ),
-                        verticalMediumSpace(context),
+                        verticalMediumSpace(),
                       ],
                     ),
                   ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/constants/style.dart';
+
 /// A Text Widget of [content] used as the content of body.
 /// The text is bold.
 
@@ -9,6 +11,16 @@ Text contentBoldString(String content) {
         fontSize: 17,
         fontWeight: FontWeight.bold,
       ));
+}
+
+/// A Text Widget of [content] used as the title of page.
+/// The text is bold.
+
+Text pageTitle(String content) {
+  return Text(
+    content,
+    style: titleStyle,
+  );
 }
 
 /// A left aligned row with a bold string that wraps.
