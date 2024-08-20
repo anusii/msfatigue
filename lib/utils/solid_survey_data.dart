@@ -1,7 +1,7 @@
 import 'package:msfatigue/constants/app.dart';
 import 'package:solidpod/solidpod.dart';
 
-Future<({List<String> files, List<String> subDirs})> loadSurveyRecords() async {
+Future<({List<String> files, List<String> subDirs})> solidSurveyData() async {
   String? webId = await getWebId();
 
   if (webId != null) {

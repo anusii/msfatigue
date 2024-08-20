@@ -18,7 +18,7 @@ class _ReviewPanelState extends State<ReviewPanel> {
 
     // Load the survey records after the first frame.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var loadedRecords = await loadSurveyRecords();
+      var loadedRecords = await solidSurveyData();
 
       // Update the state with loaded records.
       setState(() {
