@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/utils/solid_survey_data.dart';
+
 class ReviewPanel extends StatefulWidget {
   const ReviewPanel({super.key});
 
@@ -8,10 +10,78 @@ class ReviewPanel extends StatefulWidget {
 }
 
 class _ReviewPanelState extends State<ReviewPanel> {
+  Future<({List<String> files, List<String> subDirs})>? surveyRecords;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Load the survey records after the first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var loadedRecords = await loadSurveyRecords();
+
+      // Update the state with loaded records.
+      setState(() {
+        surveyRecords = Future.value(loadedRecords);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Review'),
+    return FutureBuilder<({List<String> files, List<String> subDirs})>(
+      future: surveyRecords,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Display loading spinner while data is loading.
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Handle any errors.
+          return const Center(child: Text('Error loading data'));
+        } else if (snapshot.hasData) {
+          var files = snapshot.data!.files;
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Files',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (files.isEmpty)
+                  const Text('No files available.')
+                else
+                  ...files.map((file) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.insert_drive_file),
+                          const SizedBox(width: 8),
+                          Text(
+                            file,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+              ],
+            ),
+          );
+        } else {
+          // Handle the case where no data is available.
+          return const Center(child: Text('No data available'));
+        }
+      },
     );
   }
 }

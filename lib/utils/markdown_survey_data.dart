@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 // Utility function to load and parse the survey data from a markdown file.
-Future<List<List<String>>> loadSurveyData(String filePath) async {
+Future<List<List<String>>> markDownSurveyData(String filePath) async {
   final contents = await rootBundle.loadString(filePath);
 
   return [
