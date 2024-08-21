@@ -92,3 +92,40 @@ Future<List<({String key, dynamic value})>> parseTTLStr(String ttlStr) async {
   }
   return pairs;
 }
+
+/// Parses RDF Turtle content to extract survey questions and their corresponding
+/// answers from the triples in the RDF graph.
+
+Future<Map<String, String>> listSurveyQuestions(
+    String content) async {
+  final g = Graph();
+
+  // Parse the Turtle content.
+  g.parseTurtle(content);
+
+  // Initialize the map to hold the questions and answers.
+  final Map<String, String> surveyMap = {};
+
+  // Iterate through the triples in the graph.
+  for (Triple t in g.triples) {
+    String object = t.obj.value;
+
+    // Remove ^^xsd:string and the surrounding quotes.
+    String cleanedObject = object.replaceAll('^^xsd:string', '').trim();
+    cleanedObject = cleanedObject.replaceAll('"', '');
+
+    // The format is {question} {answer}.
+    // Split the string into question and answer based on "} {".
+    final questionAnswerPair = cleanedObject.split('} {');
+
+    if (questionAnswerPair.length == 2) {
+      String question =
+          questionAnswerPair[0].replaceAll('{', '').trim(); // Remove leading {
+      String answer =
+          questionAnswerPair[1].replaceAll('}', '').trim(); // Remove trailing }
+      surveyMap[question] = answer;
+    }
+  }
+
+  return surveyMap;
+}

@@ -57,8 +57,10 @@ class _SurveyPanelState extends State<SurveyPanel> {
 
     for (int i = 0; i < questions.length; i++) {
       if (qChosenList[i] != null) {
-        dataRecords
-            .add((key: questions[i], value: surveyAnswers[qChosenList[i]!]));
+        dataRecords.add((
+          key: i.toString(),
+          value: '{${questions[i]}} {${surveyAnswers[qChosenList[i]!]}}'
+        ));
       }
     }
 
