@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart';
+
 import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/utils/create_survey.dart';
@@ -10,8 +12,7 @@ import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
 
 class SurveyPanel extends StatefulWidget {
-  final String? webId;
-  const SurveyPanel({required this.webId, super.key});
+  const SurveyPanel({super.key});
 
   @override
   State<SurveyPanel> createState() => _SurveyPanelState();
@@ -21,6 +22,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   List<String> questions = [];
   List<String> surveyAnswers = [];
   List<int?> qChosenList = [];
+  String? webId;
 
   // Update the list of selected options for the survey, with [index] specifying
   // the question being answered and [value] the selected option for the
@@ -35,6 +37,11 @@ class _SurveyPanelState extends State<SurveyPanel> {
   @override
   void initState() {
     super.initState();
+    // Load the webId after the first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      webId = await getWebId();
+    });
+
     _initializeSurveyData();
   }
 
@@ -100,7 +107,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
             ),
             SubmitButton(
               buttonStr: 'Submit',
-              webId: widget.webId,
+              webId: webId,
               onPressed: () async {
                 // Check if all items in qChosenList are null.
                 if (qChosenList.every((element) => element == null)) {

@@ -19,15 +19,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  String? webId;
   @override
   void initState() {
     super.initState();
-
-    // Load the webId after the first frame.
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      webId = await getWebId();
-    });
 
     // Create the [tabController] to manage what happens on leaving/entering
     // tabs.
@@ -43,9 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
       {
         'title': 'Survey',
         'icon': Icons.question_answer_rounded,
-        'widget': SurveyPanel(
-          webId: webId,
-        ),
+        'widget': const SurveyPanel(),
       },
       {
         'title': 'Review',
