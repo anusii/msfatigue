@@ -1,5 +1,5 @@
 name: msfatigue
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 publish_to: 'none'
 version: 0.0.1+1
 
@@ -10,24 +10,24 @@ dependencies:
   flutter:
     sdk: flutter
 
-  solidpod:
-    git:
-      url: https://github.com/anusii/solidpod
-      ref: dev
-  
   cupertino_icons: ^1.0.6
+  flutter_markdown: ^0.7.3+1
   rename_app: ^1.6.1
+  solidpod: ^0.6.0
   window_manager: ^0.3.9
   universal_io: ^2.2.2
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
+
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^3.0.0
 
 dependency_overrides:
-#  file: ^7.0.0 # Use only if necessary
+  #  file: ^7.0.0 # Use only if necessary
   intl: ^0.19.0 # Use only if necessary
 
 # For information on the generic Dart part of this file, see the
@@ -38,3 +38,4 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/image.png
+    - assets/markdown/fatigue_questionnaire.md
