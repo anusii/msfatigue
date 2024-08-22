@@ -8,8 +8,7 @@ import 'package:msfatigue/home.dart';
 
 void main() {
   group('Login Page Integration Test', () {
-    // Test to ensure the login page renders correctly and performs the login
-    // operation.
+    // Test to ensure the login page renders correctly.
 
     testWidgets('Login page displays correctly', (tester) async {
       // Load the app.
