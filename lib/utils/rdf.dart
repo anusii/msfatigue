@@ -96,8 +96,7 @@ Future<List<({String key, dynamic value})>> parseTTLStr(String ttlStr) async {
 /// Parses RDF Turtle content to extract survey questions and their corresponding
 /// answers from the triples in the RDF graph.
 
-Future<Map<String, String>> listSurveyQuestions(
-    String content) async {
+Future<Map<String, String>> listSurveyQuestions(String content) async {
   final g = Graph();
 
   // Parse the Turtle content.
