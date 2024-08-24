@@ -23,8 +23,6 @@
 ///
 /// Authors: Dawei Chen
 
-// TODO 20240708 gjw CAN ANY OF THIS GO TO RDFLIB?
-
 library;
 
 import 'package:rdflib/rdflib.dart';
@@ -67,11 +65,7 @@ Future<String> genTTLStr(
 /// Predicate: Key
 /// Object: Value
 
-// TODO 20240710 gjw COULD THIS USE rdflib::parseTTL
-
 Future<List<({String key, dynamic value})>> parseTTLStr(String ttlStr) async {
-  // TODO 20240710 gjw COMMENT THAT WE COULD DO WITH USING MORE asserts()
-
   assert(ttlStr.isNotEmpty);
   final g = Graph();
   g.parseTurtle(ttlStr);
@@ -96,8 +90,7 @@ Future<List<({String key, dynamic value})>> parseTTLStr(String ttlStr) async {
 /// Parses RDF Turtle content to extract survey questions and their corresponding
 /// answers from the triples in the RDF graph.
 
-Future<Map<String, String>> listSurveyQuestions(
-    String content) async {
+Future<Map<String, String>> listSurveyQuestions(String content) async {
   final g = Graph();
 
   // Parse the Turtle content.

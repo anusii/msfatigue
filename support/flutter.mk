@@ -132,7 +132,7 @@ docs::
 	dart doc
 	chmod -R go+rX doc
 
-SEPARATOR="\n------------------------------------------------------------------------\n"
+SEPARATOR="------------------------------------------------------------------------"
 
 .PHONY: fix
 fix:
@@ -144,6 +144,14 @@ fix:
 format:
 	@echo "Dart: FORMAT"
 	dart format lib/
+	@echo $(SEPARATOR)
+
+# My emacs IDE is starting to add imports of backups automagically!
+
+.PHONY: bakfix
+bakfix:
+	@echo "Find and fix imports of backups."
+	find lib -type f -name '*.dart*' -exec sed -i 's/\.dart\.~\([0-9]\)~/\.dart/g' {} +
 	@echo $(SEPARATOR)
 
 .PHONY: tests
@@ -186,19 +194,19 @@ analyze:
 .PHONY: ignore
 ignore:
 	@echo "Files that override lint checks with IGNORE:\n"
-	@-if rgrep -n ignore: lib; then exit 1; else exit 0; fi
+	@-if grep -r -n ignore: lib; then exit 1; else exit 0; fi
 	@echo $(SEPARATOR)
 
 .PHONY: todo
 todo:
 	@echo "Files that include TODO items to be resolved:\n"
-	@-if rgrep -n ' TODO ' lib; then exit 1; else exit 0; fi
+	@-if grep -r -n ' TODO ' lib; then exit 1; else exit 0; fi
 	@echo $(SEPARATOR)
 
 .PHONY: license
 license:
 	@echo "Files without a LICENSE:\n"
-	@-find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -printf "\t%p\n"
+	@-find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -print | xargs printf "\t%s\n"
 	@echo $(SEPARATOR)
 
 .PHONY: riverpod
@@ -236,32 +244,49 @@ test:
 	@echo "Unit TEST:"
 	-flutter test test
 	@echo $(SEPARATOR)
-
 %.itest:
-	flutter test --dart-define=PAUSE=5 --device-id \
-	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
-	integration_test/$*_test.dart
+	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
+	if [ -z "$$device_id" ]; then \
+		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
+		exit 1; \
+	fi; \
+	flutter test --dart-define=PAUSE=5 --device-id $$device_id integration_test/$*_test.dart
 
 .PHONY: itest
 itest:
-	@echo "Pausing integration TEST:"
-	for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=5 --device-id \
-	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
-	$$t; done
+	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
+	if [ -z "$$device_id" ]; then \
+		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
+		exit 1; \
+	fi; \
+	for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=5 --device-id $$device_id $$t; done
 	@echo $(SEPARATOR)
 
 .PHONY: qtest
 qtest:
-	@echo "Quick integration TEST:"
-	-for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=0 --device-id \
-	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
-	$$t; done
+	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
+	if [ -z "$$device_id" ]; then \
+		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
+		exit 1; \
+	fi; \
+	for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=0 --device-id $$device_id $$t; done
 	@echo $(SEPARATOR)
 
 %.qtest:
-	flutter test --dart-define=PAUSE=0 --device-id \
+	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
+	if [ -z "$$device_id" ]; then \
+		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
+		exit 1; \
+	fi; \
+	flutter test --dart-define=PAUSE=0 --device-id $$device_id integration_test/$*_test.dart
+
+.PHONY: atest
+atest:
+	@echo "Full integration TEST:"
+	flutter test --dart-define=PAUSE=0 --verbose --device-id \
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
-	integration_test/$*_test.dart
+	integration_test
+	@echo $(SEPARATOR)
 
 .PHONY: coverage
 coverage:
@@ -281,9 +306,9 @@ realclean::
 
 # Crate an installer for Linux as a tar.gz archive.
 
-tgz: $(APP)-$(VER)-linux-x86_64.tar.gz
+tgz:: $(APP)-$(VER)-linux-x86_64.tar.gz
 
-$(APP)-$(VER)-linux-x86_64.tar.gz:
+$(APP)-$(VER)-linux-x86_64.tar.gz: clean
 	mkdir -p installers
 	rm -rf build/linux/x64/release
 	flutter build linux --release
@@ -291,10 +316,13 @@ $(APP)-$(VER)-linux-x86_64.tar.gz:
 	cp $@ installers/
 	mv $@ installers/$(APP).tar.gz
 
-apk:
+apk::
 	flutter build apk --release
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP).apk
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP)-$(VER).apk
+
+appbundle:
+	flutter build appbundle --release
 
 realclean::
 	flutter clean
@@ -313,6 +341,7 @@ BRANCH := $(shell git branch --show-current)
 
 ifeq ($(BRANCH),dev)
 push::
+	@echo $(SEPARATOR)
 	perl -pi -e 's|(^version: .*)\+.*|$$1+$(VERSEQ)|' pubspec.yaml
 	-egrep '^version: .*\+.*' pubspec.yaml && \
 	git commit -m "Bump sequence $(VERSEQ)" pubspec.yaml
@@ -321,3 +350,33 @@ endif
 .PHONY: publish
 publish:
 	dart pub publish
+
+### TODO THESE SHOULD BE CHECKED AND CLEANED UP
+
+
+.PHONY: docs
+docs::
+	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/$(APP)/
+
+.PHONY: versions
+versions:
+	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
+	lib/constants/app.dart
+
+.PHONY: wc
+wc: lib/*.dart
+	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
+	| egrep -v '^/' \
+	| egrep -v '^ *$$' \
+	| wc -l
+
+#
+# Manage the production install on the remote server.
+#
+
+.PHONY: solidcommunity
+solidcommunity:
+	rsync -avzh ./ solidcommunity.au:projects/$(APP)/ \
+	--exclude .dart_tool --exclude build --exclude ios --exclude macos \
+	--exclude linux --exclude windows --exclude android
+	ssh solidcommunity.au '(cd projects/$(APP); flutter upgrade; make prod)'

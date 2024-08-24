@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:integration_test/integration_test.dart';
+
 import 'package:msfatigue/features/review/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
-import 'package:msfatigue/main.dart';
 import 'package:msfatigue/home.dart';
+import 'package:msfatigue/main.dart' as app;
 
 void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   group('Login Page Integration Test', () {
     // Test to ensure the login page renders correctly.
 
     testWidgets('Login page displays correctly', (tester) async {
-      // Load the app.
-
-      await tester.pumpWidget(const MSFatigue());
+      // Start the app.
+      app.main();
 
       // Allow the widget to be built and settled.
 
@@ -42,9 +45,8 @@ void main() {
     });
 
     testWidgets('Click continue button', (tester) async {
-      // Load the app.
-
-      await tester.pumpWidget(const MSFatigue());
+      // Start the app.
+      app.main();
 
       // Allow the widget to be built and settled.
 

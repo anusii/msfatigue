@@ -1,0 +1,176 @@
+name: Flutter CI
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  # This was used for testing different linux machines.
+
+  # build-release-upload-ubuntu:
+  #   if: contains(github.event.head_commit.message, 'bump version')
+  #   runs-on: ubuntu-20.04
+
+  #   steps:
+  #     - name: Clone repository
+  #       uses: actions/checkout@v4
+  #     - name: Confirm the branch
+  #       run: git status
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #         architecture: x64
+  #         flutter-version: 3.22.2
+  #     - run: flutter --version
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update -y
+  #         sudo apt-get install -y ninja-build libgtk-3-dev
+  #         sudo apt-get install -y clang cmake
+  #     - name: Build package
+  #       run: flutter build linux --release
+  #     - name: Zip the bundle
+  #       uses: thedoctor0/zip-release@master
+  #       with:
+  #         type: 'zip'
+  #         filename: msfatigue-${{github.ref_name}}-ubuntu.zip
+  #         directory: build/linux/x64/release/bundle
+  #     - name: Upload the zip bundle to Artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: msfatigue-ubuntu
+  #         path: build/linux/x64/release/bundle/msfatigue-${{github.ref_name}}-ubuntu.zip
+  #     - name: Ubuntu Release
+  #       uses: softprops/action-gh-release@v2
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         files: build/linux/x64/release/bundle/msfatigue-${{github.ref_name}}-ubuntu.zip
+
+  # Originally I was building on Ubuntu 22.04 since my 24.04 version
+  # would not run on Mint 21.3. Then moved even older to Ubuntu 20.04
+  # to get it more widely available. Seems to work on 22.04 and
+  # 24.04.
+
+  build-release-upload-linux:
+    if: contains(github.event.head_commit.message, 'bump version')
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Confirm the branch
+        run: git status
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          architecture: x64
+          flutter-version: 3.24.0
+      - run: flutter --version
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+          sudo apt-get install -y clang cmake
+
+      - name: Build package
+        run: flutter build linux --release
+      - name: Zip the bundle
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: msfatigue-${{github.ref_name}}-linux.zip
+          directory: build/linux/x64/release/bundle
+      - name: Upload the zip bundle to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: msfatigue-linux
+          path: build/linux/x64/release/bundle/msfatigue-${{github.ref_name}}-linux.zip
+      - name: Linux Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/linux/x64/release/bundle/msfatigue-${{github.ref_name}}-linux.zip
+
+  build-release-upload-windows:
+    if: contains(github.event.head_commit.message, 'Bump version')
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: '3.24.0'
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
+      - name: Build artifacts
+        run: flutter build windows --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: msfatigue-${{github.ref_name}}-windows.zip
+          directory: build/windows/x64/runner/Release
+      - name: Windows Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/windows/x64/runner/Release/msfatigue-${{github.ref_name}}-windows.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: msfatigue-windows
+          path: build/windows/x64/runner/Release/msfatigue-${{github.ref_name}}-windows.zip
+
+  build-release-upload-macos:
+    if: contains(github.event.head_commit.message, 'Bump version')
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: '3.24.0'
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Enable macOS build
+        run: flutter config --enable-macos-desktop
+      - name: Build artifacts
+        run: flutter build macos --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: msfatigue-${{github.ref_name}}-macos.zip
+          directory: build/macos/Build/Products/Release
+      - run: ls -laRsh
+      - name: macOS Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/macos/Build/Products/Release/msfatigue-${{github.ref_name}}-macos.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: msfatigue-macos
+          path: build/macos/Build/Products/Release/msfatigue-${{github.ref_name}}-macos.zip

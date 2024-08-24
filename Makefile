@@ -70,18 +70,3 @@ help::
 
 locals:
 	@echo "This might be the instructions to install $(APP)"
-
-### TODO THESE SHOULD BE IN FLUTTER.MK
-
-
-.PHONY: versions
-versions:
-	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
-	lib/constants/app.dart
-
-.PHONY: wc
-wc:
-	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
-	| egrep -v '^/' \
-	| egrep -v '^ *$$' \
-	| wc -l
