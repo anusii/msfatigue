@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:msfatigue/constants/layout.dart';
 import 'package:solidpod/solidpod.dart';
+
+import 'package:msfatigue/constants/layout.dart';
 
 Future<void> showAbout(BuildContext context, {String? webId}) async {
   final appInfo = await getAppNameVersion();
