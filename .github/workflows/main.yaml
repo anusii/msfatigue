@@ -146,7 +146,7 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
-          flutter-version: '3.24.0'
+          flutter-version: '3.22.2'
       - name: Install project dependencies
         run: flutter pub get
       - name: Generate intermediates
