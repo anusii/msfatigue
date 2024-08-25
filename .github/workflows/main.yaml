@@ -153,31 +153,8 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
       - name: Enable macOS build
         run: flutter config --enable-macos-desktop
-      - name: Import Certificate
-        env:
-          MAC_CERTIFICATE: ${{ secrets.MAC_CERTIFICATE }}
-          MAC_CERTIFICATE_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
-        run: |
-          echo $MAC_CERTIFICATE | base64 --decode > certificate.p12
-          security create-keychain -p "" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security import certificate.p12 -k build.keychain -P $MAC_CERTIFICATE_PASSWORD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
-      
-      - name: Import Provisioning Profile
-        env:
-          MAC_PROVISIONING_PROFILE: ${{ secrets.MAC_PROVISIONING_PROFILE }}
-        run: |
-          echo $MAC_PROVISIONING_PROFILE | base64 --decode > profile.provisionprofile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.provisionprofile ~/Library/MobileDevice/Provisioning\ Profiles
-      
       - name: Build artifacts
-        env:
-          FLUTTER_BUILD_ARGS: ${{ secrets.FLUTTER_BUILD_ARGS }}
-        run: flutter build macos --release $FLUTTER_BUILD_ARGS
-      
+        run: flutter build macos --release
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
