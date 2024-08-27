@@ -29,6 +29,7 @@ Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
         context);
     return true;
   } on Exception catch (e) {
+    // ignore: use_build_context_synchronously
     showWarning('Failed', 'Questions are saved to pods', context);
     debugPrint('Exception: $e');
   }
