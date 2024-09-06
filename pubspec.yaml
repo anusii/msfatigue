@@ -13,7 +13,10 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_markdown: ^0.7.3+1
   rename_app: ^1.6.1
-  solidpod: ^0.6.0
+  solidpod:
+    git:
+      url: https://github.com/anusii/solidpod
+      ref: zy/228_bug_cancelling_security_key_blank_screen
   window_manager: ^0.3.9
   universal_io: ^2.2.2
 
