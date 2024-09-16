@@ -16,7 +16,7 @@ dependencies:
   solidpod:
     git:
       url: https://github.com/anusii/solidpod
-      ref: zy/228_bug_cancelling_security_key_blank_screen
+      ref: dev
   window_manager: ^0.3.9
   universal_io: ^2.2.2
 
