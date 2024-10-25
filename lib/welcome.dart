@@ -14,7 +14,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MS Fatigue"),
+        title: const Text(
+          "MS Fatigue",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -84,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 child: const Text(
                   'Take me to the survey',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ),

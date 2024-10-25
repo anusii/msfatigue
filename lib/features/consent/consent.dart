@@ -14,7 +14,10 @@ class _ConsentScreenState extends State<ConsentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MS Fatigue"),
+        title: const Text(
+          "MS Fatigue",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,20 +72,19 @@ class _ConsentScreenState extends State<ConsentScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _consentGiven != null
-                    ? () {
-                        // Proceed to the next step, e.g., the survey screen
-                      }
-                    : null, // Disable button if consent is not provided
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Continue to the survey',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+                  onPressed: _consentGiven != null
+                      ? () {
+                          // Proceed to the next step, e.g., the survey screen
+                        }
+                      : null, // Disable button if consent is not provided
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text(
+                    'Continue to the survey',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  )),
             ),
           ],
         ),
