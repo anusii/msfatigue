@@ -27,11 +27,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'package:msfatigue/home.dart';
 import 'package:msfatigue/utils/is_desktop.dart';
+import 'package:msfatigue/welcome.dart';
+
 
 void main() async {
   // Support window size and top placement for desktop apps.
@@ -69,20 +69,7 @@ class MSFatigue extends StatelessWidget {
     return const MaterialApp(
       title: 'MS Fatigue',
       debugShowCheckedModeBanner: false,
-      home: SolidLogin(
-        title: 'Survey to Pod',
-        image: AssetImage('assets/images/image.png'),
-        logo: AssetImage('assets/images/logo.png'),
-        link: 'https://solidcommunity.au',
-        webID: 'https://pods.dev.solidcommunity.au',
-        loginButtonStyle: LoginButtonStyle(
-          background: Colors.lightGreenAccent,
-          tooltip: 'You need to connect to your Solid Pod\n'
-              'to save your survey results.',
-        ),
-        required: false,
-        child: HomeScreen(),
-      ),
+      home: WelcomeScreen(),
     );
   }
 }

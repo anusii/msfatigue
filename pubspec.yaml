@@ -46,4 +46,5 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/image.png
+    - assets/images/profile.png
     - assets/markdown/fatigue_questionnaire.md
