@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'package:msfatigue/questionnaire/submission.dart';
+
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
 
@@ -67,13 +69,15 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   void _nextQuestion() {
-    setState(() {
-      if (_currentQuestionIndex < questions.length - 1) {
+    if (_currentQuestionIndex == questions.length - 1) {
+      _showEndDialog();
+    } else {
+      setState(() {
         _currentQuestionIndex++;
         _selectedOption = null;
         _selectedAdditionalOption = null;
-      }
-    });
+      });
+    }
   }
 
   void _previousQuestion() {
@@ -86,22 +90,92 @@ class _QuestionPageState extends State<QuestionPage> {
     });
   }
 
+  Future<void> _showEndDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Are you sure you want to end now?"),
+          content: Text(
+              "You only have ${questions.length - _currentQuestionIndex - 1} more question(s) in this section."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Handle submission logic.
+
+                Navigator.pop(context);
+                _submitSurvey();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+              child: const Text("Submit what I have"),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context); 
+              },
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.red),
+              ),
+              child: const Text("Exit, without submitting"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _submitSurvey() {
+    // Redirect to submission confirmation page or process the survey data.
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SubmissionPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MS Fatigue"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Handle "End now" action here
-            },
-            child: const Text(
-              "End now",
-              style: TextStyle(color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextButton(
+              onPressed: () {
+                _showEndDialog();
+              },
+              child: const Text(
+                "End now",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 20,
+            ),
+            const Text(
+              "MS Fatigue",
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: questions.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -116,7 +190,6 @@ class _QuestionPageState extends State<QuestionPage> {
                       'QUESTION ${_currentQuestionIndex + 1}',
                       style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
                     ),
@@ -189,7 +262,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
 
                   // Navigation buttons.
-                  
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
