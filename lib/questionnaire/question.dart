@@ -43,8 +43,8 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   Future<void> _loadQuestions() async {
-    final data =
-        await rootBundle.loadString('assets/markdown/fatigue_questionnaire.md');
+    final data = await rootBundle
+        .loadString('assets/markdown/fatigue_small_questionnaire.md');
     setState(() {
       questions = _parseQuestions(data);
     });
@@ -117,7 +117,7 @@ class _QuestionPageState extends State<QuestionPage> {
             OutlinedButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.pop(context); 
+                Navigator.pop(context);
               },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),
@@ -132,7 +132,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
   void _submitSurvey() {
     // Redirect to submission confirmation page or process the survey data.
-    
+
     Navigator.push(
       context,
       MaterialPageRoute(
