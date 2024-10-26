@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/questionnaire/welcome_back.dart';
+
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
 
@@ -72,11 +74,16 @@ class _ConsentScreenState extends State<ConsentScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: _consentGiven != null
+                  onPressed: _consentGiven == true
                       ? () {
-                          // Proceed to the next step, e.g., the survey screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const WelcomeBackScreen()),
+                          );
                         }
-                      : null, // Disable button if consent is not provided
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(vertical: 16),
