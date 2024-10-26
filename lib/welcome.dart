@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:msfatigue/features/consent/consent.dart';
+import 'package:msfatigue/questionnaire/consent.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
