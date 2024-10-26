@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/questionnaire/question.dart';
+
 class WelcomeBackScreen extends StatelessWidget {
   const WelcomeBackScreen({super.key});
 
@@ -15,8 +17,7 @@ class WelcomeBackScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundImage: AssetImage(
-                  'assets/images/profile.png'), 
+              backgroundImage: AssetImage('assets/images/profile.png'),
             ),
           )
         ],
@@ -48,6 +49,12 @@ class WelcomeBackScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Implement navigation to survey.
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const QuestionPage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
