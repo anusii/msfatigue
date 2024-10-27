@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/questionnaire/welcome_back_final.dart';
+
 class SurveyCompleted extends StatelessWidget {
   const SurveyCompleted({super.key});
 
@@ -29,8 +31,11 @@ class SurveyCompleted extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                Navigator.popUntil(context,
-                    (route) => route.isFirst); // Go back to the home screen
+               Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WelcomeBackFinalPage()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
