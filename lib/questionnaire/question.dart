@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:msfatigue/questionnaire/submission.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -72,7 +71,7 @@ class _QuestionPageState extends State<QuestionPage> {
   void _nextQuestion() {
     if (_currentQuestionIndex == questions.length - 1) {
       // Navigate to the submission confirmation page if it's the last question.
-      
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -146,7 +145,7 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SubmissionPage(),
+        builder: (context) => const SubmitConfirmation(),
       ),
     );
   }
