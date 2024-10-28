@@ -28,9 +28,8 @@ class _QuestionPageState extends State<QuestionPage> {
   // Define the colors for each option button in the specified order.
 
   final List<Color> optionColors = [
-    Colors.red,
     Colors.orange,
-    Colors.yellow[700]!, // Yellow color with higher contrast
+    Colors.yellow,
     Colors.green,
     Colors.blue,
   ];
@@ -231,8 +230,8 @@ class _QuestionPageState extends State<QuestionPage> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _selectedOption == options[index]
-                                  ? optionColors[index]
-                                  : optionColors[index].withOpacity(0.5),
+                                  ? optionColors[index].withOpacity(0.5)
+                                  : optionColors[index],
                               padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
                             child: Text(
