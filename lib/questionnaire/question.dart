@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'package:gap/gap.dart';
+
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -171,10 +173,10 @@ class _QuestionPageState extends State<QuestionPage> {
             const SizedBox(
               width: 20,
             ),
-            Text(
+            const Text(
               "MS Fatigue",
-              style: TextStyle(
-                  color: Colors.purple[100], fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -196,13 +198,13 @@ class _QuestionPageState extends State<QuestionPage> {
                   Center(
                     child: Text(
                       'QUESTION ${_currentQuestionIndex + 1}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
-                        color: Colors.purple[100],
+                        color: Colors.indigo,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(30),
 
                   // Question text.
 
@@ -212,7 +214,8 @@ class _QuestionPageState extends State<QuestionPage> {
                         fontSize: 20, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 30),
+
+                  const Gap(30),
 
                   // Answer options as colorful buttons.
 
@@ -241,9 +244,10 @@ class _QuestionPageState extends State<QuestionPage> {
                               options[index],
                               style: TextStyle(
                                 fontSize: 16,
-                                color: _selectedOption == options[index]
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: _selectedOption == null ||
+                                        _selectedOption == options[index]
+                                    ? Colors.black
+                                    : Colors.blueGrey,
                               ),
                             ),
                           ),
@@ -251,7 +255,8 @@ class _QuestionPageState extends State<QuestionPage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
+
+                  const Gap(30),
 
                   // Additional options as radio buttons.
 
@@ -271,7 +276,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     }).toList(),
                   ),
 
-                  const SizedBox(height: 30),
+                  const Gap(30),
 
                   // Navigation buttons.
 
