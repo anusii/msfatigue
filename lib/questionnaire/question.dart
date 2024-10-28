@@ -17,7 +17,6 @@ class _QuestionPageState extends State<QuestionPage> {
   final List<String> options = [
     "Strongly disagree",
     "Disagree",
-    "Neither agree nor disagree",
     "Agree",
     "Strongly agree",
   ];
