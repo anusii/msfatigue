@@ -211,7 +211,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         fontSize: 20, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 30),
 
                   // Answer options as colorful buttons.
 
@@ -267,6 +267,8 @@ class _QuestionPageState extends State<QuestionPage> {
                       );
                     }).toList(),
                   ),
+
+                  const SizedBox(height: 30),
 
                   // Navigation buttons.
 
