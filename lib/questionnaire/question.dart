@@ -197,7 +197,8 @@ class _QuestionPageState extends State<QuestionPage> {
                   // Question title
                   Center(
                     child: Text(
-                      'QUESTION ${_currentQuestionIndex + 1}',
+                      'QUESTION ${_currentQuestionIndex + 1} '
+                      'of ${questions.length}',
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.indigo,
