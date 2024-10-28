@@ -34,6 +34,8 @@ dev_dependencies:
   integration_test:
     sdk: flutter
 
+  flutter_launcher_icons: ^0.13.1
+
 dependency_overrides:
   #  file: ^7.0.0 # Use only if necessary
   intl: ^0.19.0 # Use only if necessary
@@ -50,3 +52,20 @@ flutter:
     - assets/images/profile.png
     - assets/markdown/fatigue_questionnaire.md
     - assets/markdown/fatigue_small_questionnaire.md
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/images/icon.png"
+  windows:
+    generate: true
+    image_path: "assets/images/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/icon.png"
