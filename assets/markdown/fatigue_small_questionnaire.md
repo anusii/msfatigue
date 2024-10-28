@@ -2,16 +2,15 @@
 
 ## Questions
 
-1. I am feeling fatigued after physical activity.
-2. I am feeling fatigued because of pain.
+1. Question 1.
+2. Question 2.
 
 ## Answer Options
 
 1. Strongly disagree  
 2. Disagree  
-3. Neither agree nor disagree  
-4. Agree  
-5. Strongly agree
+3. Agree  
+4. Strongly agree
 
 ## Response Options
 
