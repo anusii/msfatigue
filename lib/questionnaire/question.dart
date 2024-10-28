@@ -229,9 +229,11 @@ class _QuestionPageState extends State<QuestionPage> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedOption == options[index]
-                                  ? optionColors[index].withOpacity(0.5)
-                                  : optionColors[index],
+                              backgroundColor: _selectedOption == null ||
+                                      _selectedOption == options[index]
+                                  ? optionColors[index]
+                                  : Colors.grey
+                                      .shade300, // Grey out unselected options
                               padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
                             child: Text(
