@@ -18,7 +18,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       appBar: AppBar(
         title: const Text(
           "MS Fatigue",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -85,7 +85,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.lightBlue,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text(

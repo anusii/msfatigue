@@ -57,7 +57,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
-                  "Survey last completed: Today (5 Oct 9:43am)",
+                  "Survey last completed: Today (5 November 2024 9:43am)",
                   style: TextStyle(fontSize: 16, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
@@ -70,7 +70,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
-                  "Next survey available 6 October 24",
+                  "Next survey available 6 Novement 2024",
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),

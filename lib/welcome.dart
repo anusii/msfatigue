@@ -16,7 +16,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       appBar: AppBar(
         title: const Text(
           "MS Fatigue",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
         ),
         actions: const [
           Padding(
@@ -33,7 +33,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: const <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Colors.lightBlue,
               ),
               child: Text('Menu', style: TextStyle(color: Colors.white)),
             ),
@@ -82,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.lightBlue,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: const Text(

@@ -31,14 +31,14 @@ class SurveyCompleted extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-               Navigator.pushReplacement(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const WelcomeBackFinalPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.purple,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),

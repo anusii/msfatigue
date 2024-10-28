@@ -30,8 +30,8 @@ class _QuestionPageState extends State<QuestionPage> {
   final List<Color> optionColors = [
     Colors.orange,
     Colors.yellow,
-    Colors.green,
-    Colors.blue,
+    Colors.lightGreen,
+    Colors.lightBlue,
   ];
 
   @override
@@ -114,7 +114,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 _submitSurvey();
               },
               style: TextButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.purple[100],
                 foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -127,7 +127,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 Navigator.pop(context);
               },
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.red),
+                side: const BorderSide(color: Colors.purple),
               ),
               child: const Text("Exit, without submitting"),
             ),
@@ -171,9 +171,10 @@ class _QuestionPageState extends State<QuestionPage> {
             const SizedBox(
               width: 20,
             ),
-            const Text(
+            Text(
               "MS Fatigue",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.purple[100], fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -195,9 +196,9 @@ class _QuestionPageState extends State<QuestionPage> {
                   Center(
                     child: Text(
                       'QUESTION ${_currentQuestionIndex + 1}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
-                        color: Colors.red,
+                        color: Colors.purple[100],
                       ),
                     ),
                   ),
@@ -289,7 +290,7 @@ class _QuestionPageState extends State<QuestionPage> {
                             ? _nextQuestion
                             : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.purple[100],
                         ),
                         child: const Text("Next"),
                       ),

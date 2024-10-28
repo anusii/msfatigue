@@ -41,7 +41,7 @@ class SubmitConfirmation extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
-                    side: const BorderSide(color: Colors.red),
+                    side: const BorderSide(color: Colors.purple),
                   ),
                   child: const Text("Go to previous",
                       style: TextStyle(color: Colors.black)),
@@ -56,7 +56,7 @@ class SubmitConfirmation extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.purple,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                   ),

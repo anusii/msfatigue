@@ -11,7 +11,7 @@ class WelcomeBackScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "MS Fatigue",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
         ),
         actions: const [
           Padding(
@@ -35,12 +35,12 @@ class WelcomeBackScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.red[50],
+                color: Colors.teal,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
-                'Survey last completed: 1 October 2024',
-                style: TextStyle(fontSize: 16, color: Colors.red),
+                'Survey last completed: 1 November 2024',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
             const Spacer(),
@@ -49,7 +49,7 @@ class WelcomeBackScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Implement navigation to survey.
-                  
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -57,7 +57,7 @@ class WelcomeBackScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.lightBlue,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: const Text(
@@ -75,7 +75,7 @@ class WelcomeBackScreen extends StatelessWidget {
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: const BorderSide(color: Colors.red),
+                  side: const BorderSide(color: Colors.amber),
                 ),
                 child: const Text(
                   "I'm too tired to complete this survey",
