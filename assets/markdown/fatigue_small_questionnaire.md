@@ -2,8 +2,8 @@
 
 ## Questions
 
-1. Question 1.
-2. Question 2.
+1. I find the colour scheme used here to be appropriate for this app.
+2. The inclusion of the Don't know option is useful.
 
 ## Answer Options
 
