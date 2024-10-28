@@ -2,8 +2,9 @@
 
 ## Questions
 
-1. I find the colour scheme used here to be appropriate for this app.
-2. The inclusion of the Don't know option is useful.
+1. I find the colour scheme used here to be appropriate to the answers.
+2. Including "Don't know" as an option is useful.
+3. Including "Not applicable" as an option is useful.
 
 ## Answer Options
 
