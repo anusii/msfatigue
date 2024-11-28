@@ -34,7 +34,7 @@ class WelcomeBackScreen extends StatelessWidget {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -50,17 +50,13 @@ class WelcomeBackScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.pinkAccent, Colors.pink.shade100],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.pink.shade50,
                   ),
                   child: const Text(
                     'Survey last completed: 1 October 2024',
@@ -73,7 +69,7 @@ class WelcomeBackScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
-                  width: double.infinity,
+                  width: 320,
                   child: ElevatedButton(
                     onPressed: () {
                       // Implement navigation to survey.
@@ -102,7 +98,7 @@ class WelcomeBackScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 SizedBox(
-                  width: double.infinity,
+                  width: 320,
                   child: OutlinedButton(
                     onPressed: () {
                       // Implement handling for "I'm too tired"
