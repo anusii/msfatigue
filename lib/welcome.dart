@@ -13,10 +13,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          "MS Fatigue",
-          style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 80, 
+        title: Center(
+          child: Image.asset(
+            'assets/images/msFatigue_icon.png',
+            height: 65, 
+          ),
         ),
         actions: const [
           Padding(
@@ -24,8 +30,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: CircleAvatar(
               backgroundImage: AssetImage('assets/images/profile.png'),
             ),
-          )
+          ),
         ],
+        iconTheme: const IconThemeData(
+          size: 40,
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -53,7 +62,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: <Widget>[
             const Text(
               'Welcome Jenny!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -70,27 +83,37 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               'The survey should take 10-20 minutes to complete.',
               style: TextStyle(fontSize: 16),
             ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ConsentScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Take me to the survey',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+            const SizedBox(height: 30),
+            Center(
+              child: SizedBox(
+                width: 260,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConsentScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.pink),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Take me to the survey ►',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             ),
+            const SizedBox(height: 32),
           ],
         ),
       ),

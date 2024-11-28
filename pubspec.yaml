@@ -50,6 +50,7 @@ flutter:
     - assets/images/logo.png
     - assets/images/image.png
     - assets/images/profile.png
+    - assets/images/msFatigue_icon.png
     - assets/markdown/fatigue_questionnaire.md
     - assets/markdown/fatigue_small_questionnaire.md
 
