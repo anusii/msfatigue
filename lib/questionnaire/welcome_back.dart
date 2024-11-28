@@ -128,7 +128,7 @@ class WelcomeBackScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Image.asset(
-              'assets/images/bottom_dot_one.png',
+              'assets/images/bottom_dot_three.png',
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fitWidth,
             ),
