@@ -21,19 +21,22 @@ class _QuestionPageState extends State<QuestionPage> {
     "Disagree",
     "Agree",
     "Strongly agree",
+    "Don't know",
+    "Not applicable",
   ];
   final List<String> additionalOptions = ["Don't know", "Not applicable"];
   int _currentQuestionIndex = 0;
   String? _selectedOption;
-  String? _selectedAdditionalOption;
 
-  // Define the colors for each option button in the specified order.
+  // Define the colors for the gradient buttons in the specified order.
 
-  final List<Color> optionColors = [
-    Colors.orange,
-    Colors.yellow,
-    Colors.lightGreen,
-    Colors.lightBlue,
+  final List<Color> gradientColors = [
+    const Color(0xFFFFB5C5), // Soft pink
+    const Color(0xFFFFA6CA), // Light pinkish
+    const Color(0xFFFF8FCF), // Medium pink
+    const Color(0xFFFF79D4), // Bright pink
+    const Color.fromARGB(255, 210, 205, 205),
+    const Color.fromARGB(255, 210, 205, 205),
   ];
 
   @override
@@ -70,8 +73,6 @@ class _QuestionPageState extends State<QuestionPage> {
 
   void _nextQuestion() {
     if (_currentQuestionIndex == questions.length - 1) {
-      // Navigate to the submission confirmation page if it's the last question.
-
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -84,7 +85,6 @@ class _QuestionPageState extends State<QuestionPage> {
           _currentQuestionIndex++;
         }
         _selectedOption = null;
-        _selectedAdditionalOption = null;
       });
     }
   }
@@ -94,7 +94,6 @@ class _QuestionPageState extends State<QuestionPage> {
       if (_currentQuestionIndex > 0) {
         _currentQuestionIndex--;
         _selectedOption = null;
-        _selectedAdditionalOption = null;
       }
     });
   }
@@ -110,16 +109,11 @@ class _QuestionPageState extends State<QuestionPage> {
           actions: [
             TextButton(
               onPressed: () {
-                // Handle submission logic.
-
                 Navigator.pop(context);
                 _submitSurvey();
               },
               style: TextButton.styleFrom(
-                backgroundColor: Colors.purple[100],
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                foregroundColor: Colors.purple,
               ),
               child: const Text("Submit what I have"),
             ),
@@ -128,9 +122,6 @@ class _QuestionPageState extends State<QuestionPage> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.purple),
-              ),
               child: const Text("Exit, without submitting"),
             ),
           ],
@@ -140,8 +131,6 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   void _submitSurvey() {
-    // Redirect to submission confirmation page or process the survey data.
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -153,102 +142,131 @@ class _QuestionPageState extends State<QuestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextButton(
-              onPressed: () {
-                _showEndDialog();
-              },
-              child: const Text(
-                "End now",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  decoration: TextDecoration.underline,
-                ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 40,
+        leadingWidth: 120,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: TextButton(
+            onPressed: _showEndDialog,
+            child: const Text(
+              "< End now",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                decoration: TextDecoration.underline,
               ),
             ),
-            const SizedBox(
-              width: 20,
-            ),
-            const Text(
-              "MS Fatigue",
-              style:
-                  TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
-            ),
-          ],
+          ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
       ),
       body: questions.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Question title
+                  Center(
+                    child: Image.asset(
+                      'assets/images/msFatigue_icon.png',
+                      height: 65,
+                    ),
+                  ),
+                  const Gap(5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0.0, vertical: 8.0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: Colors.pink[100],
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        ),
+                        FractionallySizedBox(
+                          widthFactor:
+                              (_currentQuestionIndex + 1) / questions.length,
+                          child: Container(
+                            height: 6,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Colors.red, Colors.pink],
+                              ),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Center(
                     child: Text(
-                      'QUESTION ${_currentQuestionIndex + 1} '
-                      'of ${questions.length}',
+                      'QUESTION ${_currentQuestionIndex + 1}',
                       style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.indigo,
+                        fontSize: 12,
+                        color: Colors.pink,
                       ),
                     ),
                   ),
-                  const Gap(30),
-
-                  // Question text.
-
-                  Text(
-                    questions[_currentQuestionIndex],
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
+                  const Gap(10),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                    child: Center(
+                      child: Text(
+                        questions[_currentQuestionIndex],
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
                   ),
-
-                  const Gap(30),
-
-                  // Answer options as colorful buttons.
-
+                  const Gap(10),
                   Expanded(
                     child: ListView.builder(
                       itemCount: options.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
+                          child: GestureDetector(
+                            onTap: () {
                               setState(() {
                                 _selectedOption = options[index];
-                                _selectedAdditionalOption = null;
                               });
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedOption == null ||
-                                      _selectedOption == options[index]
-                                  ? optionColors[index]
-                                  : Colors.grey
-                                      .shade300, // Grey out unselected options
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
-                            child: Text(
-                              options[index],
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: _selectedOption == null ||
-                                        _selectedOption == options[index]
-                                    ? Colors.black
-                                    : Colors.blueGrey,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    gradientColors[index],
+                                    Color.lerp(gradientColors[index],
+                                        Colors.white, 0.6)!
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 30),
+                                  Text(
+                                    options[index],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: _selectedOption == options[index]
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -256,51 +274,60 @@ class _QuestionPageState extends State<QuestionPage> {
                       },
                     ),
                   ),
-
-                  const Gap(30),
-
-                  // Additional options as radio buttons.
-
-                  Column(
-                    children: additionalOptions.map((option) {
-                      return RadioListTile<String>(
-                        title: Text(option),
-                        value: option,
-                        groupValue: _selectedAdditionalOption,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedAdditionalOption = value;
-                            _selectedOption = null;
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-
-                  const Gap(30),
-
-                  // Navigation buttons.
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _currentQuestionIndex > 0
-                            ? _previousQuestion
-                            : null,
-                        child: const Text("Previous"),
-                      ),
-                      ElevatedButton(
-                        onPressed: (_selectedOption != null ||
-                                _selectedAdditionalOption != null)
-                            ? _nextQuestion
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple[100],
+                  const Gap(25),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _currentQuestionIndex > 0
+                              ? _previousQuestion
+                              : null,
+                          icon:
+                              const Icon(Icons.arrow_left, color: Colors.grey),
+                          label: const Text(
+                            "Previous    ",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.grey.shade400),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 5,
+                            ),
+                            alignment: Alignment.centerLeft,
+                          ),
                         ),
-                        child: const Text("Next"),
-                      ),
-                    ],
+                        OutlinedButton.icon(
+                          onPressed:
+                              (_selectedOption != null) ? _nextQuestion : null,
+                          icon: const Text(
+                            "    Next",
+                            style: TextStyle(color: Colors.pink),
+                          ),
+                          label:
+                              const Icon(Icons.arrow_right, color: Colors.pink),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.pink,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 5,
+                            ),
+                            alignment: Alignment.centerRight,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
