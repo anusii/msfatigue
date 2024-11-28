@@ -72,13 +72,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           const SizedBox(height: 10),
-                          const Text(
-                            'Welcome Jenny!',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.pink,
-                            ),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                top: -30,
+                                left: 0,
+                                child: Image.asset(
+                                  'assets/images/title_dot_one.png',
+                                  width: 325,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                              const Text(
+                                'Welcome Jenny!',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.pink,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 16),
                           const Text(
@@ -104,8 +118,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ConsentScreen()),
+                                      builder: (context) =>
+                                          const ConsentScreen(),
+                                    ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

@@ -47,11 +47,7 @@ dependency_overrides:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/bottom_dot_one.png
-    - assets/images/logo.png
-    - assets/images/image.png
-    - assets/images/profile.png
-    - assets/images/msFatigue_icon.png
+    - assets/images/
     - assets/markdown/fatigue_questionnaire.md
     - assets/markdown/fatigue_small_questionnaire.md
 
