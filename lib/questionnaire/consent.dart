@@ -81,6 +81,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       });
                     },
                     activeColor: Colors.pink,
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return Colors.pink;
+                        }
+                        return Colors.pink;
+                      },
+                    ),
                   ),
                 ),
                 ListTile(
@@ -94,6 +102,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       });
                     },
                     activeColor: Colors.pink,
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return Colors.pink;
+                        }
+                        return Colors.pink;
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 30),
