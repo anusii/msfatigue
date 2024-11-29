@@ -38,139 +38,137 @@ class _ConsentScreenState extends State<ConsentScreen> {
           size: 50,
         ),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 10),
-                const Text(
-                  'Welcome Jenny!',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.pink,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'The Participant Information Sheet for the MS Fatigue Survey is available here.',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'I understand the following questions in this survey are copyright.',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 16),
-                ListTile(
-                  title: const Text('Yes'),
-                  leading: Radio<bool>(
-                    value: true,
-                    groupValue: _consentGiven,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _consentGiven = value;
-                      });
-                    },
-                    activeColor: Colors.pink,
-                    fillColor: WidgetStateProperty.resolveWith<Color>(
-                      (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return Colors.pink;
-                        }
-                        return Colors.pink;
-                      },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Welcome Jenny!',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.pink,
                     ),
                   ),
-                ),
-                ListTile(
-                  title: const Text('No'),
-                  leading: Radio<bool>(
-                    value: false,
-                    groupValue: _consentGiven,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _consentGiven = value;
-                      });
-                    },
-                    activeColor: Colors.pink,
-                    fillColor: WidgetStateProperty.resolveWith<Color>(
-                      (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return Colors.pink;
-                        }
-                        return Colors.pink;
-                      },
-                    ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'The Participant Information Sheet for the MS Fatigue Survey is available here.',
+                    style: TextStyle(fontSize: 16),
                   ),
-                ),
-                const SizedBox(height: 30),
-                Center(
-                  child: SizedBox(
-                    width: 260,
-                    child: ElevatedButton(
-                      onPressed: _consentGiven == true
-                          ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const WelcomeBackScreen(),
-                                ),
-                              );
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(
-                          color:
-                              _consentGiven == true ? Colors.pink : Colors.grey,
-                          width: 2,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        'Continue to the survey ►',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: _consentGiven == true
-                              ? Colors.black
-                              : Colors.grey,
-                        ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'I understand the following questions in this survey are copyright.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    title: const Text('Yes'),
+                    leading: Radio<bool>(
+                      value: true,
+                      groupValue: _consentGiven,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _consentGiven = value;
+                        });
+                      },
+                      activeColor: Colors.pink,
+                      fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Colors.pink;
+                          }
+                          return Colors.pink;
+                        },
                       ),
                     ),
                   ),
-                ),
-              ],
+                  ListTile(
+                    title: const Text('No'),
+                    leading: Radio<bool>(
+                      value: false,
+                      groupValue: _consentGiven,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _consentGiven = value;
+                        });
+                      },
+                      activeColor: Colors.pink,
+                      fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Colors.pink;
+                          }
+                          return Colors.pink;
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: SizedBox(
+                      width: 260,
+                      child: ElevatedButton(
+                        onPressed: _consentGiven == true
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const WelcomeBackScreen(),
+                                  ),
+                                );
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                            color: _consentGiven == true
+                                ? Colors.pink
+                                : Colors.grey,
+                            width: 2,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Continue to the survey ►',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: _consentGiven == true
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/images/bottom_dot_two.png',
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/bottom_dot_two.png',
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
