@@ -2,49 +2,106 @@ import 'package:flutter/material.dart';
 
 import 'package:msfatigue/questionnaire/welcome_back_final.dart';
 
+import 'package:gap/gap.dart';
+
 class SurveyCompleted extends StatelessWidget {
   const SurveyCompleted({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("MS Fatigue"),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 80,
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.black),
+          onPressed: () {
+            // Handle menu action.
+          },
+        ),
+        title: Center(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/msFatigue_icon.png',
+                height: 65,
+              ),
+            ],
+          ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/profile.png'),
+            ),
+          ),
+        ],
+        iconTheme: const IconThemeData(
+          size: 50,
+        ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              height: 6,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFFF5A5F),
+                    Color(0xFFFF66A1),
+                  ],
+                ),
+              ),
+            ),
+            const Gap(30),
             const Text(
               "Survey completed!\nThank you",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 28,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            const Icon(
-              Icons.star,
-              size: 220,
-              color: Colors.yellow,
+            Image.asset(
+              'assets/images/bottom_dot_six.png',
+              height: 300,
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const WelcomeBackFinalPage()),
+                    builder: (context) => const WelcomeBackFinalPage(),
+                  ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-              child: const Text(
-                "Home",
-                style: TextStyle(color: Colors.white),
+              child: Container(
+                width: 280,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFFF85E2),
+                      Color(0xFFFF5A5F),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Center(
+                  child: Text(
+                    "Home",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
