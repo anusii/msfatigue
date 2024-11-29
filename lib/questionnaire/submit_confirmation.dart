@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 
+import 'package:gap/gap.dart';
+
 class SubmitConfirmation extends StatelessWidget {
   const SubmitConfirmation({super.key});
 
@@ -45,12 +47,12 @@ class SubmitConfirmation extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 6, 
+              height: 6,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFFFF5A5F), 
-                    Color(0xFFFF66A1), 
+                    Color(0xFFFF5A5F),
+                    Color(0xFFFF66A1),
                   ],
                 ),
               ),
@@ -100,7 +102,7 @@ class SubmitConfirmation extends StatelessWidget {
                   const SizedBox(width: 16),
 
                   // Submit Button.
-                  
+
                   OutlinedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -130,6 +132,7 @@ class SubmitConfirmation extends StatelessWidget {
                 ],
               ),
             ),
+            const Gap(30),
           ],
         ),
       ),

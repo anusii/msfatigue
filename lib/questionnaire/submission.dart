@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:gap/gap.dart';
+
 class SubmissionPage extends StatefulWidget {
   const SubmissionPage({super.key});
 
@@ -36,6 +38,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
               ),
               child: const Text("Go to previous"),
             ),
+            const Gap(10),
           ],
         ),
       ),
