@@ -32,10 +32,10 @@ class _QuestionPageState extends State<QuestionPage> {
 
   // Define the colors for the gradient buttons in the specified order.
   final List<Color> gradientColors = [
-    const Color(0xFFFFB5C5), // Soft pink
-    const Color(0xFFFFA6CA), // Light pinkish
-    const Color(0xFFFF8FCF), // Medium pink
-    const Color(0xFFFF79D4), // Bright pink
+    const Color(0xFFFFE6EB), // Very pale soft pink
+    const Color(0xFFFFD6DE), // Light pale pink
+    const Color(0xFFFFC6D1), // Medium pale pink
+    const Color(0xFFFFB6C5), // Stronger pale pink
     const Color.fromARGB(255, 210, 205, 205),
     const Color.fromARGB(255, 210, 205, 205),
   ];
@@ -53,7 +53,7 @@ class _QuestionPageState extends State<QuestionPage> {
       questions = _parseQuestions(data);
 
       // Divide questions into Block 1 and Block 2.
-      
+
       block1Questions = questions.take(6).toList();
       block2Questions = questions.skip(6).take(6).toList();
     });
@@ -364,14 +364,13 @@ class _QuestionPageState extends State<QuestionPage> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12.0, horizontal: 16.0),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    gradientColors[index],
-                                    Color.lerp(gradientColors[index],
-                                        Colors.white, 0.6)!
-                                  ],
+                                color: _selectedOption == options[index]
+                                    ? Colors.pink[300]
+                                    : gradientColors[index],
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1,
                                 ),
-                                borderRadius: BorderRadius.circular(0),
                               ),
                               child: Row(
                                 children: [
