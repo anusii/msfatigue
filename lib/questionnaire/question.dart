@@ -15,6 +15,8 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
+  List<String> block1Questions = [];
+  List<String> block2Questions = [];
   List<String> questions = [];
   final List<String> options = [
     "Strongly disagree",
@@ -29,7 +31,6 @@ class _QuestionPageState extends State<QuestionPage> {
   String? _selectedOption;
 
   // Define the colors for the gradient buttons in the specified order.
-
   final List<Color> gradientColors = [
     const Color(0xFFFFB5C5), // Soft pink
     const Color(0xFFFFA6CA), // Light pinkish
@@ -50,6 +51,11 @@ class _QuestionPageState extends State<QuestionPage> {
         .loadString('assets/markdown/fatigue_small_questionnaire.md');
     setState(() {
       questions = _parseQuestions(data);
+
+      // Divide questions into Block 1 and Block 2.
+      
+      block1Questions = questions.take(6).toList();
+      block2Questions = questions.skip(6).take(6).toList();
     });
   }
 
@@ -96,6 +102,23 @@ class _QuestionPageState extends State<QuestionPage> {
         _selectedOption = null;
       }
     });
+  }
+
+  String _getBlockTitle() {
+    if (_currentQuestionIndex < block1Questions.length) {
+      return "BLOCK 1";
+    } else {
+      return "BLOCK 2";
+    }
+  }
+
+  String _getCurrentQuestion() {
+    if (_currentQuestionIndex < block1Questions.length) {
+      return block1Questions[_currentQuestionIndex];
+    } else {
+      final block2Index = _currentQuestionIndex - block1Questions.length;
+      return block2Questions[block2Index];
+    }
   }
 
   Future<void> _showEndDialog() async {
@@ -304,7 +327,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                   Center(
                     child: Text(
-                      'QUESTION ${_currentQuestionIndex + 1}',
+                      '${_getBlockTitle()} - QUESTION ${_currentQuestionIndex + 1}',
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.pink,
@@ -316,7 +339,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     child: Center(
                       child: Text(
-                        questions[_currentQuestionIndex],
+                        _getCurrentQuestion(),
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                           fontSize: 18,
