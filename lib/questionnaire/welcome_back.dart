@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/intl.dart';
+
 import 'package:msfatigue/questionnaire/question.dart';
 
 class WelcomeBackScreen extends StatelessWidget {
@@ -7,6 +9,9 @@ class WelcomeBackScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    String formattedDate = DateFormat('d MMMM yyyy').format(today);
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -59,9 +64,9 @@ class WelcomeBackScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.pink.shade50,
                     ),
-                    child: const Text(
-                      'Survey last completed: 1 October 2024',
-                      style: TextStyle(
+                    child: Text(
+                      'Survey last completed: $formattedDate',
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
                       ),
