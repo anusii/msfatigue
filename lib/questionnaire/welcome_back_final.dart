@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/intl.dart';
+
 import 'package:gap/gap.dart';
 
 class WelcomeBackFinalPage extends StatelessWidget {
@@ -7,6 +9,9 @@ class WelcomeBackFinalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    String formattedDate = DateFormat('d MMMM yyyy').format(today);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -72,10 +77,10 @@ class WelcomeBackFinalPage extends StatelessWidget {
                   color: Colors.pink[50],
                   borderRadius: BorderRadius.circular(0),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    "Survey last completed: Today (5 November 9:43am)",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    "Survey last completed: Today ($formattedDate)",
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -95,10 +100,10 @@ class WelcomeBackFinalPage extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    "Next survey available 6 November 2024",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    "Next survey available $formattedDate",
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
@@ -114,8 +119,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
                     // Handle "Too tired" action
                   },
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     side: const BorderSide(color: Colors.grey),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
