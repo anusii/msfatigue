@@ -120,7 +120,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
                       // Handle "Too tired" action
                     },
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 1),
                       side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
