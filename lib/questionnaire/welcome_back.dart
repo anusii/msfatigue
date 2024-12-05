@@ -11,7 +11,7 @@ class WelcomeBackScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
     String formattedDate = DateFormat('d MMMM yyyy').format(today);
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -96,6 +96,7 @@ class WelcomeBackScreen extends StatelessWidget {
                       ),
                       child: Container(
                         width: 320,
+                        height: 46,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -124,6 +125,7 @@ class WelcomeBackScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   SizedBox(
                     width: 320,
+                    height: 46,
                     child: OutlinedButton(
                       onPressed: () {
                         // Implement handling for "I'm too tired"
