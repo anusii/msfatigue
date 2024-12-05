@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 
-import 'package:gap/gap.dart';
-
 class SubmitConfirmation extends StatelessWidget {
   const SubmitConfirmation({super.key});
 
@@ -59,19 +57,19 @@ class SubmitConfirmation extends StatelessWidget {
             ),
             Image.asset(
               'assets/images/bottom_dot_four.png',
-              height: 300,
+              height: 260,
             ),
             const Text(
               "Are you ready to submit?",
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 28,
                 color: Colors.black,
               ),
               textAlign: TextAlign.center,
             ),
             Image.asset(
               'assets/images/bottom_dot_five.png',
-              height: 300,
+              height: 260,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
@@ -132,7 +130,6 @@ class SubmitConfirmation extends StatelessWidget {
                 ],
               ),
             ),
-            const Gap(30),
           ],
         ),
       ),

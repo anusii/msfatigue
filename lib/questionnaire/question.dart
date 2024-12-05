@@ -191,6 +191,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   },
                   child: Container(
                     width: 200,
+                    height: 46,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -218,25 +219,29 @@ class _QuestionPageState extends State<QuestionPage> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 200,
+                  height: 46,
                   child: OutlinedButton(
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
                     style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(200, 48),
                       side: const BorderSide(color: Colors.pink),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.zero,
                     ),
-                    child: const Text(
-                      "Exit, without submitting",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 16,
+                    child: const Center(
+                      // Center-align the text.
+                      
+                      child: Text(
+                        "Exit, without submitting",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
