@@ -2,7 +2,7 @@
 #
 # Makefile for the MSFatigue Flutter app.
 #
-# Time-stamp: <Monday 2024-12-02 12:45:22 +1100 >
+# Time-stamp: <Monday 2024-12-02 12:50:52 +1100 >
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -57,7 +57,8 @@ endif
 define HELP
 $(APP):
 
-  locals	     No local targets defined yet.
+  flat		Checkout, build, install msfatigue-flat.solidcommunity.au
+  grad		Checkout, build, install msfatigue-grad.solidcommunity.au
 
 endef
 export HELP
