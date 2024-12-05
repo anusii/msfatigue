@@ -31,6 +31,7 @@ class _QuestionPageState extends State<QuestionPage> {
   String? _selectedOption;
 
   // Define the colors for the gradient buttons in the specified order.
+
   final List<Color> gradientColors = [
     const Color(0xFFFFE6EB), // Very pale soft pink
     const Color(0xFFFFD6DE), // Light pale pink
@@ -234,7 +235,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     ),
                     child: const Center(
                       // Center-align the text.
-                      
+
                       child: Text(
                         "Exit, without submitting",
                         style: TextStyle(
@@ -370,7 +371,9 @@ class _QuestionPageState extends State<QuestionPage> {
                                   vertical: 12.0, horizontal: 16.0),
                               decoration: BoxDecoration(
                                 color: _selectedOption == options[index]
-                                    ? Colors.pink[300]
+                                    ? (index >= gradientColors.length - 2
+                                        ? Colors.grey[600]
+                                        : Colors.pink[300])
                                     : gradientColors[index],
                                 border: Border.all(
                                   color: Colors.white,
