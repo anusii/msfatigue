@@ -2,7 +2,7 @@
 #
 # Makefile for the MSFatigue Flutter app.
 #
-# Time-stamp: <Wednesday 2024-05-08 20:29:39 +1000 Graham Williams>
+# Time-stamp: <Monday 2024-12-02 12:50:52 +1100 >
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -57,7 +57,8 @@ endif
 define HELP
 $(APP):
 
-  locals	     No local targets defined yet.
+  flat		Checkout, build, install msfatigue-flat.solidcommunity.au
+  grad		Checkout, build, install msfatigue-grad.solidcommunity.au
 
 endef
 export HELP
@@ -70,3 +71,31 @@ help::
 
 locals:
 	@echo "This might be the instructions to install $(APP)"
+
+flat:
+	git checkout zy/19_button_solid_color
+	git pull
+	cp web/index.html web/index.html.bak
+	perl -pi -e 's|^  <base href=.*$$|  <base href="/msfatigue-$@/">|' web/index.html
+	flutter build web
+	mv web/index.html.bak web/index.html
+	if [ ! -e /var/www/html/msfatigue-$@ ]; then \
+		sudo mkdir /var/www/html/msfatigue-$@; \
+	fi
+	sudo rsync -azvh build/web/ /var/www/html/msfatigue-$@
+	sudo chmod -R a+rX /var/www/html/msfatigue-$@
+	git checkout dev
+
+grad:
+	git checkout zy/18_new_ui_design
+	git pull
+	cp web/index.html web/index.html.bak
+	perl -pi -e 's|^  <base href=.*$$|  <base href="/msfatigue-$@/">|' web/index.html
+	flutter build web
+	mv web/index.html.bak web/index.html
+	if [ ! -e /var/www/html/msfatigue-$@ ]; then \
+		sudo mkdir /var/www/html/msfatigue-$@; \
+	fi
+	sudo rsync -azvh build/web/ /var/www/html/msfatigue-$@
+	sudo chmod -R a+rX /var/www/html/msfatigue-$@
+	git checkout dev
