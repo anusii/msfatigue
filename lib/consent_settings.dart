@@ -55,7 +55,10 @@ class ConsentSettingsPage extends StatelessWidget {
             const SizedBox(height: 30),
             RichText(
               text: const TextSpan(
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300,color: Colors.black),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black),
                 children: [
                   TextSpan(
                     text: 'Previously agreed consent\n\n',
