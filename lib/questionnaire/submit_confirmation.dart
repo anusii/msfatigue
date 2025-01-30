@@ -43,17 +43,6 @@ class SubmitConfirmation extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 6,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFFFF5A5F),
-                    Color(0xFFFF66A1),
-                  ],
-                ),
-              ),
-            ),
             Image.asset(
               'assets/images/bottom_dot_four.png',
               height: 260,
