@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:msfatigue/questionnaire/welcome_back_final.dart';
-
 import 'package:gap/gap.dart';
+
+import 'package:msfatigue/questionnaire/welcome_back_final.dart';
+import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class SurveyCompleted extends StatelessWidget {
   const SurveyCompleted({super.key});
@@ -10,17 +13,12 @@ class SurveyCompleted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {
-            // Handle menu action.
-          },
-        ),
         title: Center(
           child: Column(
             children: [
@@ -43,6 +41,7 @@ class SurveyCompleted extends StatelessWidget {
           size: 50,
         ),
       ),
+      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           children: [

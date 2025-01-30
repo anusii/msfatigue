@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
+import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class SubmitConfirmation extends StatelessWidget {
   const SubmitConfirmation({super.key});
@@ -8,17 +11,12 @@ class SubmitConfirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {
-            // Handle menu action.
-          },
-        ),
         title: Center(
           child: Column(
             children: [
@@ -41,6 +39,7 @@ class SubmitConfirmation extends StatelessWidget {
           size: 50,
         ),
       ),
+      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           children: [
