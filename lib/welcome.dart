@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/consent_settings.dart';
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -14,6 +17,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -49,7 +53,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
                 /// Custom header section replacing the old [DrawerHeader].
                 /// Includes a placeholder logo, title, and a close button.
-            
+
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SizedBox(
@@ -63,12 +67,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         // Pin the IconButton to the top-right corner.
-            
+
                         Positioned(
                           right: 0,
                           top: 0,
                           child: IconButton(
-                            icon: const Icon(Icons.close),
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
                             onPressed: () => Navigator.of(context).pop(),
                           ),
                         ),
@@ -76,9 +84,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                 ),
-            
+
                 /// Optional section label for clarity (e.g., “SETTINGS”).
-            
+
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -92,10 +100,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                 ),
-            
+
                 /// Menu item: Personal settings.
                 /// Replace the onTap with navigation logic as needed.
-            
+
                 ListTile(
                   title: const Text('Personal settings'),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -107,10 +115,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 2,
                   color: Colors.black,
                 ),
-            
+
                 /// Menu item: Account details.
                 /// Replace the onTap with navigation logic as needed.
-            
+
                 ListTile(
                   title: const Text('Account details'),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -122,21 +130,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 2,
                   color: Colors.black,
                 ),
-            
+
                 ListTile(
                   title: const Text('Consent settings'),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    Navigator.pop(context); // Closes the Drawer.
+                  onTap: () async {
+                    // 1) Close the drawer first.
+
+                    Navigator.pop(context);
+
+                    // 2) Push the new ConsentSettingsPage.
+
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ConsentSettingsPage(),
+                      ),
+                    );
+
+                    // 3) Re-open the drawer when we return.
+                    
+                    _scaffoldKey.currentState?.openDrawer();
                   },
                 ),
-            
+
                 /// Use Spacer to push the logout button to the bottom of the Drawer.
-            
+
                 const Spacer(),
-            
+
                 /// Logout button at the bottom of the Drawer.
-            
+
                 Center(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
