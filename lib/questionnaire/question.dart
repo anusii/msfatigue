@@ -268,27 +268,6 @@ class _QuestionPageState extends State<QuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 40,
-        leadingWidth: 120,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: TextButton(
-            onPressed: _showEndDialog,
-            child: const Text(
-              "< End now",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: questions.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -296,10 +275,44 @@ class _QuestionPageState extends State<QuestionPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Center(
-                    child: Image.asset(
-                      'assets/images/msFatigue_icon.png',
-                      height: 65,
+                  SizedBox(
+                    width: double.infinity,
+                    height: 80,
+                    child: Stack(
+                      children: [
+                        // 1) Center the image.
+
+                        Center(
+                          child: Image.asset(
+                            'assets/images/msFatigue_icon.png',
+                            height: 75,
+                          ),
+                        ),
+                        // Place "End now" button in the top-right corner.
+
+                        Positioned(
+                          right: 16,
+                          top: 16,
+                          child: OutlinedButton(
+                            onPressed: _showEndDialog,
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: Colors.pink, width: 1.8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                            ),
+                            child: const Text(
+                              'End now',
+                              style: TextStyle(
+                                color: Colors.pinkAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const Gap(5),
@@ -316,8 +329,7 @@ class _QuestionPageState extends State<QuestionPage> {
                           ),
                         ),
                         FractionallySizedBox(
-                          widthFactor:
-                              (_currentQuestionIndex + 1) / questions.length,
+                          widthFactor: 0,
                           child: Container(
                             height: 6,
                             decoration: BoxDecoration(
