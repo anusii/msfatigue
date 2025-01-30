@@ -9,8 +9,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Review Panel Integration Test', () {
-    testWidgets('Displays files in review tab',
-        (WidgetTester tester) async {
+    testWidgets('Displays files in review tab', (WidgetTester tester) async {
       // Start the app.
       app.main();
 
@@ -29,8 +28,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Navigate to the Review tab (assuming the review panel is in a tab).
-      final reviewTab =
-          find.text('Review');
+      final reviewTab = find.text('Review');
       expect(reviewTab, findsOneWidget);
 
       // Tap the review tab.

@@ -32,7 +32,6 @@ import 'package:window_manager/window_manager.dart';
 import 'package:msfatigue/utils/is_desktop.dart';
 import 'package:msfatigue/welcome.dart';
 
-
 void main() async {
   // Support window size and top placement for desktop apps.
   if (isDesktop(PlatformWrapper())) {
