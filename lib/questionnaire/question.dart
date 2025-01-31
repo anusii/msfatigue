@@ -170,19 +170,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                // Subtitle Text.
-
-                Text(
-                  "You only have ${questions.length - _currentQuestionIndex - 1} more question(s) in this section.",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black,
-                  ),
-                ),
+                
                 const SizedBox(height: 80),
 
                 GestureDetector(
@@ -207,7 +195,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Submit what I have",
+                        "Yes, end now",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -237,7 +225,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       // Center-align the text.
 
                       child: Text(
-                        "Exit, without submitting",
+                        "No, return to the survey",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w300,
