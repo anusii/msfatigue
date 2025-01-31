@@ -18,7 +18,7 @@ dependencies:
     git:
       url: https://github.com/anusii/solidpod
       ref: dev
-  window_manager: ^0.3.9
+  window_manager: ^0.4.3
   universal_io: ^2.2.2
 
 dev_dependencies:
@@ -30,11 +30,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
   integration_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
 
 dependency_overrides:
   #  file: ^7.0.0 # Use only if necessary
