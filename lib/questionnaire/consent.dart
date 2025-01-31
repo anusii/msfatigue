@@ -26,14 +26,6 @@ class _ConsentScreenState extends State<ConsentScreen> {
             height: 65,
           ),
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/profile.png'),
-            ),
-          ),
-        ],
         iconTheme: const IconThemeData(
           size: 50,
         ),

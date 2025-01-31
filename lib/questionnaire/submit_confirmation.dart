@@ -27,14 +27,6 @@ class SubmitConfirmation extends StatelessWidget {
             ],
           ),
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/profile.png'),
-            ),
-          ),
-        ],
         iconTheme: const IconThemeData(
           size: 50,
         ),
