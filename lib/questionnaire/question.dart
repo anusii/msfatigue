@@ -170,7 +170,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     color: Colors.black,
                   ),
                 ),
-                
+
                 const SizedBox(height: 80),
 
                 GestureDetector(

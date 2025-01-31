@@ -27,6 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/utils/is_desktop.dart';
@@ -68,7 +69,11 @@ class MSFatigue extends StatelessWidget {
     return const MaterialApp(
       title: 'MS Fatigue',
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      home: SolidLogin(
+        image: AssetImage('assets/images/msFatigue_cover_image.png'),
+        logo: AssetImage('assets/images/msFatigue_icon.png'),
+        child: Scaffold(body: WelcomeScreen()),
+      ),
     );
   }
 }
