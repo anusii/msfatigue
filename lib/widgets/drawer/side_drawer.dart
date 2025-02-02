@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart';
+
 import 'package:msfatigue/consent_settings.dart';
 import 'package:msfatigue/constants/layout.dart';
+import 'package:msfatigue/main.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
 /// and a logout button. Handles reopening the drawer after navigating back
@@ -147,8 +150,8 @@ class SideDrawer extends StatelessWidget {
                         vertical: 16,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: () async{
+                      await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(
                       'Logout',
