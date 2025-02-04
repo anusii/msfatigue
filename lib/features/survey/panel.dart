@@ -109,6 +109,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
               buttonStr: 'Submit',
               webId: webId,
               onPressed: () async {
+
                 // Check if all items in qChosenList are null.
                 if (qChosenList.every((element) => element == null)) {
                   showWarning('Incomplete Submission',

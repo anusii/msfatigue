@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
+import 'package:msfatigue/utils/create_survey.dart';
+import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -75,18 +80,30 @@ class SubmitConfirmation extends StatelessWidget {
                     ),
                   ),
 
-                  // Spacing between buttons.
-
                   const SizedBox(width: 16),
 
-                  // Submit Button.
-
                   OutlinedButton.icon(
-                    onPressed: () {
+                    onPressed: () async{
+                      // Retrieve the current SurveyState from the bloc.
+                      final surveyState = context.read<SurveyBloc>().state;
+                      // Convert the responses Map to a list of records.
+                      final List<({String key, dynamic value})> dataRecords =
+                          surveyState.responses.entries
+                              .map((entry) =>
+                                  (key: entry.key, value: entry.value))
+                              .toList();
+                      
+                      String fileName = createSurveyFilename();
+
+                      await saveToPod(dataRecords, fileName, context);
+
+                      // Now pass the dataRecords to the SurveyCompleted screen.
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SurveyCompleted(),
+                          builder: (context) =>
+                              SurveyCompleted(),
                         ),
                       );
                     },
