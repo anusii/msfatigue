@@ -27,9 +27,11 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/utils/is_desktop.dart';
 import 'package:msfatigue/welcome.dart';
 
@@ -57,7 +59,13 @@ void main() async {
   }
 
   // Ready to run the app.
-  runApp(const MSFatigue());
+  
+  runApp(
+    BlocProvider(
+      create: (_) => SurveyBloc(),
+      child: const MSFatigue(),
+    ),
+  );
 }
 
 class MSFatigue extends StatelessWidget {

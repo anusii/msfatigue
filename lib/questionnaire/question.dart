@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:gap/gap.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -26,15 +28,6 @@ class _QuestionPageState extends State<QuestionPage> {
     "Don't know",
     "Not applicable",
   ];
-  final List<String> additionalOptions = ["Don't know", "Not applicable"];
-  int _currentQuestionIndex = 0;
-
-  /// This list holds the answer for each question.
-  /// It is initialized with null values (one for each question).
-  
-  List<String?> _responses = [];
-
-  // Define the colors for the gradient buttons in the specified order.
   final List<Color> gradientColors = [
     const Color(0xFFFFE6EB), // Very pale soft pink
     const Color(0xFFFFD6DE), // Light pale pink
@@ -51,19 +44,16 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   Future<void> _loadQuestions() async {
-    final data = await rootBundle
-        .loadString('assets/markdown/fatigue_small_questionnaire.md');
+    final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
     setState(() {
       questions = _parseQuestions(data);
-
       // Divide questions into Block 1 and Block 2.
       block1Questions = questions.take(6).toList();
       block2Questions = questions.skip(6).take(6).toList();
-
-      // Initialize responses list with one null per question.
-
-      _responses = List<String?>.filled(questions.length, null);
     });
+    // Initialize the survey bloc with the loaded questions.
+
+    context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
   }
 
   List<String> _parseQuestions(String data) {
@@ -84,44 +74,19 @@ class _QuestionPageState extends State<QuestionPage> {
     return extractedQuestions;
   }
 
-  void _nextQuestion() {
-    if (_currentQuestionIndex == questions.length - 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SubmitConfirmation(),
-        ),
-      );
-    } else {
-      setState(() {
-        if (_currentQuestionIndex < questions.length - 1) {
-          _currentQuestionIndex++;
-        }
-      });
-    }
-  }
-
-  void _previousQuestion() {
-    setState(() {
-      if (_currentQuestionIndex > 0) {
-        _currentQuestionIndex--;
-      }
-    });
-  }
-
-  String _getBlockTitle() {
-    if (_currentQuestionIndex < block1Questions.length) {
+  String _getBlockTitle(int currentQuestionIndex) {
+    if (currentQuestionIndex < block1Questions.length) {
       return "BLOCK 1";
     } else {
       return "BLOCK 2";
     }
   }
 
-  String _getCurrentQuestion() {
-    if (_currentQuestionIndex < block1Questions.length) {
-      return block1Questions[_currentQuestionIndex];
+  String _getCurrentQuestion(int currentQuestionIndex) {
+    if (currentQuestionIndex < block1Questions.length) {
+      return block1Questions[currentQuestionIndex];
     } else {
-      final block2Index = _currentQuestionIndex - block1Questions.length;
+      final block2Index = currentQuestionIndex - block1Questions.length;
       return block2Questions[block2Index];
     }
   }
@@ -131,18 +96,13 @@ class _QuestionPageState extends State<QuestionPage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
           child: Container(
             padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                width: 2,
-                color: Colors.pink,
-              ),
+              border: Border.all(width: 2, color: Colors.pink),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -152,27 +112,18 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.black,
-                        size: 30,
-                      ),
+                      icon: const Icon(Icons.close, color: Colors.black, size: 30),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                   ),
                 ),
-                // Title Text.
 
                 const Text(
                   "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400, color: Colors.black),
                 ),
 
                 const SizedBox(height: 80),
@@ -188,10 +139,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFFF79D4),
-                          Color(0xFFFF5A5F),
-                        ],
+                        colors: [Color(0xFFFF79D4), Color(0xFFFF5A5F)],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
@@ -200,11 +148,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     child: const Center(
                       child: Text(
                         "Yes, end now",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   ),
@@ -216,23 +160,16 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: OutlinedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pop(context);
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
                       child: Text(
                         "No, return to the survey",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontSize: 16),
                       ),
                     ),
                   ),
@@ -248,9 +185,7 @@ class _QuestionPageState extends State<QuestionPage> {
   void _submitSurvey() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const SubmitConfirmation(),
-      ),
+      MaterialPageRoute(builder: (context) => const SubmitConfirmation(),),
     );
   }
 
@@ -260,208 +195,185 @@ class _QuestionPageState extends State<QuestionPage> {
       backgroundColor: Colors.white,
       body: questions.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    height: 80,
-                    child: Stack(
-                      children: [
-                        // 1) Center the image.
-
-                        Center(
-                          child: Image.asset(
-                            'assets/images/msFatigue_icon.png',
-                            height: 75,
-                          ),
-                        ),
-                        // Place "End now" button in the top-right corner.
-
-                        Positioned(
-                          right: 16,
-                          top: 16,
-                          child: OutlinedButton(
-                            onPressed: _showEndDialog,
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: Colors.pink, width: 1.8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                            ),
-                            child: const Text(
-                              'End now',
-                              style: TextStyle(
-                                color: Colors.pinkAccent,
+          : BlocBuilder<SurveyBloc, SurveyState>(
+              builder: (context, state) {
+                final int currentQuestionIndex = state.currentQuestionIndex;
+                final String currentQuestion = _getCurrentQuestion(currentQuestionIndex);
+                
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: double.infinity,
+                        height: 80,
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Image.asset(
+                                'assets/images/msFatigue_icon.png',
+                                height: 75,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 0.0, vertical: 8.0),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: Colors.pink[100],
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                        ),
-                        FractionallySizedBox(
-                          widthFactor: 0,
-                          child: Container(
-                            height: 6,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Colors.red, Colors.pink],
-                              ),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      '${_getBlockTitle()} - QUESTION ${_currentQuestionIndex + 1}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.pink,
-                      ),
-                    ),
-                  ),
-                  const Gap(10),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                    child: Center(
-                      child: Text(
-                        _getCurrentQuestion(),
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Gap(10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: options.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                // Save the selected option for the current question.
-
-                                _responses[_currentQuestionIndex] = options[index];
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                color: _responses[_currentQuestionIndex] == options[index]
-                                    ? (index >= gradientColors.length - 2
-                                        ? Colors.grey[600]
-                                        : Colors.pink[300])
-                                    : gradientColors[index],
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 1,
+                            Positioned(
+                              right: 16,
+                              top: 16,
+                              child: OutlinedButton(
+                                onPressed: _showEndDialog,
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Colors.pink, width: 1.8),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                ),
+                                child: const Text(
+                                  'End now',
+                                  style: TextStyle(color: Colors.pinkAccent),
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 30),
-                                  Text(
-                                    options[index],
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: _responses[_currentQuestionIndex] == options[index]
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Gap(5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: Colors.pink[100],
+                                borderRadius: BorderRadius.circular(3),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const Gap(25),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OutlinedButton.icon(
-                          onPressed: _currentQuestionIndex > 0
-                              ? _previousQuestion
-                              : null,
-                          icon:
-                              const Icon(Icons.arrow_left, color: Colors.grey),
-                          label: const Text(
-                            "Previous    ",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.grey.shade400),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            FractionallySizedBox(
+                              widthFactor: 0,
+                              child: Container(
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.red, Colors.pink],
+                                  ),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 5,
-                            ),
-                            alignment: Alignment.centerLeft,
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          '${_getBlockTitle(currentQuestionIndex)} - QUESTION ${currentQuestionIndex + 1}',
+                          style: const TextStyle(fontSize: 12, color: Colors.pink),
+                        ),
+                      ),
+                      const Gap(10),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                        child: Center(
+                          child: Text(
+                            currentQuestion,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ),
-                        OutlinedButton.icon(
-                          onPressed: (_responses[_currentQuestionIndex] != null)
-                              ? _nextQuestion
-                              : null,
-                          icon: const Text(
-                            "    Next",
-                            style: TextStyle(color: Colors.pink),
-                          ),
-                          label:
-                              const Icon(Icons.arrow_right, color: Colors.pink),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              width: 2,
-                              color: Colors.pink,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 5,
-                            ),
-                            alignment: Alignment.centerRight,
-                          ),
+                      ),
+                      const Gap(10),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: options.length,
+                          itemBuilder: (context, index) {
+                            // Determine whether the option is selected for this question.
+
+                            final isSelected = state.responses[currentQuestionIndex] == options[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  // Dispatch an event to update the response for the current question.
+
+                                  context.read<SurveyBloc>().add(
+                                        UpdateResponse(
+                                          questionIndex: currentQuestionIndex,
+                                          response: options[index],
+                                        ),
+                                      );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? (index >= gradientColors.length - 2
+                                            ? Colors.grey[600]
+                                            : Colors.pink[300])
+                                        : gradientColors[index],
+                                    border: Border.all(color: Colors.white, width: 1),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 30),
+                                      Text(
+                                        options[index],
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: isSelected ? Colors.white : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                      const Gap(25),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: currentQuestionIndex > 0
+                                  ? () {
+                                      context.read<SurveyBloc>().add(PreviousQuestion());
+                                    }
+                                  : null,
+                              icon: const Icon(Icons.arrow_left, color: Colors.grey),
+                              label: const Text("Previous    ", style: TextStyle(color: Colors.grey)),
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(color: Colors.grey.shade400),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                                alignment: Alignment.centerLeft,
+                              ),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: (state.responses[currentQuestionIndex] != null)
+                                  ? () {
+                                      context.read<SurveyBloc>().add(NextQuestion());
+                                      if (currentQuestionIndex == questions.length - 1) {
+                                        _submitSurvey();
+                                      }
+                                    }
+                                  : null,
+                              icon: const Text("    Next", style: TextStyle(color: Colors.pink)),
+                              label: const Icon(Icons.arrow_right, color: Colors.pink),
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(width: 2, color: Colors.pink),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                                alignment: Alignment.centerRight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
     );
   }
