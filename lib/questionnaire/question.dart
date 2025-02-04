@@ -44,17 +44,24 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   Future<void> _loadQuestions() async {
-    final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
-    setState(() {
-      questions = _parseQuestions(data);
-      // Divide questions into Block 1 and Block 2.
-      block1Questions = questions.take(6).toList();
-      block2Questions = questions.skip(6).take(6).toList();
-    });
-    // Initialize the survey bloc with the loaded questions.
+  final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
 
-    context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
-  }
+  // Check if the widget is still mounted.
+  
+  if (!mounted) return;
+
+  setState(() {
+    questions = _parseQuestions(data);
+    // Divide questions into Block 1 and Block 2.
+    block1Questions = questions.take(6).toList();
+    block2Questions = questions.skip(6).take(6).toList();
+  });
+
+  // Check again if mounted before using context for the bloc.
+  
+  if (!mounted) return;
+  context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
+}
 
   List<String> _parseQuestions(String data) {
     final lines = data.split('\n');
