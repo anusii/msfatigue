@@ -28,10 +28,13 @@ class _QuestionPageState extends State<QuestionPage> {
   ];
   final List<String> additionalOptions = ["Don't know", "Not applicable"];
   int _currentQuestionIndex = 0;
-  String? _selectedOption;
+
+  /// This list holds the answer for each question.
+  /// It is initialized with null values (one for each question).
+  
+  List<String?> _responses = [];
 
   // Define the colors for the gradient buttons in the specified order.
-
   final List<Color> gradientColors = [
     const Color(0xFFFFE6EB), // Very pale soft pink
     const Color(0xFFFFD6DE), // Light pale pink
@@ -54,9 +57,12 @@ class _QuestionPageState extends State<QuestionPage> {
       questions = _parseQuestions(data);
 
       // Divide questions into Block 1 and Block 2.
-
       block1Questions = questions.take(6).toList();
       block2Questions = questions.skip(6).take(6).toList();
+
+      // Initialize responses list with one null per question.
+
+      _responses = List<String?>.filled(questions.length, null);
     });
   }
 
@@ -91,7 +97,6 @@ class _QuestionPageState extends State<QuestionPage> {
         if (_currentQuestionIndex < questions.length - 1) {
           _currentQuestionIndex++;
         }
-        _selectedOption = null;
       });
     }
   }
@@ -100,7 +105,6 @@ class _QuestionPageState extends State<QuestionPage> {
     setState(() {
       if (_currentQuestionIndex > 0) {
         _currentQuestionIndex--;
-        _selectedOption = null;
       }
     });
   }
@@ -222,8 +226,6 @@ class _QuestionPageState extends State<QuestionPage> {
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
-                      // Center-align the text.
-
                       child: Text(
                         "No, return to the survey",
                         style: TextStyle(
@@ -363,14 +365,16 @@ class _QuestionPageState extends State<QuestionPage> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedOption = options[index];
+                                // Save the selected option for the current question.
+
+                                _responses[_currentQuestionIndex] = options[index];
                               });
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12.0, horizontal: 16.0),
                               decoration: BoxDecoration(
-                                color: _selectedOption == options[index]
+                                color: _responses[_currentQuestionIndex] == options[index]
                                     ? (index >= gradientColors.length - 2
                                         ? Colors.grey[600]
                                         : Colors.pink[300])
@@ -387,7 +391,7 @@ class _QuestionPageState extends State<QuestionPage> {
                                     options[index],
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: _selectedOption == options[index]
+                                      color: _responses[_currentQuestionIndex] == options[index]
                                           ? Colors.white
                                           : Colors.black,
                                     ),
@@ -429,8 +433,9 @@ class _QuestionPageState extends State<QuestionPage> {
                           ),
                         ),
                         OutlinedButton.icon(
-                          onPressed:
-                              (_selectedOption != null) ? _nextQuestion : null,
+                          onPressed: (_responses[_currentQuestionIndex] != null)
+                              ? _nextQuestion
+                              : null,
                           icon: const Text(
                             "    Next",
                             style: TextStyle(color: Colors.pink),
