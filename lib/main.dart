@@ -72,6 +72,7 @@ class MSFatigue extends StatelessWidget {
       home: SolidLogin(
         image: AssetImage('assets/images/msFatigue_cover_image.png'),
         logo: AssetImage('assets/images/msFatigue_icon.png'),
+        webID: 'https://pods.dev.solidcommunity.au',
         child: Scaffold(body: WelcomeScreen()),
       ),
     );
