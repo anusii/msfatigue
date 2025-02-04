@@ -44,24 +44,24 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   Future<void> _loadQuestions() async {
-  final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
+    final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
 
-  // Check if the widget is still mounted.
-  
-  if (!mounted) return;
+    // Check if the widget is still mounted.
+    
+    if (!mounted) return;
 
-  setState(() {
-    questions = _parseQuestions(data);
-    // Divide questions into Block 1 and Block 2.
-    block1Questions = questions.take(6).toList();
-    block2Questions = questions.skip(6).take(6).toList();
-  });
+    setState(() {
+      questions = _parseQuestions(data);
+      // Divide questions into Block 1 and Block 2.
+      block1Questions = questions.take(6).toList();
+      block2Questions = questions.skip(6).take(6).toList();
+    });
 
-  // Check again if mounted before using context for the bloc.
-  
-  if (!mounted) return;
-  context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
-}
+    // Check again if mounted before using context for the bloc.
+    
+    if (!mounted) return;
+    context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
+  }
 
   List<String> _parseQuestions(String data) {
     final lines = data.split('\n');
@@ -74,13 +74,16 @@ class _QuestionPageState extends State<QuestionPage> {
       } else if (line.startsWith('## Answer Options')) {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
+        // Assumes each question line is prefixed with a number and a dot (e.g., "1. Question text")
+        
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
-
     return extractedQuestions;
   }
 
+  // This helper returns the block title using local variables.
+  
   String _getBlockTitle(int currentQuestionIndex) {
     if (currentQuestionIndex < block1Questions.length) {
       return "BLOCK 1";
@@ -89,21 +92,12 @@ class _QuestionPageState extends State<QuestionPage> {
     }
   }
 
-  String _getCurrentQuestion(int currentQuestionIndex) {
-    if (currentQuestionIndex < block1Questions.length) {
-      return block1Questions[currentQuestionIndex];
-    } else {
-      final block2Index = currentQuestionIndex - block1Questions.length;
-      return block2Questions[block2Index];
-    }
-  }
-
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
             decoration: BoxDecoration(
@@ -121,12 +115,11 @@ class _QuestionPageState extends State<QuestionPage> {
                     child: IconButton(
                       icon: const Icon(Icons.close, color: Colors.black, size: 30),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pop(dialogContext);
                       },
                     ),
                   ),
                 ),
-
                 const Text(
                   "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
@@ -137,7 +130,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(dialogContext);
                     _submitSurvey();
                   },
                   child: Container(
@@ -166,11 +159,11 @@ class _QuestionPageState extends State<QuestionPage> {
                   height: 46,
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(dialogContext);
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
@@ -204,9 +197,13 @@ class _QuestionPageState extends State<QuestionPage> {
           ? const Center(child: CircularProgressIndicator())
           : BlocBuilder<SurveyBloc, SurveyState>(
               builder: (context, state) {
-                final int currentQuestionIndex = state.currentQuestionIndex;
-                final String currentQuestion = _getCurrentQuestion(currentQuestionIndex);
+                // Get the current question by using the insertion order of the responses map.
                 
+                final int currentQuestionIndex = state.currentQuestionIndex;
+                final List<String> questionsList = state.responses.keys.toList();
+                final String currentQuestion = questionsList[currentQuestionIndex];
+                final String? selectedResponse = state.responses[currentQuestion];
+
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                   child: Column(
@@ -291,15 +288,11 @@ class _QuestionPageState extends State<QuestionPage> {
                         child: ListView.builder(
                           itemCount: options.length,
                           itemBuilder: (context, index) {
-                            // Determine whether the option is selected for this question.
-
-                            final isSelected = state.responses[currentQuestionIndex] == options[index];
+                            final bool isSelected = selectedResponse == options[index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  // Dispatch an event to update the response for the current question.
-
                                   context.read<SurveyBloc>().add(
                                         UpdateResponse(
                                           questionIndex: currentQuestionIndex,
@@ -357,7 +350,7 @@ class _QuestionPageState extends State<QuestionPage> {
                               ),
                             ),
                             OutlinedButton.icon(
-                              onPressed: (state.responses[currentQuestionIndex] != null)
+                              onPressed: (selectedResponse != null)
                                   ? () {
                                       context.read<SurveyBloc>().add(NextQuestion());
                                       if (currentQuestionIndex == questions.length - 1) {

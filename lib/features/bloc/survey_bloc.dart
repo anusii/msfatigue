@@ -42,7 +42,12 @@ class PreviousQuestion extends SurveyEvent {}
 /// --- SURVEY STATE ---
 
 class SurveyState extends Equatable {
-  final List<String?> responses;
+  /// Map where each key is a question (String) and its value is the answer (String?)  
+  
+  final Map<String, String?> responses;
+  
+  /// The index (in insertion order) of the currently displayed question.
+  
   final int currentQuestionIndex;
 
   const SurveyState({
@@ -51,7 +56,7 @@ class SurveyState extends Equatable {
   });
 
   SurveyState copyWith({
-    List<String?>? responses,
+    Map<String, String?>? responses,
     int? currentQuestionIndex,
   }) {
     return SurveyState(
@@ -65,22 +70,25 @@ class SurveyState extends Equatable {
 }
 
 /// --- SURVEY BLOC ---
-
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
-  SurveyBloc() : super(const SurveyState(responses: [], currentQuestionIndex: 0)) {
+  SurveyBloc() : super(const SurveyState(responses: {}, currentQuestionIndex: 0)) {
     on<InitializeSurvey>((event, emit) {
-      // Initialize the responses list with a null for each question.
+      // Create a map where each question is a key with a null value.
       
-      emit(SurveyState(
-        responses: List<String?>.filled(event.questions.length, null),
-        currentQuestionIndex: 0,
-      ));
+      final Map<String, String?> responses = {
+        for (var question in event.questions) question: null,
+      };
+      emit(SurveyState(responses: responses, currentQuestionIndex: 0));
     });
 
     on<UpdateResponse>((event, emit) {
-      final newResponses = List<String?>.from(state.responses);
-      newResponses[event.questionIndex] = event.response;
-      emit(state.copyWith(responses: newResponses));
+      final newResponses = Map<String, String?>.from(state.responses);
+      final questionList = newResponses.keys.toList();
+      if (event.questionIndex < questionList.length) {
+        final question = questionList[event.questionIndex];
+        newResponses[question] = event.response;
+        emit(state.copyWith(responses: newResponses));
+      }
     });
 
     on<NextQuestion>((event, emit) {
