@@ -44,10 +44,11 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   Future<void> _loadQuestions() async {
-    final data = await rootBundle.loadString('assets/markdown/fatigue_small_questionnaire.md');
+    final data = await rootBundle
+        .loadString('assets/markdown/fatigue_small_questionnaire.md');
 
     // Check if the widget is still mounted.
-    
+
     if (!mounted) return;
 
     setState(() {
@@ -58,7 +59,7 @@ class _QuestionPageState extends State<QuestionPage> {
     });
 
     // Check again if mounted before using context for the bloc.
-    
+
     if (!mounted) return;
     context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
   }
@@ -75,7 +76,7 @@ class _QuestionPageState extends State<QuestionPage> {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
         // Assumes each question line is prefixed with a number and a dot (e.g., "1. Question text")
-        
+
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
@@ -83,7 +84,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   // This helper returns the block title using local variables.
-  
+
   String _getBlockTitle(int currentQuestionIndex) {
     if (currentQuestionIndex < block1Questions.length) {
       return "BLOCK 1";
@@ -97,7 +98,8 @@ class _QuestionPageState extends State<QuestionPage> {
       context: context,
       builder: (BuildContext dialogContext) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
             decoration: BoxDecoration(
@@ -113,7 +115,8 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.black, size: 30),
+                      icon: const Icon(Icons.close,
+                          color: Colors.black, size: 30),
                       onPressed: () {
                         Navigator.pop(dialogContext);
                       },
@@ -123,11 +126,14 @@ class _QuestionPageState extends State<QuestionPage> {
                 const Text(
                   "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black),
                 ),
 
                 const SizedBox(height: 80),
-
+                
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(dialogContext);
@@ -148,7 +154,10 @@ class _QuestionPageState extends State<QuestionPage> {
                     child: const Center(
                       child: Text(
                         "Yes, end now",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
                       ),
                     ),
                   ),
@@ -163,13 +172,17 @@ class _QuestionPageState extends State<QuestionPage> {
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
                       child: Text(
                         "No, return to the survey",
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 16),
                       ),
                     ),
                   ),
@@ -185,7 +198,9 @@ class _QuestionPageState extends State<QuestionPage> {
   void _submitSurvey() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SubmitConfirmation(),),
+      MaterialPageRoute(
+        builder: (context) => const SubmitConfirmation(),
+      ),
     );
   }
 
@@ -198,11 +213,14 @@ class _QuestionPageState extends State<QuestionPage> {
           : BlocBuilder<SurveyBloc, SurveyState>(
               builder: (context, state) {
                 // Get the current question by using the insertion order of the responses map.
-                
+
                 final int currentQuestionIndex = state.currentQuestionIndex;
-                final List<String> questionsList = state.responses.keys.toList();
-                final String currentQuestion = questionsList[currentQuestionIndex];
-                final String? selectedResponse = state.responses[currentQuestion];
+                final List<String> questionsList =
+                    state.responses.keys.toList();
+                final String currentQuestion =
+                    questionsList[currentQuestionIndex];
+                final String? selectedResponse =
+                    state.responses[currentQuestion];
 
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
@@ -226,9 +244,13 @@ class _QuestionPageState extends State<QuestionPage> {
                               child: OutlinedButton(
                                 onPressed: _showEndDialog,
                                 style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.pink, width: 1.8),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  side: const BorderSide(
+                                      color: Colors.pink, width: 1.8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
                                 ),
                                 child: const Text(
                                   'End now',
@@ -241,7 +263,8 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(5),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 8.0),
                         child: Stack(
                           children: [
                             Container(
@@ -269,12 +292,14 @@ class _QuestionPageState extends State<QuestionPage> {
                       Center(
                         child: Text(
                           '${_getBlockTitle(currentQuestionIndex)} - QUESTION ${currentQuestionIndex + 1}',
-                          style: const TextStyle(fontSize: 12, color: Colors.pink),
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
                       ),
                       const Gap(10),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                         child: Center(
                           child: Text(
                             currentQuestion,
@@ -288,9 +313,11 @@ class _QuestionPageState extends State<QuestionPage> {
                         child: ListView.builder(
                           itemCount: options.length,
                           itemBuilder: (context, index) {
-                            final bool isSelected = selectedResponse == options[index];
+                            final bool isSelected =
+                                selectedResponse == options[index];
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
                               child: GestureDetector(
                                 onTap: () {
                                   context.read<SurveyBloc>().add(
@@ -301,14 +328,16 @@ class _QuestionPageState extends State<QuestionPage> {
                                       );
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0, horizontal: 16.0),
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? (index >= gradientColors.length - 2
                                             ? Colors.grey[600]
                                             : Colors.pink[300])
                                         : gradientColors[index],
-                                    border: Border.all(color: Colors.white, width: 1),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1),
                                   ),
                                   child: Row(
                                     children: [
@@ -317,7 +346,9 @@ class _QuestionPageState extends State<QuestionPage> {
                                         options[index],
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: isSelected ? Colors.white : Colors.black,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                       ),
                                     ],
@@ -330,40 +361,55 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(25),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OutlinedButton.icon(
                               onPressed: currentQuestionIndex > 0
                                   ? () {
-                                      context.read<SurveyBloc>().add(PreviousQuestion());
+                                      context
+                                          .read<SurveyBloc>()
+                                          .add(PreviousQuestion());
                                     }
                                   : null,
-                              icon: const Icon(Icons.arrow_left, color: Colors.grey),
-                              label: const Text("Previous    ", style: TextStyle(color: Colors.grey)),
+                              icon: const Icon(Icons.arrow_left,
+                                  color: Colors.grey),
+                              label: const Text("Previous    ",
+                                  style: TextStyle(color: Colors.grey)),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(color: Colors.grey.shade400),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 5),
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
                             OutlinedButton.icon(
                               onPressed: (selectedResponse != null)
-                                  ? () {
-                                      context.read<SurveyBloc>().add(NextQuestion());
-                                      if (currentQuestionIndex == questions.length - 1) {
+                                  ? () async {
+                                      context
+                                          .read<SurveyBloc>()
+                                          .add(NextQuestion());
+                                      if (currentQuestionIndex ==
+                                          questions.length - 1) {
                                         _submitSurvey();
                                       }
                                     }
                                   : null,
-                              icon: const Text("    Next", style: TextStyle(color: Colors.pink)),
-                              label: const Icon(Icons.arrow_right, color: Colors.pink),
+                              icon: const Text("    Next",
+                                  style: TextStyle(color: Colors.pink)),
+                              label: const Icon(Icons.arrow_right,
+                                  color: Colors.pink),
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(width: 2, color: Colors.pink),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                                side: const BorderSide(
+                                    width: 2, color: Colors.pink),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 5),
                                 alignment: Alignment.centerRight,
                               ),
                             ),

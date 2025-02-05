@@ -150,7 +150,7 @@ class SideDrawer extends StatelessWidget {
                         vertical: 16,
                       ),
                     ),
-                    onPressed: () async{
+                    onPressed: () async {
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/constants/layout.dart';
-import 'package:msfatigue/utils/create_survey.dart';
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/utils/markdown_survey_data.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
@@ -109,8 +110,8 @@ class _SurveyPanelState extends State<SurveyPanel> {
               buttonStr: 'Submit',
               webId: webId,
               onPressed: () async {
-
                 // Check if all items in qChosenList are null.
+                
                 if (qChosenList.every((element) => element == null)) {
                   showWarning('Incomplete Submission',
                       'Please answer at least one question.', context);
@@ -118,7 +119,13 @@ class _SurveyPanelState extends State<SurveyPanel> {
                   // Build the data map of questions and selected answers.
                   List<({String key, dynamic value})> dataRecords =
                       _buildDataRecords();
-                  String fileName = createSurveyFilename();
+
+                  final surveyState =
+                      BlocProvider.of<SurveyBloc>(context).state;
+
+                  String fileName = surveyState.surveyFilename;
+
+                  debugPrint('Filename: $fileName');
 
                   await saveToPod(dataRecords, fileName, context);
                 }

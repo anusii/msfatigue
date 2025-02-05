@@ -26,28 +26,51 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/utils/is_desktop.dart';
 import 'package:msfatigue/welcome.dart';
 
-void main() async {
-  // Support window size and top placement for desktop apps.
-  if (isDesktop(PlatformWrapper())) {
-    WidgetsFlutterBinding.ensureInitialized();
+// Dummy implementations for desktop support.
+// Replace these with your actual implementations.
 
+bool isDesktop(dynamic platformWrapper) {
+  return true;
+}
+
+class PlatformWrapper {
+  // Your platform wrapper implementation.
+}
+
+// Example implementation of createSurveyFilename().
+// Modify this function to generate your filename as needed.
+
+Future<String> createSurveyFilename() async {
+  final now = DateTime.now();
+  final formatter = DateFormat('yyyyMMddTHHmmss');
+  final timestamp = formatter.format(now);
+
+  return 'survey_$timestamp.ttl';
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final surveyFilename = await createSurveyFilename();
+
+  // Desktop support (if needed).
+
+  if (!kIsWeb && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
-      // Setting [alwaysOnTop] here will ensure the app starts on top of other
-      // apps on the desktop so that it is visible. We later turn it off as we
-      // don't want to force it always on top.
+      // Setting alwaysOnTop to true so the app starts on top.
       alwaysOnTop: true,
-      // The [title] is used for the window manager's window title.
       title: 'MS Fatigue',
     );
 
@@ -59,10 +82,10 @@ void main() async {
   }
 
   // Ready to run the app.
-  
+
   runApp(
     BlocProvider(
-      create: (_) => SurveyBloc(),
+      create: (_) => SurveyBloc(surveyFilename: surveyFilename),
       child: const MSFatigue(),
     ),
   );

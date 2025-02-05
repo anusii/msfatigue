@@ -16,7 +16,7 @@ void showFileContent(
   final dataDirPath = await getDataDirPath();
 
   // Remove mounted check since this is a standalone function.
-  
+
   if (!context.mounted) return;
 
   final filePath = path.join(dataDirPath, fileName);

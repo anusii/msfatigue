@@ -81,18 +81,21 @@ class SubmitConfirmation extends StatelessWidget {
                   ),
 
                   const SizedBox(width: 16),
-
+                  
                   OutlinedButton.icon(
-                    onPressed: () async{
+                    onPressed: () async {
                       // Retrieve the current SurveyState from the bloc.
+
                       final surveyState = context.read<SurveyBloc>().state;
+
                       // Convert the responses Map to a list of records.
+
                       final List<({String key, dynamic value})> dataRecords =
                           surveyState.responses.entries
                               .map((entry) =>
                                   (key: entry.key, value: entry.value))
                               .toList();
-                      
+
                       String fileName = createSurveyFilename();
 
                       await saveToPod(dataRecords, fileName, context);
@@ -102,8 +105,7 @@ class SubmitConfirmation extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SurveyCompleted(),
+                          builder: (context) => SurveyCompleted(),
                         ),
                       );
                     },

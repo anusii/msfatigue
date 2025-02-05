@@ -42,26 +42,33 @@ class PreviousQuestion extends SurveyEvent {}
 /// --- SURVEY STATE ---
 
 class SurveyState extends Equatable {
-  /// Map where each key is a question (String) and its value is the answer (String?)  
-  
+  /// Map where each key is a question (String) and its value is the answer (String?)
+
   final Map<String, String?> responses;
-  
+
   /// The index (in insertion order) of the currently displayed question.
-  
+
   final int currentQuestionIndex;
+
+  /// The survey filename generated at startup.
+
+  final String surveyFilename;
 
   const SurveyState({
     required this.responses,
     required this.currentQuestionIndex,
+    required this.surveyFilename,
   });
 
   SurveyState copyWith({
     Map<String, String?>? responses,
     int? currentQuestionIndex,
+    String? surveyFilename,
   }) {
     return SurveyState(
       responses: responses ?? this.responses,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
+      surveyFilename: surveyFilename ?? this.surveyFilename,
     );
   }
 
@@ -70,15 +77,27 @@ class SurveyState extends Equatable {
 }
 
 /// --- SURVEY BLOC ---
+
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
-  SurveyBloc() : super(const SurveyState(responses: {}, currentQuestionIndex: 0)) {
+  // The constructor now requires a surveyFilename.
+
+  SurveyBloc({required String surveyFilename})
+      : super(SurveyState(
+            responses: {},
+            currentQuestionIndex: 0,
+            surveyFilename: surveyFilename)) {
     on<InitializeSurvey>((event, emit) {
       // Create a map where each question is a key with a null value.
-      
       final Map<String, String?> responses = {
         for (var question in event.questions) question: null,
       };
-      emit(SurveyState(responses: responses, currentQuestionIndex: 0));
+      // Emit a new state, preserving the filename.
+      
+      emit(SurveyState(
+        responses: responses,
+        currentQuestionIndex: 0,
+        surveyFilename: state.surveyFilename,
+      ));
     });
 
     on<UpdateResponse>((event, emit) {
@@ -93,13 +112,15 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
     on<NextQuestion>((event, emit) {
       if (state.currentQuestionIndex < state.responses.length - 1) {
-        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1));
+        emit(state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex + 1));
       }
     });
 
     on<PreviousQuestion>((event, emit) {
       if (state.currentQuestionIndex > 0) {
-        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1));
+        emit(state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex - 1));
       }
     });
   }
