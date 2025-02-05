@@ -92,7 +92,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
         for (var question in event.questions) question: null,
       };
       // Emit a new state, preserving the filename.
-      
+
       emit(SurveyState(
         responses: responses,
         currentQuestionIndex: 0,

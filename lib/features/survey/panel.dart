@@ -111,7 +111,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
               webId: webId,
               onPressed: () async {
                 // Check if all items in qChosenList are null.
-                
+
                 if (qChosenList.every((element) => element == null)) {
                   showWarning('Incomplete Submission',
                       'Please answer at least one question.', context);
@@ -124,8 +124,6 @@ class _SurveyPanelState extends State<SurveyPanel> {
                       BlocProvider.of<SurveyBloc>(context).state;
 
                   String fileName = surveyState.surveyFilename;
-
-                  debugPrint('Filename: $fileName');
 
                   await saveToPod(dataRecords, fileName, context);
                 }

@@ -6,8 +6,11 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
+import 'package:msfatigue/utils/markdown_survey_data.dart';
+import 'package:msfatigue/utils/pod.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -37,10 +40,29 @@ class _QuestionPageState extends State<QuestionPage> {
     const Color.fromARGB(255, 210, 205, 205),
   ];
 
+  List<String> savedQuestions = [];
+  List<String> savedSurveyAnswers = [];
+  List<int?> qChosenList = [];
+
   @override
   void initState() {
     super.initState();
     _loadQuestions();
+    _initializeSurveyData();
+  }
+
+  // Load the survey data using the utils function.
+
+  Future<void> _initializeSurveyData() async {
+    final loadedQuestions = (await markDownSurveyData(surveyFilePath)).first;
+    final loadedAnswers = (await markDownSurveyData(surveyFilePath)).last;
+
+    setState(() {
+      savedQuestions = loadedQuestions;
+      savedSurveyAnswers = loadedAnswers;
+      qChosenList = List.filled(questions.length,
+          null); // Initialize qChosenList based on questions length.
+    });
   }
 
   Future<void> _loadQuestions() async {
@@ -393,6 +415,31 @@ class _QuestionPageState extends State<QuestionPage> {
                                       context
                                           .read<SurveyBloc>()
                                           .add(NextQuestion());
+
+                                      final surveyState =
+                                          BlocProvider.of<SurveyBloc>(context)
+                                              .state;
+
+                                      String fileName =
+                                          surveyState.surveyFilename;
+
+                                      Map dataResponses = surveyState.responses;
+
+                                      List<({String key, dynamic value})>
+                                          dataRecords = [];
+
+                                      for (int i = 0;
+                                          i < dataResponses.keys.length;
+                                          i++) {
+                                        dataRecords.add((
+                                          key: i.toString(),
+                                          value:
+                                              '{${dataResponses.keys.toList()[i]}} {${dataResponses.values.toList()[i]}}'
+                                        ));
+                                      }
+
+                                      await saveToPod(dataRecords, fileName, context);
+
                                       if (currentQuestionIndex ==
                                           questions.length - 1) {
                                         _submitSurvey();
