@@ -7,13 +7,18 @@ import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class WelcomeBackFinalPage extends StatelessWidget {
+class WelcomeBackFinalPage extends StatefulWidget {
   const WelcomeBackFinalPage({super.key});
 
   @override
+  State<WelcomeBackFinalPage> createState() => _WelcomeBackFinalPageState();
+}
+
+class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
+  @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    String formattedDate = DateFormat('d MMMM yyyy').format(today);
+    String formattedDate = DateFormat('d MMMM yyyy hh:mm a').format(today);
 
     return Scaffold(
       key: _scaffoldKey,
