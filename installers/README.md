@@ -1,4 +1,4 @@
-# MSFatigue Installers
+# MS Fatigue Installers
 
 Flutter supports multiple platform targets. Flutter based apps can run
 native on Android, iOS, Linux, MacOS, and Windows, as well as directly
