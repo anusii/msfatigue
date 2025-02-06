@@ -1,7 +1,7 @@
 name: msfatigue
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 0.0.3+1
+version: 0.0.4+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -10,18 +10,23 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
-  flutter_markdown: ^0.7.3+1
-  rename_app: ^1.6.1
+  cupertino_icons: ^1.0.8
+  flutter_markdown: ^0.7.6
+  gap: ^3.0.1
+  rename_app: ^1.6.2
   solidpod:
     git:
       url: https://github.com/anusii/solidpod
       ref: dev
-  window_manager: ^0.3.9
+  window_manager: ^0.4.3
   universal_io: ^2.2.2
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.7
+  rdflib: ^0.2.11
+  path: ^1.9.0
 
 dev_dependencies:
-  build_runner: ^2.4.12
+  build_runner: ^2.4.14
   dart_code_metrics:
     git:
       url: https://github.com/anusii/dart-code-metrics.git
@@ -29,9 +34,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
   integration_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.14.3
 
 dependency_overrides:
   #  file: ^7.0.0 # Use only if necessary
@@ -44,6 +51,23 @@ dependency_overrides:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/logo.png
-    - assets/images/image.png
+    - assets/images/
     - assets/markdown/fatigue_questionnaire.md
+    - assets/markdown/fatigue_small_questionnaire.md
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/icon.png'
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: 'assets/images/icon.png'
+  windows:
+    generate: true
+    image_path: 'assets/images/icon.png'
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: 'assets/images/icon.png'

@@ -53,5 +53,9 @@
 2. Disagree  
 3. Neither agree nor disagree  
 4. Agree  
-5. Strongly agree  
-6. Not applicable
+5. Strongly agree
+
+## Response Options
+
+1. Don't know
+2. Not applicable
