@@ -8,7 +8,8 @@ import 'package:msfatigue/utils/rdf.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 
 Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
-    String fileName, BuildContext context) async {
+    String fileName, BuildContext context,
+    {bool isSubmit = false}) async {
   if (dataRecords.isEmpty) {
     return false;
   }
@@ -27,13 +28,15 @@ Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
     // Show a SnackBar indicating successful upload.
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.pink,
-          content: Text('Successfully saved "$fileName" to PODs'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      if (isSubmit) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.pink,
+            content: Text('Successfully saved "$fileName" to PODs'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     }
     return true;
   } on Exception catch (e) {

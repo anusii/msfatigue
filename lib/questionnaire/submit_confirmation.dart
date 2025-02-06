@@ -96,7 +96,8 @@ class SubmitConfirmation extends StatelessWidget {
 
                       String fileName = createSurveyFilename();
 
-                      await saveToPod(dataRecords, fileName, context);
+                      await saveToPod(dataRecords, fileName, context,
+                          isSubmit: true);
 
                       // Now pass the dataRecords to the SurveyCompleted screen.
 
