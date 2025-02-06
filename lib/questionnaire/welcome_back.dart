@@ -38,7 +38,7 @@ class WelcomeBackScreen extends StatelessWidget {
                 children: <Widget>[
                   const SizedBox(height: 10),
                   const Text(
-                    'Welcome back, Jenny!',
+                    'Welcome back!',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,

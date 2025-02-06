@@ -66,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 ),
                               ),
                               const Text(
-                                'Welcome Jenny!',
+                                'Welcome to the Survey!',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w600,

@@ -79,9 +79,7 @@ class SubmitConfirmation extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(width: 16),
-                  
                   OutlinedButton.icon(
                     onPressed: () async {
                       // Retrieve the current SurveyState from the bloc.
