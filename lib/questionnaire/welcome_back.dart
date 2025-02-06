@@ -132,8 +132,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     decoration: BoxDecoration(
                       color: Colors.pink.shade50,
                     ),
-                    child: Text(
-                      'Survey last completed: $latestUploadDate',
+                    child: Text(latestUploadDate.isNotEmpty?
+                      'Survey last completed: $latestUploadDate':'Survey not submitted yet.',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,

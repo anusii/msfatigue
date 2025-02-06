@@ -20,6 +20,8 @@ class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
     DateTime today = DateTime.now();
     String formattedDate = DateFormat('d MMMM yyyy hh:mm a').format(today);
 
+    String nextAvailableDate = DateFormat('d MMMM yyyy').format(today);
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -86,7 +88,7 @@ class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
                   ),
                   child: Center(
                     child: Text(
-                      "Next survey available $formattedDate",
+                      "Next survey available $nextAvailableDate",
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
