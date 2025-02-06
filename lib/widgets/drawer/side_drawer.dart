@@ -4,6 +4,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/main.dart';
+import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
@@ -103,7 +104,7 @@ class SideDrawer extends StatelessWidget {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ConsentSettings(),
+                      builder: (context) => const AccountDetails(),
                     ),
                   );
 
