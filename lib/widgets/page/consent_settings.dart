@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ConsentSettingsPage extends StatelessWidget {
-  const ConsentSettingsPage({super.key});
+class ConsentSettings extends StatelessWidget {
+  const ConsentSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
