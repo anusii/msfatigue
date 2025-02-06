@@ -65,15 +65,21 @@ class SubmitConfirmation extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context); // Go to previous question
                     },
-                    icon: const Icon(Icons.arrow_left, color: Colors.grey),
-                    label: const Text(
+                    icon: Icon(
+                      Icons.arrow_left,
+                      color: Colors.grey.shade700,
+                      size: 25,
+                    ),
+                    label: Text(
                       "Previous   ",
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                      ),
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 12),
-                      side: const BorderSide(color: Colors.grey),
+                      side: BorderSide(color: Colors.grey.shade700, width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -112,7 +118,11 @@ class SubmitConfirmation extends StatelessWidget {
                       "    Submit",
                       style: TextStyle(color: Colors.pink),
                     ),
-                    label: const Icon(Icons.arrow_right, color: Colors.pink),
+                    label: const Icon(
+                      Icons.arrow_right,
+                      color: Colors.pink,
+                      size: 25,
+                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(
                         width: 2,

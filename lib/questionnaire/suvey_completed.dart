@@ -37,20 +37,9 @@ class SurveyCompleted extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 6,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFFFF5A5F),
-                    Color(0xFFFF66A1),
-                  ],
-                ),
-              ),
-            ),
             const Gap(30),
             const Text(
-              "Survey completed!\nThank you",
+              "Thank you - You can return to the survey any time before midnight.",
               style: TextStyle(
                 fontSize: 28,
               ),
