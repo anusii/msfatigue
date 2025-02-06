@@ -40,7 +40,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 children: <Widget>[
                   const SizedBox(height: 10),
                   const Text(
-                    'Welcome Jenny!',
+                    'Welcome to the Survey!',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,

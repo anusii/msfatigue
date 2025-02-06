@@ -24,11 +24,17 @@ Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
       await writePod(fileName, ttlStr, context, const HomeScreen());
     }
 
-    showWarning(
-        'Upload',
-        'Successfully saved "$fileName" to PODs',
-        // ignore: use_build_context_synchronously
-        context);
+    // Show a SnackBar indicating successful upload.
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.pink,
+          content: Text('Successfully saved "$fileName" to PODs'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
     return true;
   } on Exception catch (e) {
     // ignore: use_build_context_synchronously

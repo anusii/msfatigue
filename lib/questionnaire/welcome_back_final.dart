@@ -7,13 +7,20 @@ import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class WelcomeBackFinalPage extends StatelessWidget {
+class WelcomeBackFinalPage extends StatefulWidget {
   const WelcomeBackFinalPage({super.key});
 
   @override
+  State<WelcomeBackFinalPage> createState() => _WelcomeBackFinalPageState();
+}
+
+class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
+  @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    String formattedDate = DateFormat('d MMMM yyyy').format(today);
+    String formattedDate = DateFormat('d MMMM yyyy hh:mm a').format(today);
+
+    String nextAvailableDate = DateFormat('d MMMM yyyy').format(today);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -45,7 +52,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Welcome back, Jenny!",
+                  "Welcome back!",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -81,7 +88,7 @@ class WelcomeBackFinalPage extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "Next survey available $formattedDate",
+                      "Next survey available $nextAvailableDate",
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
