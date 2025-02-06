@@ -125,7 +125,8 @@ class _SurveyPanelState extends State<SurveyPanel> {
 
                   String fileName = surveyState.surveyFilename;
 
-                  await saveToPod(dataRecords, fileName, context);
+                  await saveToPod(dataRecords, fileName, context,
+                      isSubmit: true);
                 }
               },
             ),
