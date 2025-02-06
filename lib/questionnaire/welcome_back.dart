@@ -87,7 +87,6 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -132,8 +131,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     decoration: BoxDecoration(
                       color: Colors.pink.shade50,
                     ),
-                    child: Text(latestUploadDate.isNotEmpty?
-                      'Survey last completed: $latestUploadDate':'Survey not submitted yet.',
+                    child: Text(
+                      latestUploadDate.isNotEmpty
+                          ? 'Survey last completed: $latestUploadDate'
+                          : 'Survey not submitted yet.',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -196,7 +197,25 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     height: 46,
                     child: OutlinedButton(
                       onPressed: () {
-                        // Implement handling for "I'm too tired"
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: const Text(
+                                "That's okay. When you are ready you can come back to the survey.",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 1),
