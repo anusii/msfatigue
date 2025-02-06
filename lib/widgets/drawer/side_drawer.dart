@@ -96,8 +96,20 @@ class SideDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
+                onTap: () async {
                   Navigator.pop(context); // Closes the drawer.
+                  // 2) Push the new ConsentSettingsPage.
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ConsentSettingsPage(),
+                    ),
+                  );
+
+                  // 3) Re-open the drawer when we return.
+
+                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
               const Divider(
