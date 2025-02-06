@@ -4,7 +4,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/main.dart';
-import 'package:msfatigue/widgets/setting/consent_settings.dart';
+import 'package:msfatigue/widgets/page/consent_settings.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
 /// and a logout button. Handles reopening the drawer after navigating back
