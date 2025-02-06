@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/questionnaire/question.dart';
+import 'package:msfatigue/widgets/dialog/show_warning.dart';
 
 class WelcomeBackScreen extends StatefulWidget {
   const WelcomeBackScreen({super.key});
@@ -197,25 +198,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     height: 46,
                     child: OutlinedButton(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: const Text(
-                                "That's okay. When you are ready you can come back to the survey.",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        showWarning(
+                            'Info',
+                            "That's okay. When you are ready you can come back to the survey.",
+                            context);
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 1),
