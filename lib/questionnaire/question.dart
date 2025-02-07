@@ -36,8 +36,8 @@ class _QuestionPageState extends State<QuestionPage> {
     const Color(0xFFFFD6DE), // Light pale pink
     const Color(0xFFFFC6D1), // Medium pale pink
     const Color(0xFFFFB6C5), // Stronger pale pink
-    const Color.fromARGB(255, 210, 205, 205),
-    const Color.fromARGB(255, 210, 205, 205),
+    const Color.fromARGB(255, 200, 195, 195),
+    const Color.fromARGB(255, 220, 215, 215),
   ];
 
   List<String> savedQuestions = [];
@@ -337,7 +337,7 @@ class _QuestionPageState extends State<QuestionPage> {
                                 selectedResponse == options[index];
                             return Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
+                                  const EdgeInsets.symmetric(vertical: 0.0),
                               child: GestureDetector(
                                 onTap: () {
                                   context.read<SurveyBloc>().add(
@@ -356,8 +356,6 @@ class _QuestionPageState extends State<QuestionPage> {
                                             ? Colors.grey[600]
                                             : Colors.pink[300])
                                         : gradientColors[index],
-                                    border: Border.all(
-                                        color: Colors.white, width: 1),
                                   ),
                                   child: Row(
                                     children: [
@@ -394,12 +392,17 @@ class _QuestionPageState extends State<QuestionPage> {
                                           .add(PreviousQuestion());
                                     }
                                   : null,
-                              icon: const Icon(Icons.arrow_left,
-                                  color: Colors.grey),
-                              label: const Text("Previous    ",
-                                  style: TextStyle(color: Colors.grey)),
+                              icon: Icon(
+                                Icons.arrow_left,
+                                color: Colors.grey.shade700,
+                                size: 25,
+                              ),
+                              label: Text("Previous    ",
+                                  style:
+                                      TextStyle(color: Colors.grey.shade700)),
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade400),
+                                side: BorderSide(
+                                    color: Colors.grey.shade700, width: 2),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: const EdgeInsets.symmetric(
@@ -446,9 +449,14 @@ class _QuestionPageState extends State<QuestionPage> {
                                     }
                                   : null,
                               icon: const Text("    Next",
-                                  style: TextStyle(color: Colors.pink)),
-                              label: const Icon(Icons.arrow_right,
-                                  color: Colors.pink),
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  )),
+                              label: const Icon(
+                                Icons.arrow_right,
+                                color: Colors.pink,
+                                size: 25,
+                              ),
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(
                                     width: 2, color: Colors.pink),

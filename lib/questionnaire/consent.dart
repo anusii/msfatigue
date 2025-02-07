@@ -62,11 +62,6 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
                     style: TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'I understand the following questions in this survey are copyright.',
-                    style: TextStyle(fontSize: 16),
-                  ),
                   const SizedBox(height: 16),
                   ListTile(
                     title: const Text('Yes'),
@@ -143,6 +138,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                           'Continue to the survey ►',
                           style: TextStyle(
                             fontSize: 16,
+                            fontWeight: FontWeight.w600,
                             color: _consentGiven == true
                                 ? Colors.black
                                 : Colors.grey,
