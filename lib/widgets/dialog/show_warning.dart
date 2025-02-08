@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/welcome.dart';
+
 void showWarning(String title, String content, BuildContext context) {
   showDialog<void>(
     context: context,
@@ -10,7 +12,13 @@ void showWarning(String title, String content, BuildContext context) {
         actions: <Widget>[
           TextButton(
             onPressed: () {
+              // First exit the dialog.
+              // Then pop the current screen and navigate to the welcome screen.
+
               Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+              );
             },
             child: const Text('OK'),
           ),

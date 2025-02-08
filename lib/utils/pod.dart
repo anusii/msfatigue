@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:msfatigue/home.dart';
+import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/utils/rdf.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 
@@ -22,7 +22,7 @@ Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
     // Write to POD.
 
     if (context.mounted) {
-      await writePod(fileName, ttlStr, context, const HomeScreen());
+      await writePod(fileName, ttlStr, context, const QuestionPage());
     }
 
     // Show a SnackBar indicating successful upload.
