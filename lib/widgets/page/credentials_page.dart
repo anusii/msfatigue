@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/welcome.dart';
+
 class CredentialsPage extends StatefulWidget {
   const CredentialsPage({super.key});
 
@@ -91,7 +93,10 @@ class _CredentialsPageState extends State<CredentialsPage> {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(content: Text("Credentials saved")),
                   );
-                  navigator.pop();
+                  navigator.pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen()),
+                  );
                 },
                 child: const Text("Save"),
               ),
