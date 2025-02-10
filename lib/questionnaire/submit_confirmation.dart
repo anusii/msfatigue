@@ -106,13 +106,15 @@ class SubmitConfirmation extends StatelessWidget {
                           isSubmit: true);
 
                       // Now pass the dataRecords to the SurveyCompleted screen.
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SurveyCompleted(),
-                        ),
-                      );
+                      
+                      if (context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SurveyCompleted(),
+                          ),
+                        );
+                      }
                     },
                     icon: const Text(
                       "    Submit",

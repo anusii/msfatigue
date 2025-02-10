@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
@@ -15,20 +13,9 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Print stored values from SharedPreferences for debugging.
-  
-  Future<void> _printStoredValues() async {
-    final prefs = await SharedPreferences.getInstance();
-    final username = prefs.getString('msfatigue_username');
-    final password = prefs.getString('msfatigue_password');
-    final preferredName = prefs.getString('msfatigue_preferredName');
-    debugPrint('Stored values: username=$username, password=$password, preferredName=$preferredName');
-  }
-
   @override
   void initState() {
     super.initState();
-    _printStoredValues();
   }
 
   @override
@@ -123,7 +110,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   color: Colors.pink,
                                   width: 2,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

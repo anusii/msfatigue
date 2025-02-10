@@ -116,7 +116,7 @@ class CheckCredentials extends StatefulWidget {
 
 class _CheckCredentialsState extends State<CheckCredentials> {
   bool? credentialsExist;
-  
+
   Future<void> checkCredentials() async {
     // Use SharedPreferences to read stored credentials.
 
@@ -161,7 +161,7 @@ class _CheckCredentialsState extends State<CheckCredentials> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); 
+                  Navigator.of(context).pop();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const CredentialsPage(),
@@ -179,7 +179,7 @@ class _CheckCredentialsState extends State<CheckCredentials> {
       );
     }
     // If credentials exist, navigate to the main WelcomeScreen.
-    
+
     else {
       return const WelcomeScreen();
     }
