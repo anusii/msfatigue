@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/page/pod_login_web_view.dart';
 
 class CredentialsPage extends StatefulWidget {
   const CredentialsPage({super.key});
@@ -94,9 +94,11 @@ class _CredentialsPageState extends State<CredentialsPage> {
                     const SnackBar(content: Text("Credentials saved")),
                   );
 
+                  // Navigate to the InAppWebView login flow instead of WelcomeScreen.
+                  
                   navigator.pushReplacement(
                     MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen()),
+                        builder: (context) => const PodLoginWebView()),
                   );
                 },
                 child: const Text("Save"),
