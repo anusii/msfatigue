@@ -93,6 +93,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(content: Text("Credentials saved")),
                   );
+
                   navigator.pushReplacement(
                     MaterialPageRoute(
                         builder: (context) => const WelcomeScreen()),
