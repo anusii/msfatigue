@@ -95,7 +95,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
                   );
 
                   // Navigate to the InAppWebView login flow instead of WelcomeScreen.
-                  
+
                   navigator.pushReplacement(
                     MaterialPageRoute(
                         builder: (context) => const PodLoginWebView()),
