@@ -132,7 +132,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   const SizedBox(height: 20),
 
                   // Clear Credentials button is only shown if all credentials are present.
-                  
+
                   if (allCredentialsPresent)
                     Center(
                       child: ElevatedButton(

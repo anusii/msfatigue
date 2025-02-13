@@ -91,7 +91,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
                   // Use the pre-captured scaffoldMessenger and navigator.
 
                   scaffoldMessenger.showSnackBar(
-                    const SnackBar(content: Text("Credentials saved")),
+                    const SnackBar(content: Text("Successfully registered")),
                   );
                   navigator.pushReplacement(
                     MaterialPageRoute(

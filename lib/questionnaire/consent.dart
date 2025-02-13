@@ -32,7 +32,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
   @override
   Widget build(BuildContext context) {
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
-        ? "Welcome to the Survey!"
+        ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     return Scaffold(
