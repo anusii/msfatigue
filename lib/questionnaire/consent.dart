@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:msfatigue/questionnaire/welcome_back.dart';
+import 'package:msfatigue/welcome.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -11,9 +14,27 @@ class ConsentScreen extends StatefulWidget {
 
 class _ConsentScreenState extends State<ConsentScreen> {
   bool? _consentGiven;
+  String? preferredName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferredName();
+  }
+
+  Future<void> _loadPreferredName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      preferredName = prefs.getString('msfatigue_preferredName');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final welcomeText = (preferredName == null || preferredName!.isEmpty)
+        ? "Welcome to the Survey!"
+        : "Welcome ${formatPreferredName(preferredName!)}!";
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -39,8 +60,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 10),
-                  const Text(
-                    'Welcome to the Survey!',
+                  Text(
+                    welcomeText,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
