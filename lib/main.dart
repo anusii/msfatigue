@@ -56,8 +56,14 @@ Future<void> main() async {
   
   // *** KEY CHANGE: Await the future returned by SharedPreferences.getInstance() ***
   
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  try {
+    prefs = await SharedPreferences.getInstance();
+  } catch (e) {
+    debugPrint("SharedPreferences error: $e");
+    prefs = await SharedPreferences.getInstance(); // Retry once
+  }
 
   final surveyFilename = await createSurveyFilename();
 
