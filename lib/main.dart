@@ -30,6 +30,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
@@ -59,6 +60,7 @@ Future<String> createSurveyFilename() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   await SharedPreferences.getInstance();
 
   final surveyFilename = await createSurveyFilename();
 
