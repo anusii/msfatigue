@@ -100,42 +100,6 @@ class _CredentialsPageState extends State<CredentialsPage> {
                 },
                 child: const Text("Save"),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  // Capture any needed objects before the async gap.
-
-                  final creds = await getCredentials();
-                  if (!mounted) return;
-                  // Schedule the dialog to be shown in the next frame.
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (!mounted) return;
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext dialogContext) {
-                        return AlertDialog(
-                          title: const Text("Saved Credentials"),
-                          content: Text(
-                            "Username: ${creds['msfatigue_username'] ?? 'N/A'}\n"
-                            "Password: ${creds['msfatigue_password'] ?? 'N/A'}\n"
-                            "Preferred Name: ${creds['msfatigue_preferredName'] ?? 'N/A'}",
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(dialogContext).pop();
-                              },
-                              child: const Text("OK"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  });
-                },
-                child: const Text("Show Credentials"),
-              ),
             ],
           ),
         ),

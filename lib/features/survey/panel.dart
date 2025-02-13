@@ -29,7 +29,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   // Update the list of selected options for the survey, with [index] specifying
   // the question being answered and [value] the selected option for the
   // question.
-  
+
   void onChanged(int index, int? value) {
     setState(() {
       qChosenList[index] = value;

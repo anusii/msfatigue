@@ -107,7 +107,7 @@ class SubmitConfirmation extends StatelessWidget {
                                 .toList();
 
                         // Generate a filename.
-                        
+
                         final String fileName = await createSurveyFilename();
 
                         // Save data to POD.
