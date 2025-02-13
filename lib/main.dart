@@ -23,67 +23,59 @@
 ///
 /// Authors: Graham Williams
 
+// ignore_for_file: unused_import
+
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_web/shared_preferences_web.dart'; // Explicitly import the web plugin to force registration.
+
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/widgets/page/check_credentials.dart';
 
+
 // Dummy implementations for desktop support.
-// Replace these with your actual implementations.
 
-bool isDesktop(dynamic platformWrapper) {
-  return true;
-}
+bool isDesktop(dynamic platformWrapper) => true;
+class PlatformWrapper {}
 
-class PlatformWrapper {
-  // Your platform wrapper implementation.
-}
-
-// Example implementation of createSurveyFilename().
-// Modify this function to generate your filename as needed.
+/// Example implementation of createSurveyFilename().
 
 Future<String> createSurveyFilename() async {
   final now = DateTime.now();
   final formatter = DateFormat('yyyyMMddTHHmmss');
   final timestamp = formatter.format(now);
-
   return 'survey_$timestamp.ttl';
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await SharedPreferences.getInstance();
+  
+  // Force registration of shared_preferences web plugin by getting an instance.
+
+  await SharedPreferences.getInstance();
 
   final surveyFilename = await createSurveyFilename();
 
   // Desktop support (if needed).
-
   if (!kIsWeb && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
-
     const windowOptions = WindowOptions(
-      // Setting alwaysOnTop to true so the app starts on top.
-
       alwaysOnTop: true,
       title: 'MS Fatigue',
     );
-
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
       await windowManager.setAlwaysOnTop(false);
     });
   }
-
-  // Ready to run the app.
 
   runApp(
     BlocProvider(
@@ -95,8 +87,6 @@ Future<void> main() async {
 
 class MSFatigue extends StatelessWidget {
   const MSFatigue({super.key});
-
-  // This widget is the root of our application.
 
   @override
   Widget build(BuildContext context) {
