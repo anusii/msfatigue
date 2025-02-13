@@ -36,6 +36,13 @@
   <script>
     window._flutter_web_renderer = "html";
   </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach(registration => registration.unregister());
+      });
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
