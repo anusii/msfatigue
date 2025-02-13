@@ -23,6 +23,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _loadPreferredName();
   }
 
+  /// Helper function to format the preferred name:
+  /// first letter uppercase and the rest lowercase.
+  
+  String formatPreferredName(String name) {
+  if (name.isEmpty) return name;
+  if (name.length == 1) return name.toUpperCase();
+  return name[0].toUpperCase() + name.substring(1).toLowerCase();
+}
+
   Future<void> _loadPreferredName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -32,11 +41,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine welcome text based on preferred name.
-
+    // Compute the welcome text.
+    
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome to the Survey!"
-        : "Welcome $preferredName!";
+        : "Welcome ${formatPreferredName(preferredName!)}!";
 
     return Scaffold(
       key: _scaffoldKey,
@@ -127,8 +136,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   color: Colors.pink,
                                   width: 2,
                                 ),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -143,8 +151,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                         ),
-                        // If credentials are missing, show the Register button.
-                        
+                        // If account info is missing, show the Register button.
+
                         if (preferredName == null || preferredName!.isEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 16.0),
@@ -156,8 +164,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                       builder: (_) => const CredentialsPage(),
-                                    ))
-                                        .then((_) {
+                                    )).then((_) {
+                                      // Re-load the preferred name after returning.
                                       _loadPreferredName();
                                     });
                                   },
@@ -167,8 +175,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.pink,
                                       width: 2,
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
