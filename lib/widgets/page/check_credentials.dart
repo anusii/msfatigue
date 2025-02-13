@@ -61,8 +61,8 @@ class _CheckCredentialsState extends State<CheckCredentials> {
                       onPressed: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(
-                              builder: (_) => const CredentialsPage(),
-                            ))
+                          builder: (_) => const CredentialsPage(),
+                        ))
                             .then((_) {
                           // After returning, rebuild to re-check credentials.
 
@@ -77,7 +77,7 @@ class _CheckCredentialsState extends State<CheckCredentials> {
             );
           } else {
             // If credentials exist, go to the WelcomeScreen.
-            
+
             return const WelcomeScreen();
           }
         }

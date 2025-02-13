@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+import 'package:msfatigue/widgets/page/credentials_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -12,14 +15,29 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String? preferredName;
 
   @override
   void initState() {
     super.initState();
+    _loadPreferredName();
+  }
+
+  Future<void> _loadPreferredName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      preferredName = prefs.getString('msfatigue_preferredName');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Determine welcome text based on preferred name.
+
+    final welcomeText = (preferredName == null || preferredName!.isEmpty)
+        ? "Welcome to the Survey!"
+        : "Welcome $preferredName!";
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -33,18 +51,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             height: 65,
           ),
         ),
-        iconTheme: const IconThemeData(
-          size: 50,
-        ),
+        iconTheme: const IconThemeData(size: 50),
       ),
       drawer: SideDrawer(scaffoldKey: _scaffoldKey),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -66,12 +80,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 fit: BoxFit.fitWidth,
                               ),
                             ),
-                            const Text(
-                              'Welcome to the Survey!',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.pink,
+                            Center(
+                              child: Text(
+                                welcomeText,
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.pink,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
@@ -126,6 +143,47 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                         ),
+                        // If credentials are missing, show the Register button.
+                        
+                        if (preferredName == null || preferredName!.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Center(
+                              child: SizedBox(
+                                width: 260,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (_) => const CredentialsPage(),
+                                    ))
+                                        .then((_) {
+                                      _loadPreferredName();
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    side: const BorderSide(
+                                      color: Colors.pink,
+                                      width: 2,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Register",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
