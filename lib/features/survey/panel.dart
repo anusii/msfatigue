@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/constants/app.dart';
-import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/utils/markdown_survey_data.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/constants/layout.dart';
+import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 import 'package:msfatigue/widgets/button/submit_button.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/question/radio_question.dart';
@@ -28,7 +29,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   // Update the list of selected options for the survey, with [index] specifying
   // the question being answered and [value] the selected option for the
   // question.
-
+  
   void onChanged(int index, int? value) {
     setState(() {
       qChosenList[index] = value;
@@ -75,12 +76,55 @@ class _SurveyPanelState extends State<SurveyPanel> {
     return dataRecords;
   }
 
+  // Handle the submit action based on webId and answers.
+
+  Future<void> handleSubmit() async {
+    // Check if all items in qChosenList are null.
+
+    if (qChosenList.every((element) => element == null)) {
+      showWarning('Incomplete Submission',
+          'Please answer at least one question.', context);
+      return;
+    }
+
+    // If webId exists and is not empty, proceed with pod save.
+
+    if (webId != null && webId!.isNotEmpty) {
+      // Build the data map of questions and selected answers.
+
+      List<({String key, dynamic value})> dataRecords = _buildDataRecords();
+
+      final surveyState = BlocProvider.of<SurveyBloc>(context).state;
+      String fileName = surveyState.surveyFilename;
+
+      await saveToPod(dataRecords, fileName, context, isSubmit: true);
+    } else {
+      // Show successful submission without saving to pod.
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Survey submitted successfully'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Navigate to next screen or handle completion as needed
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SubmitConfirmation(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
     double bodyWidth =
         screenWidth > 800 ? screenWidth * 0.5 : screenWidth * 0.8;
+
     return Center(
       child: SizedBox(
         width: bodyWidth,
@@ -109,26 +153,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
             SubmitButton(
               buttonStr: 'Submit',
               webId: webId,
-              onPressed: () async {
-                // Check if all items in qChosenList are null.
-
-                if (qChosenList.every((element) => element == null)) {
-                  showWarning('Incomplete Submission',
-                      'Please answer at least one question.', context);
-                } else {
-                  // Build the data map of questions and selected answers.
-                  List<({String key, dynamic value})> dataRecords =
-                      _buildDataRecords();
-
-                  final surveyState =
-                      BlocProvider.of<SurveyBloc>(context).state;
-
-                  String fileName = surveyState.surveyFilename;
-
-                  await saveToPod(dataRecords, fileName, context,
-                      isSubmit: true);
-                }
-              },
+              onPressed: handleSubmit,
             ),
           ],
         ),

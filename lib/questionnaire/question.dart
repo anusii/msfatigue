@@ -54,7 +54,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   /// Loads the webId from SharedPreferences using the SurveyBloc's instance.
-/// This method is called during widget initialization to check if a webId exists.
+  /// This method is called during widget initialization to check if a webId exists.
 
   Future<void> _loadWebId() async {
     final prefs = context.read<SurveyBloc>().sharedPreferences;
@@ -258,7 +258,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   context.read<SurveyBloc>().add(NextQuestion());
 
                   // Only save to pod if webId exists and is not empty.
-                  
+
                   if (webId != null && webId!.isNotEmpty) {
                     final surveyState =
                         BlocProvider.of<SurveyBloc>(context).state;

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+
+// Assume _scaffoldKey is defined globally for this widget.
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -88,24 +91,32 @@ class SubmitConfirmation extends StatelessWidget {
                   const SizedBox(width: 16),
                   OutlinedButton.icon(
                     onPressed: () async {
-                      // Retrieve the current SurveyState from the bloc.
+                      // Get the SharedPreferences instance and check webId.
 
-                      final surveyState = context.read<SurveyBloc>().state;
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final webId = prefs.getString('webId') ?? '';
+                      if (webId.isNotEmpty) {
+                        // Retrieve the current SurveyState from the bloc.
+                        final surveyState = context.read<SurveyBloc>().state;
+                        // Convert the responses Map to a list of records.
+                        final List<({String key, dynamic value})> dataRecords =
+                            surveyState.responses.entries
+                                .map((entry) =>
+                                    (key: entry.key, value: entry.value))
+                                .toList();
 
-                      // Convert the responses Map to a list of records.
+                        // Generate a filename.
+                        
+                        final String fileName = await createSurveyFilename();
 
-                      final List<({String key, dynamic value})> dataRecords =
-                          surveyState.responses.entries
-                              .map((entry) =>
-                                  (key: entry.key, value: entry.value))
-                              .toList();
+                        // Save data to POD.
 
-                      String fileName = createSurveyFilename();
+                        await saveToPod(dataRecords, fileName, context,
+                            isSubmit: true);
+                      }
 
-                      await saveToPod(dataRecords, fileName, context,
-                          isSubmit: true);
-
-                      // Now pass the dataRecords to the SurveyCompleted screen.
+                      // If successful, navigate to SurveyCompleted screen.
 
                       if (context.mounted) {
                         Navigator.push(
@@ -126,10 +137,7 @@ class SubmitConfirmation extends StatelessWidget {
                       size: 25,
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        width: 2,
-                        color: Colors.pink,
-                      ),
+                      side: const BorderSide(width: 2, color: Colors.pink),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
