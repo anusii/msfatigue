@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SurveyEvent extends Equatable {
   const SurveyEvent();
@@ -79,15 +80,17 @@ class SurveyState extends Equatable {
 /// --- SURVEY BLOC ---
 
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
-  // The constructor now requires a surveyFilename.
+  final SharedPreferences sharedPreferences; // Add this
+  final String surveyFilename;
 
-  SurveyBloc({required String surveyFilename})
+
+  SurveyBloc({required this.surveyFilename, required this.sharedPreferences})
       : super(SurveyState(
             responses: {},
             currentQuestionIndex: 0,
             surveyFilename: surveyFilename)) {
-    on<InitializeSurvey>((event, emit) {
-      // Create a map where each question is a key with a null value.
+
+    on<InitializeSurvey>((event, emit) async {
       final Map<String, String?> responses = {
         for (var question in event.questions) question: null,
       };

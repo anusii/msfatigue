@@ -23,8 +23,6 @@
 ///
 /// Authors: Graham Williams
 
-// ignore_for_file: unused_import
-
 library;
 
 import 'package:flutter/material.dart';
@@ -33,7 +31,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_web/shared_preferences_web.dart'; // Explicitly import the web plugin to force registration.
 
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
@@ -57,9 +54,10 @@ Future<String> createSurveyFilename() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Force registration of shared_preferences web plugin by getting an instance.
+  // *** KEY CHANGE: Await the future returned by SharedPreferences.getInstance() ***
+  
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  await SharedPreferences.getInstance();
 
   final surveyFilename = await createSurveyFilename();
 
@@ -79,7 +77,7 @@ Future<void> main() async {
 
   runApp(
     BlocProvider(
-      create: (_) => SurveyBloc(surveyFilename: surveyFilename),
+      create: (_) => SurveyBloc(surveyFilename: surveyFilename, sharedPreferences: prefs),
       child: const MSFatigue(),
     ),
   );
