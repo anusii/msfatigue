@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:msfatigue/widgets/drawer/side_drawer.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalSettings extends StatefulWidget {
@@ -57,12 +55,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine the welcome text.
-
-    final welcomeText = (preferredName == null || preferredName!.isEmpty)
-        ? "Welcome to the Survey!"
-        : "Welcome ${formatPreferredName(preferredName!)}!";
-
     // Determine if all credentials are present.
 
     final bool allCredentialsPresent =
@@ -71,100 +63,99 @@ class _PersonalSettingsState extends State<PersonalSettings> {
             (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Account Details'),
         backgroundColor: Colors.white,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-            child: IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: Colors.grey,
-                size: 40,
-              ),
-              padding: EdgeInsets.zero,
-              onPressed: () => Navigator.pop(context),
-            ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: const Text('Account Details'),
           ),
-        ],
-        elevation: 0,
-        toolbarHeight: 80,
-      ),
-      drawer: SideDrawer(scaffoldKey: GlobalKey<ScaffoldState>()),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                welcomeText,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+          elevation: 0,
+          toolbarHeight: 125,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.grey,
+                  size: 40,
                 ),
-                textAlign: TextAlign.center,
+                padding: EdgeInsets.zero,
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              "Username:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            const SizedBox(height: 4),
-            SelectableText(
-              username ?? "Not set",
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              "Password:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            const SizedBox(height: 4),
-            SelectableText(
-              password ?? "Not set",
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              "Preferred Name:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            const SizedBox(height: 4),
-            SelectableText(
-              (preferredName == null || preferredName!.isEmpty)
-                  ? "Not set"
-                  : formatPreferredName(preferredName!),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            const Spacer(),
-            // Only show the "Clear Credentials" button if all credentials are present.
-            
-            if (allCredentialsPresent)
-              Center(
-                child: ElevatedButton(
-                  onPressed: _clearCredentials,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: const BorderSide(color: Colors.red, width: 2),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 32),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    "Clear Credentials",
-                    style: TextStyle(fontSize: 16, color: Colors.red),
-                  ),
-                ),
-              ),
           ],
         ),
-      ),
-    );
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Username:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  SelectableText(
+                    username ?? "Not set",
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Password:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  SelectableText(
+                    password ?? "Not set",
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Preferred Name:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  SelectableText(
+                    (preferredName == null || preferredName!.isEmpty)
+                        ? "Not set"
+                        : formatPreferredName(preferredName!),
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Clear Credentials button is only shown if all credentials are present.
+                  
+                  if (allCredentialsPresent)
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _clearCredentials,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.red, width: 2),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "Clear Credentials",
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
