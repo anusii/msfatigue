@@ -69,7 +69,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -117,7 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           'The survey should take 10-20 minutes to complete.',
                           style: TextStyle(fontSize: 16),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 10),
 
                         // If account info is missing, show the informational message and the Register button.
 
@@ -131,7 +130,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   // Informational message for unregistered users.
                                   const Text(
                                     "You can try the survey out without registering and your answers will not be saved. For keeping track of your answers though, please register using the username and password that you have been provided with.",
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(fontSize: 16),
                                     textAlign: TextAlign.left,
                                   ),
                                   const SizedBox(height: 12),
@@ -176,7 +175,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               ),
                             ),
                           ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 30),
 
                         Center(
                           child: SizedBox(
@@ -215,6 +214,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 20),
+
                   // Bottom dot image with a small bottom padding.
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
