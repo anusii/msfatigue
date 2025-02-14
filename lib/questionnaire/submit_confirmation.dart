@@ -91,14 +91,15 @@ class SubmitConfirmation extends StatelessWidget {
                   const SizedBox(width: 16),
                   OutlinedButton.icon(
                     onPressed: () async {
-                      // Get the SharedPreferences instance and check webId.
+                      // Retrieve the current SurveyState from the bloc before async operation.
 
+                      final surveyState = context.read<SurveyBloc>().state;
+
+                      // Get the SharedPreferences instance and check webId.
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       final webId = prefs.getString('webId') ?? '';
                       if (webId.isNotEmpty) {
-                        // Retrieve the current SurveyState from the bloc.
-                        final surveyState = context.read<SurveyBloc>().state;
                         // Convert the responses Map to a list of records.
                         final List<({String key, dynamic value})> dataRecords =
                             surveyState.responses.entries
@@ -108,10 +109,11 @@ class SubmitConfirmation extends StatelessWidget {
 
                         // Generate a filename.
 
-                        final String fileName = await createSurveyFilename();
+                        final String fileName = createSurveyFilename();
 
                         // Save data to POD.
 
+                        if (!context.mounted) return;
                         await saveToPod(dataRecords, fileName, context,
                             isSubmit: true);
                       }

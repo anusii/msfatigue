@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/welcome.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalSettings extends StatefulWidget {
@@ -43,6 +45,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
       password = null;
       preferredName = null;
     });
+
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+    );
   }
 
   /// Formats the preferred name so that the first letter is uppercase and the rest are lowercase.
