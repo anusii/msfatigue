@@ -232,6 +232,8 @@ class _QuestionPageState extends State<QuestionPage> {
                 final int currentQuestionIndex = state.currentQuestionIndex;
                 final List<String> questionsList =
                     state.responses.keys.toList();
+                final int questionTotal = questionsList.length;
+
                 final String currentQuestion =
                     questionsList[currentQuestionIndex];
                 final String? selectedResponse =
@@ -338,7 +340,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       Center(
                         child: Text(
-                          'QUESTION ${state.currentQuestionIndex + 1}',
+                          'QUESTION ${state.currentQuestionIndex + 1} out of $questionTotal',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
