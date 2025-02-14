@@ -94,10 +94,6 @@ class SideDrawer extends StatelessWidget {
                       builder: (context) => const PersonalSettings(),
                     ),
                   );
-
-                  // 3) Re-open the drawer when we return.
-
-                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
               const Divider(
@@ -120,10 +116,6 @@ class SideDrawer extends StatelessWidget {
                       builder: (context) => const AccountDetails(),
                     ),
                   );
-
-                  // 3) Re-open the drawer when we return.
-
-                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
               const Divider(
@@ -149,10 +141,6 @@ class SideDrawer extends StatelessWidget {
                       builder: (context) => const ConsentSettings(),
                     ),
                   );
-
-                  // 3) Re-open the drawer when we return.
-
-                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
 
