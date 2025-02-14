@@ -20,8 +20,6 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  List<String> block1Questions = [];
-  List<String> block2Questions = [];
   List<String> questions = [];
   String? webId;
   final List<String> options = [
@@ -87,9 +85,6 @@ class _QuestionPageState extends State<QuestionPage> {
 
     setState(() {
       questions = _parseQuestions(data);
-      // Divide questions into Block 1 and Block 2.
-      block1Questions = questions.take(6).toList();
-      block2Questions = questions.skip(6).take(6).toList();
     });
 
     // Check again if mounted before using context for the bloc.
@@ -115,16 +110,6 @@ class _QuestionPageState extends State<QuestionPage> {
       }
     }
     return extractedQuestions;
-  }
-
-  // This helper returns the block title using local variables.
-
-  String _getBlockTitle(int currentQuestionIndex) {
-    if (currentQuestionIndex < block1Questions.length) {
-      return "BLOCK 1";
-    } else {
-      return "BLOCK 2";
-    }
   }
 
   Future<void> _showEndDialog() async {
@@ -353,7 +338,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       Center(
                         child: Text(
-                          '${_getBlockTitle(currentQuestionIndex)} - QUESTION ${currentQuestionIndex + 1}',
+                          'QUESTION ${state.currentQuestionIndex + 1}',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
