@@ -6,6 +6,7 @@ import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
+import 'package:msfatigue/widgets/page/personal_settings.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
 /// and a logout button. Handles reopening the drawer after navigating back
@@ -83,8 +84,16 @@ class SideDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
+                onTap: () async {
                   Navigator.pop(context); // Closes the drawer.
+                  // 2) Push the new ConsentSettingsPage.
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PersonalSettings(),
+                    ),
+                  );
                 },
               ),
               const Divider(
@@ -107,10 +116,6 @@ class SideDrawer extends StatelessWidget {
                       builder: (context) => const AccountDetails(),
                     ),
                   );
-
-                  // 3) Re-open the drawer when we return.
-
-                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
               const Divider(
@@ -136,10 +141,6 @@ class SideDrawer extends StatelessWidget {
                       builder: (context) => const ConsentSettings(),
                     ),
                   );
-
-                  // 3) Re-open the drawer when we return.
-
-                  scaffoldKey.currentState?.openDrawer();
                 },
               ),
 

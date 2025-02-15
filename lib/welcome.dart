@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+import 'package:msfatigue/widgets/page/credentials_page.dart';
+
+/// Helper function to format the preferred name:
+/// first letter uppercase and the rest lowercase.
+
+String formatPreferredName(String name) {
+  if (name.isEmpty) return name;
+  if (name.length == 1) return name.toUpperCase();
+  return name[0].toUpperCase() + name.substring(1).toLowerCase();
+}
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -12,14 +24,29 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String? preferredName;
 
   @override
   void initState() {
     super.initState();
+    _loadPreferredName();
+  }
+
+  Future<void> _loadPreferredName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      preferredName = prefs.getString('msfatigue_preferredName');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Compute the welcome text.
+
+    final welcomeText = (preferredName == null || preferredName!.isEmpty)
+        ? "Welcome!"
+        : "Welcome ${formatPreferredName(preferredName!)}!";
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -33,20 +60,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             height: 65,
           ),
         ),
-        iconTheme: const IconThemeData(
-          size: 50,
-        ),
+        iconTheme: const IconThemeData(size: 50),
       ),
       drawer: SideDrawer(scaffoldKey: _scaffoldKey),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -66,12 +88,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 fit: BoxFit.fitWidth,
                               ),
                             ),
-                            const Text(
-                              'Welcome to the Survey!',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.pink,
+                            Center(
+                              child: Text(
+                                welcomeText,
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.pink,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
@@ -91,7 +116,67 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           'The survey should take 10-20 minutes to complete.',
                           style: TextStyle(fontSize: 16),
                         ),
+                        const SizedBox(height: 10),
+
+                        // If account info is missing, show the informational message and the Register button.
+
+                        if (preferredName == null || preferredName!.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Informational message for unregistered users.
+                                  const Text(
+                                    "You can try the survey out without registering and your answers will not be saved. For keeping track of your answers though, please register using the username and password that you have been provided with.",
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  // Register button.
+                                  SizedBox(
+                                    width: 260,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (_) =>
+                                              const CredentialsPage(),
+                                        ))
+                                            .then((_) {
+                                          // Re-load the preferred name after returning.
+                                          _loadPreferredName();
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        side: const BorderSide(
+                                          color: Colors.pink,
+                                          width: 2,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Register",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 30),
+
                         Center(
                           child: SizedBox(
                             width: 260,
@@ -129,6 +214,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 20),
+
                   // Bottom dot image with a small bottom padding.
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
