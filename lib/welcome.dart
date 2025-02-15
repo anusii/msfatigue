@@ -177,40 +177,42 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         const SizedBox(height: 30),
 
-                        Center(
-                          child: SizedBox(
-                            width: 260,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ConsentScreen(),
+                        if (preferredName != null && preferredName!.isNotEmpty)
+                          Center(
+                            child: SizedBox(
+                              width: 260,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ConsentScreen(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(
+                                    color: Colors.pink,
+                                    width: 2,
                                   ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                side: const BorderSide(
-                                  color: Colors.pink,
-                                  width: 2,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Text(
-                                'Take me to the survey ►',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
+                                child: const Text(
+                                  'Take me to the survey ►',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
