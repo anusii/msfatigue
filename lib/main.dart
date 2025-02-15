@@ -27,53 +27,55 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:solidpod/solidpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_web/shared_preferences_web.dart';
+
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/page/check_credentials.dart';
+
 
 // Dummy implementations for desktop support.
-// Replace these with your actual implementations.
 
-bool isDesktop(dynamic platformWrapper) {
-  return true;
-}
+bool isDesktop(dynamic platformWrapper) => true;
+class PlatformWrapper {}
 
-class PlatformWrapper {
-  // Your platform wrapper implementation.
-}
-
-// Example implementation of createSurveyFilename().
-// Modify this function to generate your filename as needed.
+/// Example implementation of createSurveyFilename().
 
 Future<String> createSurveyFilename() async {
   final now = DateTime.now();
   final formatter = DateFormat('yyyyMMddTHHmmss');
   final timestamp = formatter.format(now);
-
   return 'survey_$timestamp.ttl';
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // *** KEY CHANGE: Await the future returned by SharedPreferences.getInstance() ***
+  
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  try {
+    prefs = await SharedPreferences.getInstance();
+  } catch (e) {
+    debugPrint("SharedPreferences error: $e");
+    prefs = await SharedPreferences.getInstance(); // Retry once
+  }
 
   final surveyFilename = await createSurveyFilename();
 
   // Desktop support (if needed).
-
   if (!kIsWeb && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
-
     const windowOptions = WindowOptions(
-      // Setting alwaysOnTop to true so the app starts on top.
       alwaysOnTop: true,
       title: 'MS Fatigue',
     );
-
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
@@ -81,11 +83,9 @@ Future<void> main() async {
     });
   }
 
-  // Ready to run the app.
-
   runApp(
     BlocProvider(
-      create: (_) => SurveyBloc(surveyFilename: surveyFilename),
+      create: (_) => SurveyBloc(surveyFilename: surveyFilename, sharedPreferences: prefs),
       child: const MSFatigue(),
     ),
   );
@@ -94,18 +94,12 @@ Future<void> main() async {
 class MSFatigue extends StatelessWidget {
   const MSFatigue({super.key});
 
-  // This widget is the root of our application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'MS Fatigue',
       debugShowCheckedModeBanner: false,
-      home: SolidLogin(
-        image: AssetImage('assets/images/msFatigue_cover_image.png'),
-        logo: AssetImage('assets/images/msFatigue_icon.png'),
-        webID: 'https://pods.dev.solidcommunity.au',
-        child: Scaffold(body: WelcomeScreen()),
-      ),
+      home: CheckCredentials(),
     );
   }
 }
