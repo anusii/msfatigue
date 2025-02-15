@@ -7,6 +7,7 @@ import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 // Assume _scaffoldKey is defined globally for this widget.
@@ -28,10 +29,7 @@ class SubmitConfirmation extends StatelessWidget {
         title: Center(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/msFatigue_icon.png',
-                height: 65,
-              ),
+              iconImage,
             ],
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/page/credentials_page.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 /// Helper function to format the preferred name:
 /// first letter uppercase and the rest lowercase.
@@ -56,8 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-        (password != null && password!.isNotEmpty) &&
-        (preferredName != null && preferredName!.isNotEmpty);
+            (password != null && password!.isNotEmpty) &&
+            (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -67,10 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         elevation: 0,
         toolbarHeight: 80,
         title: Center(
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 65,
-          ),
+          child: iconImage,
         ),
         iconTheme: const IconThemeData(size: 50),
       ),
@@ -140,22 +138,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   // Retrieve the stored credentials.
-                                  
-                                  final prefs = await SharedPreferences.getInstance();
+
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   final storedUsername =
-                                      prefs.getString('msfatigue_username') ?? "";
+                                      prefs.getString('msfatigue_username') ??
+                                          "";
                                   final storedPassword =
-                                      prefs.getString('msfatigue_password') ?? "";
-                                  final storedPreferredName =
-                                      prefs.getString('msfatigue_preferredName') ?? "";
+                                      prefs.getString('msfatigue_password') ??
+                                          "";
+                                  final storedPreferredName = prefs.getString(
+                                          'msfatigue_preferredName') ??
+                                      "";
 
                                   if (storedUsername == expectedUsername &&
                                       storedPassword == expectedPassword &&
-                                      storedPreferredName == expectedPreferredName) {
+                                      storedPreferredName ==
+                                          expectedPreferredName) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const ConsentScreen(),
+                                        builder: (context) =>
+                                            const ConsentScreen(),
                                       ),
                                     );
                                   } else {
@@ -169,7 +173,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             "Your registration details are not recognised.\n\nPlease contact the study team for assistance."),
                                         actions: [
                                           TextButton(
-                                            onPressed: () => Navigator.pop(context),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
                                             child: const Text("OK"),
                                           ),
                                         ],
@@ -183,14 +188,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     color: Colors.pink,
                                     width: 2,
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: const Text(
                                   'Take me to the survey ►',
-                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
                                 ),
                               ),
                             ),
@@ -218,7 +225,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                         onPressed: () {
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (_) => const CredentialsPage(),
+                                            builder: (_) =>
+                                                const CredentialsPage(),
                                           ))
                                               .then((_) {
                                             // Re-load the credentials after returning.
@@ -232,9 +240,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             color: Colors.pink,
                                             width: 2,
                                           ),
-                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                         child: const Text(

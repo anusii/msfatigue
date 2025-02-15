@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:msfatigue/widgets/image/image.dart';
+
 class ConsentSettings extends StatelessWidget {
   const ConsentSettings({super.key});
 
@@ -16,11 +18,7 @@ class ConsentSettings extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 75,
-            fit: BoxFit.contain,
-          ),
+          child: iconImage,
         ),
         centerTitle: true,
         // Add the close button to the actions list (right side).

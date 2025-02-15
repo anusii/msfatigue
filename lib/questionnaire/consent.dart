@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -42,10 +43,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
         elevation: 0,
         toolbarHeight: 80,
         title: Center(
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 65,
-          ),
+          child: iconImage,
         ),
         iconTheme: const IconThemeData(
           size: 50,

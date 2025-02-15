@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -32,10 +33,7 @@ class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
         title: Center(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/msFatigue_icon.png',
-                height: 65,
-              ),
+              iconImage,
             ],
           ),
         ),

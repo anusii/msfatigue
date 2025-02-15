@@ -5,6 +5,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 class WelcomeBackScreen extends StatefulWidget {
   const WelcomeBackScreen({super.key});
@@ -95,10 +96,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
         elevation: 0,
         toolbarHeight: 80,
         title: Center(
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 65,
-          ),
+          child: iconImage,
         ),
         iconTheme: const IconThemeData(
           size: 50,

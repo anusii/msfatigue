@@ -11,6 +11,7 @@ import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 import 'package:msfatigue/utils/markdown_survey_data.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -282,10 +283,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         child: Stack(
                           children: [
                             Center(
-                              child: Image.asset(
-                                'assets/images/msFatigue_icon.png',
-                                height: 75,
-                              ),
+                              child: iconImage,
                             ),
                             Positioned(
                               right: 16,

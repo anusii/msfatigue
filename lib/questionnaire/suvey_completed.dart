@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import 'package:msfatigue/questionnaire/welcome_back_final.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -22,10 +23,7 @@ class SurveyCompleted extends StatelessWidget {
         title: Center(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/msFatigue_icon.png',
-                height: 65,
-              ),
+              iconImage,
             ],
           ),
         ),

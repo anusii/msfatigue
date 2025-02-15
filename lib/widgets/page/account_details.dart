@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:msfatigue/widgets/image/image.dart';
+
 class AccountDetails extends StatelessWidget {
   const AccountDetails({super.key});
 
@@ -23,11 +25,7 @@ class AccountDetails extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 75,
-            fit: BoxFit.contain,
-          ),
+          child: iconImage,
         ),
         centerTitle: true,
         actions: [

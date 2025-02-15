@@ -7,6 +7,7 @@ import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
 /// and a logout button. Handles reopening the drawer after navigating back
@@ -41,10 +42,7 @@ class SideDrawer extends StatelessWidget {
                   child: Stack(
                     children: [
                       Center(
-                        child: Image.asset(
-                          'assets/images/msFatigue_icon.png',
-                          height: 80,
-                        ),
+                        child: iconImage,
                       ),
                       Positioned(
                         right: 0,
