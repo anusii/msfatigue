@@ -204,60 +204,57 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         // If account info is missing, show the informational message and the Register button.
                         if (preferredName == null || preferredName!.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16.0),
-                            child: Center(
-                              child: SizedBox(
-                                width: 300, // Wider for message
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "You can try the survey out without registering and your answers will not be saved. For keeping track of your answers though, please register using the username and password that you have been provided with.",
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    SizedBox(
-                                      width: 260,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (_) =>
-                                                const CredentialsPage(),
-                                          ))
-                                              .then((_) {
-                                            // Re-load the credentials after returning.
+                          Center(
+                            child: SizedBox(
+                              width: 300, // Wider for message
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Before you begin the survey please record the registration details you have been provided with:',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    width: 260,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (_) =>
+                                              const CredentialsPage(),
+                                        ))
+                                            .then((_) {
+                                          // Re-load the credentials after returning.
 
-                                            _loadCredentials();
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          side: const BorderSide(
-                                            color: Colors.pink,
-                                            width: 2,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 16),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
+                                          _loadCredentials();
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        side: const BorderSide(
+                                          color: Colors.pink,
+                                          width: 2,
                                         ),
-                                        child: const Text(
-                                          "Register",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Register",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
