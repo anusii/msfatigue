@@ -439,6 +439,7 @@ class _QuestionPageState extends State<QuestionPage> {
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
+                            Text('Copyright © 2025 ANU',style: TextStyle(fontSize: 12),),
                             OutlinedButton.icon(
                               onPressed:
                                   selectedResponse != null ? handleNext : null,
