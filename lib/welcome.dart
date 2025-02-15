@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/page/credentials_page.dart';
@@ -25,17 +26,21 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? preferredName;
+  String? username;
+  String? password;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferredName();
+    _loadCredentials();
   }
 
-  Future<void> _loadPreferredName() async {
+  Future<void> _loadCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       preferredName = prefs.getString('msfatigue_preferredName');
+      username = prefs.getString('msfatigue_username');
+      password = prefs.getString('msfatigue_password');
     });
   }
 
@@ -46,6 +51,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
+
+    // Check if all credentials are present.
+
+    final bool allCredentialsPresent =
+        (username != null && username!.isNotEmpty) &&
+        (password != null && password!.isNotEmpty) &&
+        (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -69,6 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -116,80 +129,53 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           'The survey should take 10-20 minutes to complete.',
                           style: TextStyle(fontSize: 16),
                         ),
-                        const SizedBox(height: 10),
-
-                        // If account info is missing, show the informational message and the Register button.
-
-                        if (preferredName == null || preferredName!.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16.0),
-                            child: Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Informational message for unregistered users.
-                                  const Text(
-                                    "You can try the survey out without registering and your answers will not be saved. For keeping track of your answers though, please register using the username and password that you have been provided with.",
-                                    style: TextStyle(fontSize: 16),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  // Register button.
-                                  SizedBox(
-                                    width: 260,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (_) =>
-                                              const CredentialsPage(),
-                                        ))
-                                            .then((_) {
-                                          // Re-load the preferred name after returning.
-                                          _loadPreferredName();
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        side: const BorderSide(
-                                          color: Colors.pink,
-                                          width: 2,
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        "Register",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                         const SizedBox(height: 30),
 
-                        if (preferredName != null && preferredName!.isNotEmpty)
+                        // If credentials are present, show the "Take me to the survey" button.
+
+                        if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
                               width: 260,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ConsentScreen(),
-                                    ),
-                                  );
+                                onPressed: () async {
+                                  // Retrieve the stored credentials.
+                                  
+                                  final prefs = await SharedPreferences.getInstance();
+                                  final storedUsername =
+                                      prefs.getString('msfatigue_username') ?? "";
+                                  final storedPassword =
+                                      prefs.getString('msfatigue_password') ?? "";
+                                  final storedPreferredName =
+                                      prefs.getString('msfatigue_preferredName') ?? "";
+
+                                  if (storedUsername == expectedUsername &&
+                                      storedPassword == expectedPassword &&
+                                      storedPreferredName == expectedPreferredName) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const ConsentScreen(),
+                                      ),
+                                    );
+                                  } else {
+                                    // Show a popup dialog if registration details are incorrect.
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Registration Error"),
+                                        content: const Text(
+                                            "Your registration details are not recognised.\n\nPlease contact the study team for assistance."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: const Text("OK"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
@@ -197,18 +183,70 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     color: Colors.pink,
                                     width: 2,
                                   ),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: const Text(
                                   'Take me to the survey ►',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                        // If account info is missing, show the informational message and the Register button.
+                        if (preferredName == null || preferredName!.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Center(
+                              child: SizedBox(
+                                width: 300, // Wider for message
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "You can try the survey out without registering and your answers will not be saved. For keeping track of your answers though, please register using the username and password that you have been provided with.",
+                                      style: TextStyle(fontSize: 16),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    SizedBox(
+                                      width: 260,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (_) => const CredentialsPage(),
+                                          ))
+                                              .then((_) {
+                                            // Re-load the credentials after returning.
+
+                                            _loadCredentials();
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          side: const BorderSide(
+                                            color: Colors.pink,
+                                            width: 2,
+                                          ),
+                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Register",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -217,8 +255,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   // Bottom dot image with a small bottom padding.
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
                     child: Image.asset(
