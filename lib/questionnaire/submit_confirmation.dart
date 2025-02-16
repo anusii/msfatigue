@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+// Assume _scaffoldKey is defined globally for this widget.
 
 class SubmitConfirmation extends StatelessWidget {
   const SubmitConfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -25,10 +29,7 @@ class SubmitConfirmation extends StatelessWidget {
         title: Center(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/msFatigue_icon.png',
-                height: 65,
-              ),
+              iconImage,
             ],
           ),
         ),
@@ -36,21 +37,25 @@ class SubmitConfirmation extends StatelessWidget {
           size: 50,
         ),
       ),
-      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+      drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Image.asset(
               'assets/images/bottom_dot_four.png',
-              height: 260,
+              height: 240,
             ),
-            const Text(
-              "Are you ready to submit?",
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+              child: const Text(
+                "Thank you for your participation.\n\n"
+                "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.center,
             ),
             Image.asset(
               'assets/images/bottom_dot_five.png',
@@ -71,7 +76,7 @@ class SubmitConfirmation extends StatelessWidget {
                       size: 25,
                     ),
                     label: Text(
-                      "Previous   ",
+                      "Resume   ",
                       style: TextStyle(
                         color: Colors.grey.shade700,
                       ),
@@ -88,36 +93,46 @@ class SubmitConfirmation extends StatelessWidget {
                   const SizedBox(width: 16),
                   OutlinedButton.icon(
                     onPressed: () async {
-                      // Retrieve the current SurveyState from the bloc.
+                      // Retrieve the current SurveyState from the bloc before async operation.
 
                       final surveyState = context.read<SurveyBloc>().state;
 
-                      // Convert the responses Map to a list of records.
+                      // Get the SharedPreferences instance and check webId.
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final webId = prefs.getString('webId') ?? '';
+                      if (webId.isNotEmpty) {
+                        // Convert the responses Map to a list of records.
+                        final List<({String key, dynamic value})> dataRecords =
+                            surveyState.responses.entries
+                                .map((entry) =>
+                                    (key: entry.key, value: entry.value))
+                                .toList();
 
-                      final List<({String key, dynamic value})> dataRecords =
-                          surveyState.responses.entries
-                              .map((entry) =>
-                                  (key: entry.key, value: entry.value))
-                              .toList();
+                        // Generate a filename.
 
-                      String fileName = createSurveyFilename();
+                        final String fileName = createSurveyFilename();
 
-                      await saveToPod(dataRecords, fileName, context,
-                          isSubmit: true);
+                        // Save data to POD.
 
-                      // Now pass the dataRecords to the SurveyCompleted screen.
+                        if (!context.mounted) return;
+                        await saveToPod(dataRecords, fileName, context,
+                            isSubmit: true);
+                      }
+
+                      // If successful, navigate to SurveyCompleted screen.
 
                       if (context.mounted) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SurveyCompleted(),
+                            builder: (context) => WelcomeScreen(),
                           ),
                         );
                       }
                     },
                     icon: const Text(
-                      "    Submit",
+                      "    Finish",
                       style: TextStyle(color: Colors.pink),
                     ),
                     label: const Icon(
@@ -126,10 +141,7 @@ class SubmitConfirmation extends StatelessWidget {
                       size: 25,
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        width: 2,
-                        color: Colors.pink,
-                      ),
+                      side: const BorderSide(width: 2, color: Colors.pink),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

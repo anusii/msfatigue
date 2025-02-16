@@ -40,6 +40,9 @@ solidpod
 .pub/
 /build/
 
+# Secret files
+/lib/constants/secrets.dart
+
 # Symbolication related
 app.*.symbols
 

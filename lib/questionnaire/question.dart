@@ -11,6 +11,7 @@ import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
 import 'package:msfatigue/utils/markdown_survey_data.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -20,9 +21,8 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  List<String> block1Questions = [];
-  List<String> block2Questions = [];
   List<String> questions = [];
+  String? webId;
   final List<String> options = [
     "Strongly disagree",
     "Disagree",
@@ -32,10 +32,10 @@ class _QuestionPageState extends State<QuestionPage> {
     "Not applicable",
   ];
   final List<Color> gradientColors = [
-    const Color(0xFFFFE6EB), // Very pale soft pink
-    const Color(0xFFFFD6DE), // Light pale pink
-    const Color(0xFFFFC6D1), // Medium pale pink
-    const Color(0xFFFFB6C5), // Stronger pale pink
+    const Color(0xFFFFE6EB),
+    const Color(0xFFFFD6DE),
+    const Color(0xFFFFC6D1),
+    const Color(0xFFFFB6C5),
     const Color.fromARGB(255, 200, 195, 195),
     const Color.fromARGB(255, 220, 215, 215),
   ];
@@ -49,6 +49,17 @@ class _QuestionPageState extends State<QuestionPage> {
     super.initState();
     _loadQuestions();
     _initializeSurveyData();
+    _loadWebId();
+  }
+
+  /// Loads the webId from SharedPreferences using the SurveyBloc's instance.
+  /// This method is called during widget initialization to check if a webId exists.
+
+  Future<void> _loadWebId() async {
+    final prefs = context.read<SurveyBloc>().sharedPreferences;
+    setState(() {
+      webId = prefs.getString('webId');
+    });
   }
 
   // Load the survey data using the utils function.
@@ -75,9 +86,6 @@ class _QuestionPageState extends State<QuestionPage> {
 
     setState(() {
       questions = _parseQuestions(data);
-      // Divide questions into Block 1 and Block 2.
-      block1Questions = questions.take(6).toList();
-      block2Questions = questions.skip(6).take(6).toList();
     });
 
     // Check again if mounted before using context for the bloc.
@@ -103,16 +111,6 @@ class _QuestionPageState extends State<QuestionPage> {
       }
     }
     return extractedQuestions;
-  }
-
-  // This helper returns the block title using local variables.
-
-  String _getBlockTitle(int currentQuestionIndex) {
-    if (currentQuestionIndex < block1Questions.length) {
-      return "BLOCK 1";
-    } else {
-      return "BLOCK 2";
-    }
   }
 
   Future<void> _showEndDialog() async {
@@ -232,15 +230,47 @@ class _QuestionPageState extends State<QuestionPage> {
           ? const Center(child: CircularProgressIndicator())
           : BlocBuilder<SurveyBloc, SurveyState>(
               builder: (context, state) {
-                // Get the current question by using the insertion order of the responses map.
-
                 final int currentQuestionIndex = state.currentQuestionIndex;
                 final List<String> questionsList =
                     state.responses.keys.toList();
+                final int questionTotal = questionsList.length;
+
                 final String currentQuestion =
                     questionsList[currentQuestionIndex];
                 final String? selectedResponse =
                     state.responses[currentQuestion];
+
+                // Function to handle next button press.
+
+                Future<void> handleNext() async {
+                  context.read<SurveyBloc>().add(NextQuestion());
+
+                  // Only save to pod if webId exists and is not empty.
+
+                  if (webId != null && webId!.isNotEmpty) {
+                    final surveyState =
+                        BlocProvider.of<SurveyBloc>(context).state;
+                    String fileName = surveyState.surveyFilename;
+                    Map dataResponses = surveyState.responses;
+
+                    List<({String key, dynamic value})> dataRecords = [];
+                    for (int i = 0; i < dataResponses.keys.length; i++) {
+                      dataRecords.add((
+                        key: i.toString(),
+                        value:
+                            '{${dataResponses.keys.toList()[i]}} {${dataResponses.values.toList()[i]}}'
+                      ));
+                    }
+
+                    await saveToPod(dataRecords, fileName, context);
+                  }
+
+                  if (currentQuestionIndex == questions.length - 1) {
+                    _submitSurvey();
+                  }
+                }
+
+                // Rest of the build method remains the same until the bottom navigation buttons.
 
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
@@ -253,10 +283,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         child: Stack(
                           children: [
                             Center(
-                              child: Image.asset(
-                                'assets/images/msFatigue_icon.png',
-                                height: 75,
-                              ),
+                              child: iconImage,
                             ),
                             Positioned(
                               right: 16,
@@ -311,7 +338,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       Center(
                         child: Text(
-                          '${_getBlockTitle(currentQuestionIndex)} - QUESTION ${currentQuestionIndex + 1}',
+                          'Question ${state.currentQuestionIndex + 1} of $questionTotal',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
@@ -410,48 +437,17 @@ class _QuestionPageState extends State<QuestionPage> {
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
+                            Text(
+                              'Copyright © 2025 ANU',
+                              style: TextStyle(fontSize: 12),
+                            ),
                             OutlinedButton.icon(
-                              onPressed: (selectedResponse != null)
-                                  ? () async {
-                                      context
-                                          .read<SurveyBloc>()
-                                          .add(NextQuestion());
-
-                                      final surveyState =
-                                          BlocProvider.of<SurveyBloc>(context)
-                                              .state;
-
-                                      String fileName =
-                                          surveyState.surveyFilename;
-
-                                      Map dataResponses = surveyState.responses;
-
-                                      List<({String key, dynamic value})>
-                                          dataRecords = [];
-
-                                      for (int i = 0;
-                                          i < dataResponses.keys.length;
-                                          i++) {
-                                        dataRecords.add((
-                                          key: i.toString(),
-                                          value:
-                                              '{${dataResponses.keys.toList()[i]}} {${dataResponses.values.toList()[i]}}'
-                                        ));
-                                      }
-
-                                      await saveToPod(
-                                          dataRecords, fileName, context);
-
-                                      if (currentQuestionIndex ==
-                                          questions.length - 1) {
-                                        _submitSurvey();
-                                      }
-                                    }
-                                  : null,
-                              icon: const Text("    Next",
-                                  style: TextStyle(
-                                    color: Colors.pink,
-                                  )),
+                              onPressed:
+                                  selectedResponse != null ? handleNext : null,
+                              icon: const Text(
+                                "    Next",
+                                style: TextStyle(color: Colors.pink),
+                              ),
                               label: const Icon(
                                 Icons.arrow_right,
                                 color: Colors.pink,

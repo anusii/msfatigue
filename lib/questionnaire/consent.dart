@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:msfatigue/questionnaire/welcome_back.dart';
+import 'package:msfatigue/widgets/page/dummy_sheet.dart';
+import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -11,9 +16,27 @@ class ConsentScreen extends StatefulWidget {
 
 class _ConsentScreenState extends State<ConsentScreen> {
   bool? _consentGiven;
+  String? preferredName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferredName();
+  }
+
+  Future<void> _loadPreferredName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      preferredName = prefs.getString('msfatigue_preferredName');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final welcomeText = (preferredName == null || preferredName!.isEmpty)
+        ? "Welcome!"
+        : "Welcome ${formatPreferredName(preferredName!)}!";
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -21,10 +44,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
         elevation: 0,
         toolbarHeight: 80,
         title: Center(
-          child: Image.asset(
-            'assets/images/msFatigue_icon.png',
-            height: 65,
-          ),
+          child: iconImage,
         ),
         iconTheme: const IconThemeData(
           size: 50,
@@ -39,8 +59,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 10),
-                  const Text(
-                    'Welcome to the Survey!',
+                  Text(
+                    welcomeText,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
@@ -48,9 +68,42 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'The Participant Information Sheet for the MS Fatigue Survey is available here.',
-                    style: TextStyle(fontSize: 16),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      children: [
+                        const TextSpan(text: "The "),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigate to your dummy sheet screen.
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DummySheet(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Participant Information Sheet",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const TextSpan(
+                          text: " for the MS Fatigue Survey is available here.",
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(

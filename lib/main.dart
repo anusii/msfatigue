@@ -31,20 +31,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_web/shared_preferences_web.dart';
-
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/widgets/page/check_credentials.dart';
-
+import 'package:msfatigue/welcome.dart';
 
 // Dummy implementations for desktop support.
 
 bool isDesktop(dynamic platformWrapper) => true;
+
 class PlatformWrapper {}
 
-/// Example implementation of createSurveyFilename().
+// Example implementation of createSurveyFilename().
 
 Future<String> createSurveyFilename() async {
   final now = DateTime.now();
@@ -55,27 +52,22 @@ Future<String> createSurveyFilename() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // *** KEY CHANGE: Await the future returned by SharedPreferences.getInstance() ***
-  
-  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  try {
-    prefs = await SharedPreferences.getInstance();
-  } catch (e) {
-    debugPrint("SharedPreferences error: $e");
-    prefs = await SharedPreferences.getInstance(); // Retry once
-  }
+  // Get SharedPreferences instance.
+
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   final surveyFilename = await createSurveyFilename();
 
   // Desktop support (if needed).
   if (!kIsWeb && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
+
     const windowOptions = WindowOptions(
       alwaysOnTop: true,
       title: 'MS Fatigue',
     );
+
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
@@ -85,7 +77,8 @@ Future<void> main() async {
 
   runApp(
     BlocProvider(
-      create: (_) => SurveyBloc(surveyFilename: surveyFilename, sharedPreferences: prefs),
+      create: (_) =>
+          SurveyBloc(surveyFilename: surveyFilename, sharedPreferences: prefs),
       child: const MSFatigue(),
     ),
   );
@@ -99,7 +92,7 @@ class MSFatigue extends StatelessWidget {
     return const MaterialApp(
       title: 'MS Fatigue',
       debugShowCheckedModeBanner: false,
-      home: CheckCredentials(),
+      home: WelcomeScreen(),
     );
   }
 }

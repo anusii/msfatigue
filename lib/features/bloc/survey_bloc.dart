@@ -83,13 +83,11 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
   final SharedPreferences sharedPreferences; // Add this
   final String surveyFilename;
 
-
   SurveyBloc({required this.surveyFilename, required this.sharedPreferences})
       : super(SurveyState(
             responses: {},
             currentQuestionIndex: 0,
             surveyFilename: surveyFilename)) {
-
     on<InitializeSurvey>((event, emit) async {
       final Map<String, String?> responses = {
         for (var question in event.questions) question: null,
