@@ -25,10 +25,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? preferredName;
   String? username;
   String? password;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -72,7 +72,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
         iconTheme: const IconThemeData(size: 50),
       ),
-      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+      drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(

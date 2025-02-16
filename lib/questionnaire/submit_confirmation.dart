@@ -4,23 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 // Assume _scaffoldKey is defined globally for this widget.
-
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class SubmitConfirmation extends StatelessWidget {
   const SubmitConfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -37,21 +37,25 @@ class SubmitConfirmation extends StatelessWidget {
           size: 50,
         ),
       ),
-      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+      drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Image.asset(
               'assets/images/bottom_dot_four.png',
-              height: 260,
+              height: 240,
             ),
-            const Text(
-              "Are you ready to submit?",
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+              child: const Text(
+                "Thank you for your participation.\n\n"
+                "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap the PREVIOUS button. Otherwise tap GOODBYE.",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.center,
             ),
             Image.asset(
               'assets/images/bottom_dot_five.png',
@@ -122,13 +126,13 @@ class SubmitConfirmation extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SurveyCompleted(),
+                            builder: (context) => WelcomeScreen(),
                           ),
                         );
                       }
                     },
                     icon: const Text(
-                      "    Submit",
+                      "    Goodbye",
                       style: TextStyle(color: Colors.pink),
                     ),
                     label: const Icon(

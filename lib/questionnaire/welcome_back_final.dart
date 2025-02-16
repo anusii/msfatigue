@@ -6,8 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class WelcomeBackFinalPage extends StatefulWidget {
   const WelcomeBackFinalPage({super.key});
 
@@ -18,13 +16,15 @@ class WelcomeBackFinalPage extends StatefulWidget {
 class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     DateTime today = DateTime.now();
     String formattedDate = DateFormat('d MMMM yyyy hh:mm a').format(today);
 
     String nextAvailableDate = DateFormat('d MMMM yyyy').format(today);
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -41,7 +41,7 @@ class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
           size: 50,
         ),
       ),
-      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+      drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
         child: Center(

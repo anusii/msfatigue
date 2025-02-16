@@ -80,7 +80,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                             child: GestureDetector(
                               onTap: () {
                                 // Navigate to your dummy sheet screen.
-                                
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

@@ -5,15 +5,14 @@ import 'package:gap/gap.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class SurveyCompleted extends StatelessWidget {
-  const SurveyCompleted({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  SurveyCompleted({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -30,7 +29,7 @@ class SurveyCompleted extends StatelessWidget {
           size: 50,
         ),
       ),
-      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+      drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           children: [
