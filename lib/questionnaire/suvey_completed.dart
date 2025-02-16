@@ -36,12 +36,15 @@ class SurveyCompleted extends StatelessWidget {
         child: Column(
           children: [
             const Gap(30),
-            const Text(
-              "Thank you - You can return to the survey any time before midnight.",
-              style: TextStyle(
-                fontSize: 28,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: const Text(
+                "Thank you - Your survey has been saved. You can complete another survey tomorrow (i.e., after midnight tonight).",
+                style: TextStyle(
+                  fontSize: 22,
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.center,
             ),
             Image.asset(
               'assets/images/bottom_dot_six.png',
