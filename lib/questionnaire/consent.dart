@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/questionnaire/welcome_back.dart';
+import 'package:msfatigue/widgets/page/dummy_sheet.dart';
 import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
@@ -67,9 +68,42 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'The Participant Information Sheet for the MS Fatigue Survey is available here.',
-                    style: TextStyle(fontSize: 16),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      children: [
+                        const TextSpan(text: "The "),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigate to your dummy sheet screen.
+                                
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DummySheet(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Participant Information Sheet",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const TextSpan(
+                          text: " for the MS Fatigue Survey is available here.",
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(

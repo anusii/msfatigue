@@ -156,7 +156,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   //     "";
 
                                   if (storedUsername == expectedUsername &&
-                                      storedPassword == expectedPassword 
+                                          storedPassword == expectedPassword
                                       // && storedPreferredName == expectedPreferredName
                                       ) {
                                     Navigator.push(
@@ -234,7 +234,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: ' you begin the survey please record the registration details '
+                                            text:
+                                                ' you begin the survey please record the registration details '
                                                 'you have been provided with:',
                                           ),
                                         ],
@@ -255,7 +256,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                               .then((_) {
                                             // Re-load the credentials after returning.
 
-                                             _loadCredentials();
+                                            _loadCredentials();
                                           });
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -264,9 +265,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             color: Colors.pink,
                                             width: 2,
                                           ),
-                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                         child: const Text(
