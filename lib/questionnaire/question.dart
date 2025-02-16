@@ -338,7 +338,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       Center(
                         child: Text(
-                          'QUESTION ${state.currentQuestionIndex + 1} of $questionTotal',
+                          'Question ${state.currentQuestionIndex + 1} of $questionTotal',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
