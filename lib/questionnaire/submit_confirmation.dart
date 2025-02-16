@@ -49,7 +49,7 @@ class SubmitConfirmation extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: const Text(
                 "Thank you for your participation.\n\n"
-                "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap the PREVIOUS button. Otherwise tap GOODBYE.",
+                "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.",
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black,
@@ -76,7 +76,7 @@ class SubmitConfirmation extends StatelessWidget {
                       size: 25,
                     ),
                     label: Text(
-                      "Previous   ",
+                      "Resume   ",
                       style: TextStyle(
                         color: Colors.grey.shade700,
                       ),
@@ -132,7 +132,7 @@ class SubmitConfirmation extends StatelessWidget {
                       }
                     },
                     icon: const Text(
-                      "    Goodbye",
+                      "    Finish",
                       style: TextStyle(color: Colors.pink),
                     ),
                     label: const Icon(
