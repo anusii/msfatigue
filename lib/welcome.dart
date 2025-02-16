@@ -147,14 +147,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   final storedPassword =
                                       prefs.getString('msfatigue_password') ??
                                           "";
-                                  final storedPreferredName = prefs.getString(
-                                          'msfatigue_preferredName') ??
-                                      "";
+
+                                  // Allow the preferred name to be anything.
+                                  // It is temporarily setted and may be changed later.
+
+                                  // final storedPreferredName = prefs.getString(
+                                  //         'msfatigue_preferredName') ??
+                                  //     "";
 
                                   if (storedUsername == expectedUsername &&
-                                      storedPassword == expectedPassword &&
-                                      storedPreferredName ==
-                                          expectedPreferredName) {
+                                      storedPassword == expectedPassword 
+                                      // && storedPreferredName == expectedPreferredName
+                                      ) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
