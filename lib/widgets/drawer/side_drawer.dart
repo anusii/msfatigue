@@ -34,7 +34,7 @@ class _SideDrawerState extends State<SideDrawer> {
   }
 
   /// Load appName and version from pubspec.yaml using package_info_plus.
-  
+
   Future<void> _loadAppInfo() async {
     final info = await PackageInfo.fromPlatform();
     setState(() {
@@ -54,7 +54,7 @@ class _SideDrawerState extends State<SideDrawer> {
           child: Column(
             children: [
               /// Header: msFatigue icon in center, close button top-right.
-              
+
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
@@ -80,7 +80,7 @@ class _SideDrawerState extends State<SideDrawer> {
               ),
 
               /// SETTINGS label.
-              
+
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -96,7 +96,7 @@ class _SideDrawerState extends State<SideDrawer> {
               ),
 
               /// 1) Personal settings.
-              
+
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -113,7 +113,7 @@ class _SideDrawerState extends State<SideDrawer> {
               const Divider(height: 2, color: Colors.black),
 
               /// 2) Account details.
-              
+
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -130,7 +130,7 @@ class _SideDrawerState extends State<SideDrawer> {
               const Divider(height: 2, color: Colors.black),
 
               /// 3) Consent settings.
-              
+
               ListTile(
                 title: const Text('Consent settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -147,7 +147,7 @@ class _SideDrawerState extends State<SideDrawer> {
               const Divider(height: 2, color: Colors.black),
 
               /// 4) About the app.
-              
+
               ListTile(
                 title: const Text('About the app'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -159,14 +159,18 @@ class _SideDrawerState extends State<SideDrawer> {
                   showAboutDialog(
                     context: context,
                     applicationIcon: iconImage,
-                    applicationName: _appName,
+                    applicationName: 'MS Fatigue Survey',
                     applicationVersion: _appVersion,
-                    applicationLegalese: '© 2025 ANU',
+                    applicationLegalese: 'Copyright © 2025 ANU',
                     children: [
                       const Text(
-                        "\nThis app demonstrates an MS Fatigue Survey.\n\n"
-                        "Authors: Graham Williams and Zheyuan Xu\n\n"
-                      ),
+                          "\nThe MS Fatigue app presents a survey to collect data on your experience of fatigue. "
+                          "This data will contribute towards our understanding of fatigue amongst people "
+                          "affected by multiple sclerosis. We thank you for your important contribution to "
+                          "this research.\n\n"
+                          "The survery was developed by the ANU's John Curtin School of Medical Research and the research is in "
+                          "collaboration with the School of Computing.\n\n"
+                          "This app was developed by the ANU's Software Innovation Institute.\n\n"),
                     ],
                   );
                 },
@@ -175,7 +179,7 @@ class _SideDrawerState extends State<SideDrawer> {
               const Spacer(),
 
               /// Logout button.
-              
+
               Center(
                 child: SizedBox(
                   width: 250,
