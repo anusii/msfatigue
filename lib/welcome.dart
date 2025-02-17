@@ -57,21 +57,39 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // Check if all credentials are present.
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-            (password != null && password!.isNotEmpty) &&
-            (preferredName != null && preferredName!.isNotEmpty);
+        (password != null && password!.isNotEmpty) &&
+        (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
+
+      // Overriding the default hamburger icon: fade to grey, smaller size.
+
       appBar: AppBar(
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: iconImage,
-        iconTheme: const IconThemeData(size: 50),
+        centerTitle: true,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.grey,
+                size: 50,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+
+        title: iconImage, // Our msFatigue icon
       ),
+
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -109,6 +127,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
+
                         MarkdownBody(
                           selectable: true,
                           data:
@@ -117,8 +136,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             p: const TextStyle(fontSize: 16),
                           ),
                         ),
-
                         const SizedBox(height: 8),
+
                         MarkdownBody(
                           selectable: true,
                           data:
@@ -127,8 +146,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             p: const TextStyle(fontSize: 16),
                           ),
                         ),
-
                         const SizedBox(height: 8),
+
                         MarkdownBody(
                           selectable: true,
                           data:
@@ -146,7 +165,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               width: 260,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  // Retrieve the stored credentials.
                                   final prefs =
                                       await SharedPreferences.getInstance();
                                   if (!mounted) return;
@@ -158,7 +176,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       prefs.getString('msfatigue_password') ??
                                           "";
 
-                                  // Compare with secrets.dart
                                   if (storedUsername == expectedUsername &&
                                       storedPassword == expectedPassword) {
                                     if (!mounted) return;
@@ -175,8 +192,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       context: context,
                                       builder: (dialogCtx) {
                                         return AlertDialog(
-                                          title:
-                                              const Text("Registration Error"),
+                                          title: const Text("Registration Error"),
                                           content: const Text(
                                             "Your registration details are not recognised.\n\n"
                                             "Please contact the study team for assistance.",
@@ -259,7 +275,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             ),
                                           )
                                               .then((_) {
-                                            // Re-load credentials after returning
                                             _loadCredentials();
                                           });
                                         },
@@ -294,9 +309,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Bottom dot image.
-
+                  // Bottom image.
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
                     child: Image.asset(
