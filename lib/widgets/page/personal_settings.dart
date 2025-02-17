@@ -16,8 +16,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String? password;
   String? preferredName;
 
-  /// Controls whether the password is shown in plain text.
-  
+  // For toggling password on this screen (outside dialog).
+
   bool _showPassword = false;
 
   @override
@@ -26,8 +26,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     _loadCredentials();
   }
 
-  /// Loads the stored credentials from SharedPreferences.
-  
   Future<void> _loadCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -37,13 +35,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     });
   }
 
-  /// Clears the stored credentials and returns the user to [WelcomeScreen].
-  
   Future<void> _clearCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('msfatigue_username');
     await prefs.remove('msfatigue_password');
     await prefs.remove('msfatigue_preferredName');
+
     setState(() {
       username = null;
       password = null;
@@ -57,8 +54,97 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     );
   }
 
-  /// Formats the preferred name so that the first letter is uppercase and the rest are lowercase.
-  
+  Future<void> _showUpdateDialog() async {
+    final usernameController = TextEditingController(text: username ?? "");
+    final passwordController = TextEditingController(text: password ?? "");
+    final preferredNameController = TextEditingController(text: preferredName ?? "");
+
+    final updated = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        bool localShowPassword = false;
+        return StatefulBuilder(
+          builder: (ctx, setStateDialog) {
+            return AlertDialog(
+              title: const Text("Update Credentials"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(labelText: "Username"),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            localShowPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setStateDialog(() {
+                              localShowPassword = !localShowPassword;
+                            });
+                          },
+                        ),
+                      ),
+                      obscureText: !localShowPassword,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: preferredNameController,
+                      decoration:
+                          const InputDecoration(labelText: "Preferred Name"),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString(
+                      'msfatigue_username',
+                      usernameController.text.trim(),
+                    );
+                    await prefs.setString(
+                      'msfatigue_password',
+                      passwordController.text.trim(),
+                    );
+                    await prefs.setString(
+                      'msfatigue_preferredName',
+                      preferredNameController.text.trim(),
+                    );
+
+                    if (!mounted) return;
+                    Navigator.pop(dialogContext, true);
+                  },
+                  child: const Text("Update"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (updated == true && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+    }
+  }
+
   String formatPreferredName(String name) {
     if (name.isEmpty) return name;
     if (name.length == 1) return name.toUpperCase();
@@ -67,16 +153,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if all credentials are present.
-
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
         (password != null && password!.isNotEmpty) &&
         (preferredName != null && preferredName!.isNotEmpty);
 
-    // Decide how to display the password:
-    //  - If null or empty => "Not set"
-    //  - Otherwise => masked by default (******) or show in plain text.
+    // For the main screen's password display (not the dialog).
 
     String passwordDisplay;
     if (password == null || password!.isEmpty) {
@@ -136,21 +218,15 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-
-                // Row that contains the masked/unmasked password + eye icon.
-
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: SelectableText(
                         passwordDisplay,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.black),
+                        style: const TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ),
-                    // Eye icon toggles _showPassword.
-
                     IconButton(
                       icon: Icon(
                         _showPassword ? Icons.visibility_off : Icons.visibility,
@@ -179,27 +255,50 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 ),
                 const SizedBox(height: 20),
 
-                // Clear Credentials button is only shown if all credentials are present.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Clear Credentials button
+                    if (allCredentialsPresent)
+                      ElevatedButton(
+                        onPressed: _clearCredentials,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.red, width: 2),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "Clear Credentials",
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        ),
+                      ),
 
-                if (allCredentialsPresent)
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: _clearCredentials,
+                    if (allCredentialsPresent) const SizedBox(width: 16),
+
+                    // Update Credentials button.
+                    
+                    ElevatedButton(
+                      onPressed: _showUpdateDialog,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.red, width: 2),
+                        side: const BorderSide(color: Colors.blue, width: 2),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 32),
+                            vertical: 16, horizontal: 24),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text(
-                        "Clear Credentials",
-                        style: TextStyle(fontSize: 16, color: Colors.red),
+                        "Update Credentials",
+                        style: TextStyle(fontSize: 16, color: Colors.blue),
                       ),
                     ),
-                  ),
+                  ],
+                ),
               ],
             ),
           ),
