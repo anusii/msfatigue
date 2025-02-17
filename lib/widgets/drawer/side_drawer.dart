@@ -7,18 +7,43 @@ import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
-import 'package:msfatigue/widgets/page/about_app.dart'; // Import the new AboutApp screen
 import 'package:msfatigue/widgets/image/image.dart';
 
-/// A custom drawer for the MSFatigue app that includes a logo, settings menu,
-/// and a logout button.
-class SideDrawer extends StatelessWidget {
+import 'package:package_info_plus/package_info_plus.dart';
+
+class SideDrawer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const SideDrawer({
     super.key,
     required this.scaffoldKey,
   });
+
+  @override
+  State<SideDrawer> createState() => _SideDrawerState();
+}
+
+class _SideDrawerState extends State<SideDrawer> {
+  String _appName = 'Unknown';
+  String _appVersion = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppInfo();
+  }
+
+  /// Load appName and version from pubspec.yaml using package_info_plus.
+  
+  Future<void> _loadAppInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _appName = info.appName;
+      // Combine version and buildNumber if desired, e.g. "0.0.6+4".
+
+      _appVersion = '${info.version}+${info.buildNumber}';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +53,15 @@ class SideDrawer extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              /// Header: msFatigue icon centered, close button top-right.
-
+              /// Header: msFatigue icon in center, close button top-right.
+              
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   height: 80,
                   child: Stack(
                     children: [
-                      Center(
-                        child: iconImage,
-                      ),
+                      Center(child: iconImage),
                       Positioned(
                         right: 0,
                         top: 0,
@@ -57,7 +80,7 @@ class SideDrawer extends StatelessWidget {
               ),
 
               /// SETTINGS label.
-
+              
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -73,7 +96,7 @@ class SideDrawer extends StatelessWidget {
               ),
 
               /// 1) Personal settings.
-
+              
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -90,7 +113,7 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 2) Account details.
-
+              
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -107,7 +130,7 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 3) Consent settings.
-
+              
               ListTile(
                 title: const Text('Consent settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -124,27 +147,36 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 4) About the app.
-
+              
               ListTile(
                 title: const Text('About the app'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () async {
+                onTap: () {
                   Navigator.pop(context);
-                  // Navigate to the AboutApp screen.
 
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AboutApp(),
-                    ),
+                  // Show an about dialog with appName, version, etc.
+
+                  showAboutDialog(
+                    context: context,
+                    applicationIcon: iconImage,
+                    applicationName: _appName,
+                    applicationVersion: _appVersion,
+                    applicationLegalese: '© 2025 ANU',
+                    children: [
+                      const Text(
+                        "\nThis app demonstrates an MS Fatigue Survey.\n\n"
+                        "Authors: Graham Williams and Zheyuan Xu\n"
+                        "Licenses: This app is distributed under MIT license.\n",
+                      ),
+                    ],
                   );
                 },
               ),
 
               const Spacer(),
 
-              /// Logout button at the bottom of the Drawer.
-
+              /// Logout button.
+              
               Center(
                 child: SizedBox(
                   width: 250,
@@ -163,7 +195,7 @@ class SideDrawer extends StatelessWidget {
                     ),
                     onPressed: () async {
                       // Example of your logout flow.
-
+                      
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(
