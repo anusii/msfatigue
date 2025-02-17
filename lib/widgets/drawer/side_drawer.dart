@@ -37,7 +37,6 @@ class _SideDrawerState extends State<SideDrawer> {
   Future<void> _loadAppInfo() async {
     final info = await PackageInfo.fromPlatform();
     setState(() {
-  
       // Combine version and buildNumber if desired, e.g. "0.0.6+4".
 
       _appVersion = '${info.version}+${info.buildNumber}';
@@ -159,8 +158,9 @@ class _SideDrawerState extends State<SideDrawer> {
                     context: context,
                     applicationIcon: iconImage,
                     applicationName: 'MS Fatigue Survey',
-                    applicationVersion: _appVersion,
-                    applicationLegalese: 'Copyright © 2025 ANU',
+                    applicationVersion: 'Version ${_appVersion.split("+")[0]}',
+                    applicationLegalese:
+                        'Copyright © 2025 ANU\nApp License GPLv3',
                     children: [
                       const Text(
                           "\nThe MS Fatigue app presents a survey to collect data on your experience of fatigue. "

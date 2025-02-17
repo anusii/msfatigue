@@ -18,15 +18,11 @@ class SurveyCompleted extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: Column(
-            children: [
-              iconImage,
-            ],
-          ),
-        ),
+        title: iconImage,
+        centerTitle: true,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
         ),
       ),
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
