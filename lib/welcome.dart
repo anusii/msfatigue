@@ -99,16 +99,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 fit: BoxFit.fitWidth,
                               ),
                             ),
-                            Center(
-                              child: Text(
-                                welcomeText,
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.pink,
-                                ),
-                                textAlign: TextAlign.center,
+                            Text(
+                              welcomeText,
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.pink,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -199,7 +197,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   ),
                                 ),
                                 child: const Text(
-                                  'Take me to the survey ►',
+                                  'Continue ►',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.black),
                                 ),
