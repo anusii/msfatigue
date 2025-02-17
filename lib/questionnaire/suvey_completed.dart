@@ -21,7 +21,8 @@ class SurveyCompleted extends StatelessWidget {
         title: iconImage,
         centerTitle: true,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
         ),
       ),
       drawer: SideDrawer(scaffoldKey: scaffoldKey),

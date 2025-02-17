@@ -97,7 +97,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
         toolbarHeight: 80,
         title: iconImage,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
         ),
         centerTitle: true,
       ),

@@ -30,7 +30,8 @@ class SubmitConfirmation extends StatelessWidget {
         centerTitle: true,
         title: iconImage,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
         ),
         leading: Builder(
           builder: (BuildContext context) {
