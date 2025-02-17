@@ -179,7 +179,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         ),
                         child: const Center(
                           child: Text(
-                            'Take me to the survey',
+                            'Continue  ►',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -209,7 +209,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         ),
                       ),
                       child: const Text(
-                        "I'm too tired to complete this survey",
+                        "I'm too tired for the survey at this time.",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
