@@ -259,7 +259,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   ),
                                 ),
                                 child: const Text(
-                                  'Continue ►',
+                                  'Continue   ►',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.black),
                                 ),
