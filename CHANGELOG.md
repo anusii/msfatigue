@@ -15,5 +15,6 @@ Binaries to download latest version:
 
 ## 0.1 Beta Release for Participant Feedback
 
++ Fine tuning Welcome UI [0.0.7 20250218 gjw]
 + Review and tune for team review [0.0.6 20250217 zy]
 + Initial versioned release [0.0.5 20250207 gjw]
