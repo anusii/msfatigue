@@ -9,20 +9,41 @@ import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
-/// A custom drawer for the MSFatigue app that includes a logo, settings menu,
-/// and a logout button. Handles reopening the drawer after navigating back
-/// from the ConsentSettingsPage.
-///
-class SideDrawer extends StatelessWidget {
-  /// A global key that manages the state of the parent Scaffold, allowing us
-  /// to open the drawer programmatically after returning from another page.
+import 'package:package_info_plus/package_info_plus.dart';
 
+class SideDrawer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const SideDrawer({
     super.key,
     required this.scaffoldKey,
   });
+
+  @override
+  State<SideDrawer> createState() => _SideDrawerState();
+}
+
+class _SideDrawerState extends State<SideDrawer> {
+  String _appName = 'Unknown';
+  String _appVersion = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppInfo();
+  }
+
+  /// Load appName and version from pubspec.yaml using package_info_plus.
+  
+  Future<void> _loadAppInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _appName = info.appName;
+      // Combine version and buildNumber if desired, e.g. "0.0.6+4".
+
+      _appVersion = '${info.version}+${info.buildNumber}';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +53,15 @@ class SideDrawer extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              /// Custom header section. Shows msFatigue_icon.png centered
-              /// and a close button on the top-right.
-
+              /// Header: msFatigue icon in center, close button top-right.
+              
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   height: 80,
                   child: Stack(
                     children: [
-                      Center(
-                        child: iconImage,
-                      ),
+                      Center(child: iconImage),
                       Positioned(
                         right: 0,
                         top: 0,
@@ -61,8 +79,8 @@ class SideDrawer extends StatelessWidget {
                 ),
               ),
 
-              /// Section label: “SETTINGS”.
-
+              /// SETTINGS label.
+              
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -77,15 +95,13 @@ class SideDrawer extends StatelessWidget {
                 ),
               ),
 
-              /// Menu item: Personal settings.
-
+              /// 1) Personal settings.
+              
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // Closes the drawer.
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -94,20 +110,15 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
-              const Divider(
-                height: 2,
-                color: Colors.black,
-              ),
+              const Divider(height: 2, color: Colors.black),
 
-              /// Menu item: Account details.
-
+              /// 2) Account details.
+              
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // Closes the drawer.
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -116,23 +127,15 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
-              const Divider(
-                height: 2,
-                color: Colors.black,
-              ),
+              const Divider(height: 2, color: Colors.black),
 
-              /// Menu item: Consent settings.
-              /// We close the drawer, navigate to ConsentSettingsPage,
-              /// then re-open the drawer when we come back.
-
+              /// 3) Consent settings.
+              
               ListTile(
                 title: const Text('Consent settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // 1) Close the drawer first
-
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -141,11 +144,38 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
+              const Divider(height: 2, color: Colors.black),
+
+              /// 4) About the app.
+              
+              ListTile(
+                title: const Text('About the app'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  Navigator.pop(context);
+
+                  // Show an about dialog with appName, version, etc.
+
+                  showAboutDialog(
+                    context: context,
+                    applicationIcon: iconImage,
+                    applicationName: _appName,
+                    applicationVersion: _appVersion,
+                    applicationLegalese: '© 2025 ANU',
+                    children: [
+                      const Text(
+                        "\nThis app demonstrates an MS Fatigue Survey.\n\n"
+                        "Authors: Graham Williams and Zheyuan Xu\n\n"
+                      ),
+                    ],
+                  );
+                },
+              ),
 
               const Spacer(),
 
-              /// Logout button at the bottom of the Drawer.
-
+              /// Logout button.
+              
               Center(
                 child: SizedBox(
                   width: 250,
@@ -163,6 +193,8 @@ class SideDrawer extends StatelessWidget {
                       ),
                     ),
                     onPressed: () async {
+                      // Example of your logout flow.
+
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(
