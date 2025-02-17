@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  flutter_markdown: ^0.7.6
+  flutter_markdown: ^0.7.6+2
   gap: ^3.0.1
   rename_app: ^1.6.2
   solidpod:

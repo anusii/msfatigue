@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
@@ -43,23 +44,21 @@ class SubmitConfirmation extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/bottom_dot_four.png',
-              height: 240,
+              height: 220,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-              child: const Text(
-                "Thank you for your participation.\n\n"
-                "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child: MarkdownBody(
+                  selectable: true,
+                  data: "Thank you for your participation.\n\n"
+                      "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.",
+                  styleSheet: MarkdownStyleSheet(
+                    p: const TextStyle(fontSize: 18),
+                  ),
+                )),
             Image.asset(
               'assets/images/bottom_dot_five.png',
-              height: 260,
+              height: 220,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
