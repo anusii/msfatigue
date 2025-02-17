@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/questionnaire/welcome_back.dart';
@@ -68,52 +69,45 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      children: [
-                        const TextSpan(text: "Here is the "),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 0.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                // Navigate to your dummy sheet screen.
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const DummySheet(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                "Participant Information Sheet",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blue,
-                                  // decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
+                  MarkdownBody(
+                    data:
+                        'Here is the [Participant Information Sheet](info) for the MS Fatigue Survey.',
+                    onTapLink: (text, href, title) {
+                      if (href == 'info') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DummySheet(),
                           ),
-                        ),
-                        const TextSpan(
-                          text: " for the MS Fatigue Survey.",
-                        ),
-                      ],
+                        );
+                      }
+                    },
+                    selectable: true,
+                    styleSheet: MarkdownStyleSheet(
+                      p: const TextStyle(fontSize: 16, color: Colors.black),
+                      a: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).',
-                    style: TextStyle(fontSize: 16),
+                  MarkdownBody(
+                    selectable: true,
+                    data:
+                        "The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).",
+                    styleSheet: MarkdownStyleSheet(
+                      p: const TextStyle(fontSize: 16),
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
-                    style: TextStyle(fontSize: 16),
+                  MarkdownBody(
+                    selectable: true,
+                    data:
+                        'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
+                    styleSheet: MarkdownStyleSheet(
+                      p: const TextStyle(fontSize: 16),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ListTile(
