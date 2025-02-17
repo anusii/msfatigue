@@ -165,8 +165,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     children: [
                       const Text(
                         "\nThis app demonstrates an MS Fatigue Survey.\n\n"
-                        "Authors: Graham Williams and Zheyuan Xu\n"
-                        "Licenses: This app is distributed under MIT license.\n",
+                        "Authors: Graham Williams and Zheyuan Xu\n\n"
                       ),
                     ],
                   );
@@ -195,7 +194,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                     onPressed: () async {
                       // Example of your logout flow.
-                      
+
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(
