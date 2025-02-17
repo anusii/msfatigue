@@ -23,10 +23,7 @@ class AccountDetails extends StatelessWidget {
         elevation: 0,
         toolbarHeight: 125,
         automaticallyImplyLeading: false,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: iconImage,
-        ),
+        title: iconImage,
         centerTitle: true,
         actions: [
           Padding(

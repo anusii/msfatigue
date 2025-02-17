@@ -24,7 +24,6 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> {
-  String _appName = 'Unknown';
   String _appVersion = 'Unknown';
 
   @override
@@ -38,7 +37,6 @@ class _SideDrawerState extends State<SideDrawer> {
   Future<void> _loadAppInfo() async {
     final info = await PackageInfo.fromPlatform();
     setState(() {
-      _appName = info.appName;
       // Combine version and buildNumber if desired, e.g. "0.0.6+4".
 
       _appVersion = '${info.version}+${info.buildNumber}';

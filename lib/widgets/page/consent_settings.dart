@@ -16,10 +16,7 @@ class ConsentSettings extends StatelessWidget {
         // Remove the leading property since we'll add the close button to actions.
 
         automaticallyImplyLeading: false,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: iconImage,
-        ),
+        title: iconImage,
         centerTitle: true,
         // Add the close button to the actions list (right side).
 

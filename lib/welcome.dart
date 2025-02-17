@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_markdown/flutter_markdown.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
@@ -29,6 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String? preferredName;
   String? username;
   String? password;
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -49,31 +50,46 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Compute the welcome text.
-
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     // Check if all credentials are present.
-
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-            (password != null && password!.isNotEmpty) &&
-            (preferredName != null && preferredName!.isNotEmpty);
+        (password != null && password!.isNotEmpty) &&
+        (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
+
+      // Overriding the default hamburger icon: fade to grey, smaller size.
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: iconImage,
+        centerTitle: true,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.grey,
+                size: 50,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
         ),
-        iconTheme: const IconThemeData(size: 50),
+
+        title: iconImage, // Our msFatigue icon
       ),
+
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -92,7 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           clipBehavior: Clip.none,
                           children: [
                             Positioned(
-                              top: -30,
+                              top: -25,
                               left: 0,
                               child: Image.asset(
                                 'assets/images/title_dot_one.png',
@@ -107,31 +123,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.pink,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                         const SizedBox(height: 16),
+
                         MarkdownBody(
                           selectable: true,
                           data:
-                              "You\'ve been invited to participate in a fatigue survey for people with multiple sclerosis (MS).",
+                              "You've been invited to participate in a fatigue survey for people with multiple sclerosis (MS).",
                           styleSheet: MarkdownStyleSheet(
                             p: const TextStyle(fontSize: 16),
                           ),
                         ),
-
                         const SizedBox(height: 8),
 
                         MarkdownBody(
                           selectable: true,
                           data:
-                              "The focus of the survey is your recent experiences of fatigue with a focus on how you are feeling \'right now\'.",
+                              "The focus of the survey is your recent experiences of fatigue with a focus on how you are feeling 'right now'.",
                           styleSheet: MarkdownStyleSheet(
                             p: const TextStyle(fontSize: 16),
                           ),
                         ),
-
                         const SizedBox(height: 8),
 
                         MarkdownBody(
@@ -144,18 +158,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         const SizedBox(height: 30),
 
-                        // If credentials are present, show the "Take me to the survey" button.
-
+                        // If credentials are present, show the "Continue" button.
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
                               width: 260,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  // Retrieve the stored credentials.
-
                                   final prefs =
                                       await SharedPreferences.getInstance();
+                                  if (!mounted) return;
+
                                   final storedUsername =
                                       prefs.getString('msfatigue_username') ??
                                           "";
@@ -163,17 +176,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       prefs.getString('msfatigue_password') ??
                                           "";
 
-                                  // Allow the preferred name to be anything.
-                                  // It is temporarily setted and may be changed later.
-
-                                  // final storedPreferredName = prefs.getString(
-                                  //         'msfatigue_preferredName') ??
-                                  //     "";
-
                                   if (storedUsername == expectedUsername &&
-                                          storedPassword == expectedPassword
-                                      // && storedPreferredName == expectedPreferredName
-                                      ) {
+                                      storedPassword == expectedPassword) {
+                                    if (!mounted) return;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -182,22 +187,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       ),
                                     );
                                   } else {
-                                    // Show a popup dialog if registration details are incorrect.
-
+                                    if (!mounted) return;
                                     showDialog(
                                       context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text("Registration Error"),
-                                        content: const Text(
-                                            "Your registration details are not recognised.\n\nPlease contact the study team for assistance."),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text("OK"),
+                                      builder: (dialogCtx) {
+                                        return AlertDialog(
+                                          title: const Text("Registration Error"),
+                                          content: const Text(
+                                            "Your registration details are not recognised.\n\n"
+                                            "Please contact the study team for assistance.",
                                           ),
-                                        ],
-                                      ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(dialogCtx),
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   }
                                 },
@@ -221,20 +229,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               ),
                             ),
                           ),
-                        // If account info is missing, show the informational message and the Register button.
 
-                        if (preferredName == null || preferredName!.isEmpty)
+                        // If account info is missing, show a message + Register button.
+
+                        if (!allCredentialsPresent)
                           Padding(
                             padding: const EdgeInsets.only(top: 16.0),
                             child: Center(
                               child: SizedBox(
                                 width: 300,
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Informational message for unregistered users.
-
                                     RichText(
                                       text: const TextSpan(
                                         style: TextStyle(
@@ -255,22 +261,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                           ),
                                         ],
                                       ),
-                                      textAlign: TextAlign.left,
                                     ),
                                     const SizedBox(height: 12),
-
                                     SizedBox(
                                       width: 300,
                                       child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (_) =>
-                                                const CredentialsPage(),
-                                          ))
+                                              .push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const CredentialsPage(),
+                                            ),
+                                          )
                                               .then((_) {
-                                            // Re-load the credentials after returning.
-
                                             _loadCredentials();
                                           });
                                         },
@@ -305,8 +309,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Bottom dot image with a small bottom padding.
-
+                  // Bottom image.
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
                     child: Image.asset(

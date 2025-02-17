@@ -27,17 +27,27 @@ class SubmitConfirmation extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: Column(
-            children: [
-              iconImage,
-            ],
-          ),
-        ),
+        centerTitle: true,
+        title: iconImage,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.grey,
+                size: 50,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
         ),
       ),
+      
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(

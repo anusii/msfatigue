@@ -95,12 +95,12 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: iconImage,
-        ),
+        title: iconImage,
         iconTheme: const IconThemeData(
-          size: 50,
+          size: 40,
+          color: Colors.grey,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
