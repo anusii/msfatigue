@@ -93,7 +93,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue,
-                                  decoration: TextDecoration.underline,
+                                  // decoration: TextDecoration.underline,
                                 ),
                               ),
                             ),
