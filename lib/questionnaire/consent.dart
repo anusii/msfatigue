@@ -72,7 +72,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     text: TextSpan(
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                       children: [
-                        const TextSpan(text: "The "),
+                        const TextSpan(text: "Here is the "),
                         WidgetSpan(
                           alignment: PlaceholderAlignment.middle,
                           child: Padding(
@@ -100,7 +100,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                           ),
                         ),
                         const TextSpan(
-                          text: " for the MS Fatigue Survey is available here.",
+                          text: " for the MS Fatigue Survey.",
                         ),
                       ],
                     ),
