@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_markdown/flutter_markdown.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
@@ -29,6 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String? preferredName;
   String? username;
   String? password;
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -49,31 +50,31 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Compute the welcome text.
-
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     // Check if all credentials are present.
-
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-            (password != null && password!.isNotEmpty) &&
-            (preferredName != null && preferredName!.isNotEmpty);
+        (password != null && password!.isNotEmpty) &&
+        (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
+
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: iconImage,
-        ),
+        title: iconImage,
         iconTheme: const IconThemeData(size: 50),
       ),
+
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -107,7 +108,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.pink,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -122,7 +122,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
 
                         const SizedBox(height: 8),
-
                         MarkdownBody(
                           selectable: true,
                           data:
@@ -133,7 +132,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
 
                         const SizedBox(height: 8),
-
                         MarkdownBody(
                           selectable: true,
                           data:
@@ -144,8 +142,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         const SizedBox(height: 30),
 
-                        // If credentials are present, show the "Take me to the survey" button.
-
+                        // If credentials are present, show the "Continue" button.
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
@@ -153,51 +150,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   // Retrieve the stored credentials.
-
                                   final prefs =
                                       await SharedPreferences.getInstance();
+                                  if (!mounted) return;
+
                                   final storedUsername =
-                                      prefs.getString('msfatigue_username') ??
-                                          "";
+                                      prefs.getString('msfatigue_username') ?? "";
                                   final storedPassword =
-                                      prefs.getString('msfatigue_password') ??
-                                          "";
+                                      prefs.getString('msfatigue_password') ?? "";
 
-                                  // Allow the preferred name to be anything.
-                                  // It is temporarily setted and may be changed later.
-
-                                  // final storedPreferredName = prefs.getString(
-                                  //         'msfatigue_preferredName') ??
-                                  //     "";
-
+                                  // Compare with secrets.dart
                                   if (storedUsername == expectedUsername &&
-                                          storedPassword == expectedPassword
-                                      // && storedPreferredName == expectedPreferredName
-                                      ) {
+                                      storedPassword == expectedPassword) {
+                                    if (!mounted) return;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ConsentScreen(),
+                                        builder: (context) => const ConsentScreen(),
                                       ),
                                     );
                                   } else {
-                                    // Show a popup dialog if registration details are incorrect.
-
+                                    if (!mounted) return;
                                     showDialog(
                                       context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text("Registration Error"),
-                                        content: const Text(
-                                            "Your registration details are not recognised.\n\nPlease contact the study team for assistance."),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text("OK"),
+                                      builder: (dialogCtx) {
+                                        return AlertDialog(
+                                          title: const Text("Registration Error"),
+                                          content: const Text(
+                                            "Your registration details are not recognised.\n\n"
+                                            "Please contact the study team for assistance.",
                                           ),
-                                        ],
-                                      ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(dialogCtx),
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   }
                                 },
@@ -207,34 +198,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     color: Colors.pink,
                                     width: 2,
                                   ),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: const Text(
                                   'Continue ►',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
                                 ),
                               ),
                             ),
                           ),
-                        // If account info is missing, show the informational message and the Register button.
 
-                        if (preferredName == null || preferredName!.isEmpty)
+                        // If account info is missing, show a message + Register button.
+
+                        if (!allCredentialsPresent)
                           Padding(
                             padding: const EdgeInsets.only(top: 16.0),
                             child: Center(
                               child: SizedBox(
                                 width: 300,
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Informational message for unregistered users.
-
                                     RichText(
                                       text: const TextSpan(
                                         style: TextStyle(
@@ -255,22 +242,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                           ),
                                         ],
                                       ),
-                                      textAlign: TextAlign.left,
                                     ),
                                     const SizedBox(height: 12),
-
                                     SizedBox(
                                       width: 300,
                                       child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (_) =>
-                                                const CredentialsPage(),
-                                          ))
+                                              .push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const CredentialsPage(),
+                                            ),
+                                          )
                                               .then((_) {
-                                            // Re-load the credentials after returning.
-
+                                            // Re-load credentials after returning
                                             _loadCredentials();
                                           });
                                         },
@@ -280,11 +266,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             color: Colors.pink,
                                             width: 2,
                                           ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 16),
+                                          padding:
+                                              const EdgeInsets.symmetric(vertical: 16),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
                                         child: const Text(
@@ -305,8 +290,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Bottom dot image with a small bottom padding.
 
+                  // Bottom dot image.
+                  
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
                     child: Image.asset(
