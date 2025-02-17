@@ -18,6 +18,33 @@ String formatPreferredName(String name) {
   return name[0].toUpperCase() + name.substring(1).toLowerCase();
 }
 
+class GradientIcon extends StatelessWidget {
+  final IconData icon;
+  final double size;
+  final Gradient gradient;
+
+  const GradientIcon({
+    Key? key,
+    required this.icon,
+    required this.size,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return gradient.createShader(bounds);
+      },
+      child: Icon(
+        icon,
+        size: size,
+        color: Colors.white, // The color here is overridden by the shader
+      ),
+    );
+  }
+}
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -57,8 +84,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // Check if all credentials are present.
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-        (password != null && password!.isNotEmpty) &&
-        (preferredName != null && preferredName!.isNotEmpty);
+            (password != null && password!.isNotEmpty) &&
+            (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
@@ -74,10 +101,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.grey,
-                size: 50,
+              // icon: const Icon(
+              //   Icons.menu,
+              //   color: Colors.grey,
+              //   size: 30,
+              // ),
+              icon: GradientIcon(
+                icon: Icons.menu,
+                size: 30.0,
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               onPressed: () => Scaffold.of(context).openDrawer(),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -192,7 +228,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       context: context,
                                       builder: (dialogCtx) {
                                         return AlertDialog(
-                                          title: const Text("Registration Error"),
+                                          title:
+                                              const Text("Registration Error"),
                                           content: const Text(
                                             "Your registration details are not recognised.\n\n"
                                             "Please contact the study team for assistance.",
