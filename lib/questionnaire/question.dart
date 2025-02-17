@@ -442,18 +442,26 @@ class _QuestionPageState extends State<QuestionPage> {
                             OutlinedButton.icon(
                               onPressed:
                                   selectedResponse != null ? handleNext : null,
-                              icon: const Text(
+                              icon: Text(
                                 "    Next",
-                                style: TextStyle(color: Colors.pink),
+                                style: TextStyle(
+                                    color: selectedResponse != null
+                                        ? Colors.pink
+                                        : Colors.grey),
                               ),
-                              label: const Icon(
+                              label: Icon(
                                 Icons.arrow_right,
-                                color: Colors.pink,
+                                color: selectedResponse != null
+                                    ? Colors.pink
+                                    : Colors.grey,
                                 size: 25,
                               ),
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                    width: 2, color: Colors.pink),
+                                side: BorderSide(
+                                    width: 2,
+                                    color: selectedResponse != null
+                                        ? Colors.pink
+                                        : Colors.grey),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: const EdgeInsets.symmetric(
