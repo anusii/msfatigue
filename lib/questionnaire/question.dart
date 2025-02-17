@@ -144,7 +144,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                 ),
                 const Text(
-                  "Are you sure you want to end now?",
+                  "Are you sure you want to end now? You can resume again within 2 hours and before midnight.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 26,
@@ -347,12 +347,10 @@ class _QuestionPageState extends State<QuestionPage> {
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                        child: Center(
-                          child: Text(
-                            currentQuestion,
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(fontSize: 18),
-                          ),
+                        child: Text(
+                          currentQuestion,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ),
                       const Gap(10),
