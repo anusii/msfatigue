@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'package:msfatigue/widgets/image/image.dart';
+
 class AboutApp extends StatefulWidget {
   const AboutApp({super.key});
 
@@ -11,8 +13,9 @@ class AboutApp extends StatefulWidget {
 
 class _AboutAppState extends State<AboutApp> {
   String? appVersion;
-  final String authors = "ANU SII Team";
-  final String description = "A demonstration of an MS Fatigue Survey application.";
+  final String authors = "Graham Williams and Zheyuan Xu";
+  final String description =
+      "Collect surveys to review fatigue with MS.";
 
   @override
   void initState() {
@@ -21,13 +24,13 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   /// Loads version from pubspec.yaml via package_info_plus.
-  
+
   Future<void> _loadAppVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       // Typically you'd do something like: appVersion = "${packageInfo.version}+${packageInfo.buildNumber}";
 
-      appVersion = packageInfo.version; 
+      appVersion = packageInfo.version;
     });
   }
 
@@ -38,8 +41,30 @@ class _AboutAppState extends State<AboutApp> {
     final displayVersion = appVersion ?? "Loading...";
 
     return Scaffold(
+      backgroundColor:Colors.white,
       appBar: AppBar(
-        title: const Center(child: Text("About the app")),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 125,
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: iconImage,
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.grey,
+                size: 40,
+              ),
+              padding: EdgeInsets.zero,
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,23 +92,16 @@ class _AboutAppState extends State<AboutApp> {
             const SizedBox(height: 12),
 
             Text(
-              description,
+              "Description: $description",
               style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-
-            const Text(
-              "Need to update your credentials? You can do so in the Personal Settings screen.",
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             // Example license link.
-            
+
             const Text(
-              "Licenses: This app is distributed under the MIT license (example).",
-              style: TextStyle(fontSize: 14),
+              "Licenses: © 2025 ANU",
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),

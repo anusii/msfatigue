@@ -11,7 +11,7 @@ import 'package:msfatigue/widgets/page/about_app.dart'; // Import the new AboutA
 import 'package:msfatigue/widgets/image/image.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
-/// and a logout button. 
+/// and a logout button.
 class SideDrawer extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -29,7 +29,7 @@ class SideDrawer extends StatelessWidget {
           child: Column(
             children: [
               /// Header: msFatigue icon centered, close button top-right.
-              
+
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
@@ -57,7 +57,7 @@ class SideDrawer extends StatelessWidget {
               ),
 
               /// SETTINGS label.
-              
+
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -73,7 +73,7 @@ class SideDrawer extends StatelessWidget {
               ),
 
               /// 1) Personal settings.
-              
+
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -90,7 +90,7 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 2) Account details.
-              
+
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -107,7 +107,7 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 3) Consent settings.
-              
+
               ListTile(
                 title: const Text('Consent settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -124,7 +124,7 @@ class SideDrawer extends StatelessWidget {
               const Divider(height: 2, color: Colors.black),
 
               /// 4) About the app.
-              
+
               ListTile(
                 title: const Text('About the app'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -144,7 +144,7 @@ class SideDrawer extends StatelessWidget {
               const Spacer(),
 
               /// Logout button at the bottom of the Drawer.
-              
+
               Center(
                 child: SizedBox(
                   width: 250,
@@ -163,7 +163,7 @@ class SideDrawer extends StatelessWidget {
                     ),
                     onPressed: () async {
                       // Example of your logout flow.
-                      
+
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(

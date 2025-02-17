@@ -57,7 +57,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   Future<void> _showUpdateDialog() async {
     final usernameController = TextEditingController(text: username ?? "");
     final passwordController = TextEditingController(text: password ?? "");
-    final preferredNameController = TextEditingController(text: preferredName ?? "");
+    final preferredNameController =
+        TextEditingController(text: preferredName ?? "");
 
     final updated = await showDialog<bool>(
       context: context,
@@ -155,8 +156,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   Widget build(BuildContext context) {
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-        (password != null && password!.isNotEmpty) &&
-        (preferredName != null && preferredName!.isNotEmpty);
+            (password != null && password!.isNotEmpty) &&
+            (preferredName != null && preferredName!.isNotEmpty);
 
     // For the main screen's password display (not the dialog).
 
@@ -212,7 +213,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   style: const TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 const SizedBox(height: 24),
-
                 const Text(
                   "Password:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -224,7 +224,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     Expanded(
                       child: SelectableText(
                         passwordDisplay,
-                        style: const TextStyle(fontSize: 16, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ),
                     IconButton(
@@ -241,7 +242,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   ],
                 ),
                 const SizedBox(height: 24),
-
                 const Text(
                   "Preferred Name:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -254,7 +254,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
                 const SizedBox(height: 20),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -280,7 +279,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     if (allCredentialsPresent) const SizedBox(width: 16),
 
                     // Update Credentials button.
-                    
+
                     ElevatedButton(
                       onPressed: _showUpdateDialog,
                       style: ElevatedButton.styleFrom(
