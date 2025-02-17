@@ -160,8 +160,9 @@ class _SideDrawerState extends State<SideDrawer> {
                     context: context,
                     applicationIcon: iconImage,
                     applicationName: 'MS Fatigue Survey',
-                    applicationVersion: _appVersion,
-                    applicationLegalese: 'Copyright © 2025 ANU',
+                    applicationVersion: 'Version ${_appVersion.split("+")[0]}',
+                    applicationLegalese:
+                        'Copyright © 2025 ANU\nApp License GPLv3',
                     children: [
                       const Text(
                           "\nThe MS Fatigue app presents a survey to collect data on your experience of fatigue. "
