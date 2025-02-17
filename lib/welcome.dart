@@ -108,7 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           clipBehavior: Clip.none,
                           children: [
                             Positioned(
-                              top: -30,
+                              top: -25,
                               left: 0,
                               child: Image.asset(
                                 'assets/images/title_dot_one.png',
