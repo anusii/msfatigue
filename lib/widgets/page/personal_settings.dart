@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:msfatigue/welcome.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:msfatigue/welcome.dart';
 
 class PersonalSettings extends StatefulWidget {
   const PersonalSettings({super.key});
@@ -16,13 +16,15 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String? password;
   String? preferredName;
 
+  // For toggling password on this screen (outside dialog).
+
+  bool _showPassword = false;
+
   @override
   void initState() {
     super.initState();
     _loadCredentials();
   }
-
-  /// Loads the stored credentials from SharedPreferences.
 
   Future<void> _loadCredentials() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,13 +35,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     });
   }
 
-  /// Clears the stored credentials.
-
   Future<void> _clearCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('msfatigue_username');
     await prefs.remove('msfatigue_password');
     await prefs.remove('msfatigue_preferredName');
+
     setState(() {
       username = null;
       password = null;
@@ -53,7 +54,97 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     );
   }
 
-  /// Formats the preferred name so that the first letter is uppercase and the rest are lowercase.
+  Future<void> _showUpdateDialog() async {
+    final usernameController = TextEditingController(text: username ?? "");
+    final passwordController = TextEditingController(text: password ?? "");
+    final preferredNameController =
+        TextEditingController(text: preferredName ?? "");
+
+    final updated = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        bool localShowPassword = false;
+        return StatefulBuilder(
+          builder: (ctx, setStateDialog) {
+            return AlertDialog(
+              title: const Text("Update Credentials"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(labelText: "Username"),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            localShowPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setStateDialog(() {
+                              localShowPassword = !localShowPassword;
+                            });
+                          },
+                        ),
+                      ),
+                      obscureText: !localShowPassword,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: preferredNameController,
+                      decoration:
+                          const InputDecoration(labelText: "Preferred Name"),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString(
+                      'msfatigue_username',
+                      usernameController.text.trim(),
+                    );
+                    await prefs.setString(
+                      'msfatigue_password',
+                      passwordController.text.trim(),
+                    );
+                    await prefs.setString(
+                      'msfatigue_preferredName',
+                      preferredNameController.text.trim(),
+                    );
+
+                    if (!mounted) return;
+                    Navigator.pop(dialogContext, true);
+                  },
+                  child: const Text("Update"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (updated == true && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+    }
+  }
 
   String formatPreferredName(String name) {
     if (name.isEmpty) return name;
@@ -63,93 +154,118 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if all credentials are present.
-
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
             (password != null && password!.isNotEmpty) &&
             (preferredName != null && preferredName!.isNotEmpty);
 
+    // For the main screen's password display (not the dialog).
+
+    String passwordDisplay;
+    if (password == null || password!.isEmpty) {
+      passwordDisplay = "Not set";
+    } else {
+      passwordDisplay = _showPassword ? password! : "******";
+    }
+
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          title: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: const Text('Account Details'),
-          ),
-          elevation: 0,
-          toolbarHeight: 125,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.grey,
-                  size: 40,
-                ),
-                padding: EdgeInsets.zero,
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-          ],
+        automaticallyImplyLeading: false,
+        title: const Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Text('Account Details'),
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 24),
-                  const Text(
-                    "Username:",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  SelectableText(
-                    username ?? "Not set",
-                    style: const TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    "Password:",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  SelectableText(
-                    password ?? "Not set",
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    "Preferred Name:",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  SelectableText(
-                    (preferredName == null || preferredName!.isEmpty)
-                        ? "Not set"
-                        : formatPreferredName(preferredName!),
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Clear Credentials button is only shown if all credentials are present.
-
-                  if (allCredentialsPresent)
-                    Center(
-                      child: ElevatedButton(
+        elevation: 0,
+        toolbarHeight: 125,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.grey,
+                size: 40,
+              ),
+              padding: EdgeInsets.zero,
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ],
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                const Text(
+                  "Username:",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                SelectableText(
+                  username ?? "Not set",
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Password:",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SelectableText(
+                        passwordDisplay,
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        _showPassword ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey.shade700,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Preferred Name:",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                SelectableText(
+                  (preferredName == null || preferredName!.isEmpty)
+                      ? "Not set"
+                      : formatPreferredName(preferredName!),
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Clear Credentials button
+                    if (allCredentialsPresent)
+                      ElevatedButton(
                         onPressed: _clearCredentials,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           side: const BorderSide(color: Colors.red, width: 2),
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 32),
+                              vertical: 16, horizontal: 24),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -159,11 +275,34 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                           style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
                       ),
+
+                    if (allCredentialsPresent) const SizedBox(width: 16),
+
+                    // Update Credentials button.
+
+                    ElevatedButton(
+                      onPressed: _showUpdateDialog,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.blue, width: 2),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 24),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        "Update Credentials",
+                        style: TextStyle(fontSize: 16, color: Colors.blue),
+                      ),
                     ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
