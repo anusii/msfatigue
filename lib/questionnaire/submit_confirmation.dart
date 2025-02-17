@@ -27,13 +27,8 @@ class SubmitConfirmation extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: Column(
-            children: [
-              iconImage,
-            ],
-          ),
-        ),
+        centerTitle: true,
+        title: iconImage,
         iconTheme: const IconThemeData(
           size: 50,
         ),

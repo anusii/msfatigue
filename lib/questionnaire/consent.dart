@@ -42,11 +42,10 @@ class _ConsentScreenState extends State<ConsentScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        centerTitle: true,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: iconImage,
-        ),
+        title: iconImage,
         iconTheme: const IconThemeData(
           size: 50,
         ),

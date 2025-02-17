@@ -30,13 +30,8 @@ class _WelcomeBackFinalPageState extends State<WelcomeBackFinalPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Center(
-          child: Column(
-            children: [
-              iconImage,
-            ],
-          ),
-        ),
+        title: iconImage,
+        centerTitle: true,
         iconTheme: const IconThemeData(
           size: 50,
         ),
