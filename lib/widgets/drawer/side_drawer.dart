@@ -7,16 +7,12 @@ import 'package:msfatigue/main.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
+import 'package:msfatigue/widgets/page/about_app.dart'; // Import the new AboutApp screen
 import 'package:msfatigue/widgets/image/image.dart';
 
 /// A custom drawer for the MSFatigue app that includes a logo, settings menu,
-/// and a logout button. Handles reopening the drawer after navigating back
-/// from the ConsentSettingsPage.
-///
+/// and a logout button. 
 class SideDrawer extends StatelessWidget {
-  /// A global key that manages the state of the parent Scaffold, allowing us
-  /// to open the drawer programmatically after returning from another page.
-
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const SideDrawer({
@@ -32,9 +28,8 @@ class SideDrawer extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              /// Custom header section. Shows msFatigue_icon.png centered
-              /// and a close button on the top-right.
-
+              /// Header: msFatigue icon centered, close button top-right.
+              
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
@@ -61,8 +56,8 @@ class SideDrawer extends StatelessWidget {
                 ),
               ),
 
-              /// Section label: “SETTINGS”.
-
+              /// SETTINGS label.
+              
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -77,15 +72,13 @@ class SideDrawer extends StatelessWidget {
                 ),
               ),
 
-              /// Menu item: Personal settings.
-
+              /// 1) Personal settings.
+              
               ListTile(
                 title: const Text('Personal settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // Closes the drawer.
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -94,20 +87,15 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
-              const Divider(
-                height: 2,
-                color: Colors.black,
-              ),
+              const Divider(height: 2, color: Colors.black),
 
-              /// Menu item: Account details.
-
+              /// 2) Account details.
+              
               ListTile(
                 title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // Closes the drawer.
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -116,23 +104,15 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
-              const Divider(
-                height: 2,
-                color: Colors.black,
-              ),
+              const Divider(height: 2, color: Colors.black),
 
-              /// Menu item: Consent settings.
-              /// We close the drawer, navigate to ConsentSettingsPage,
-              /// then re-open the drawer when we come back.
-
+              /// 3) Consent settings.
+              
               ListTile(
                 title: const Text('Consent settings'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  Navigator.pop(context); // 1) Close the drawer first
-
-                  // 2) Push the new ConsentSettingsPage.
-
+                  Navigator.pop(context);
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -141,11 +121,30 @@ class SideDrawer extends StatelessWidget {
                   );
                 },
               ),
+              const Divider(height: 2, color: Colors.black),
+
+              /// 4) About the app.
+              
+              ListTile(
+                title: const Text('About the app'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () async {
+                  Navigator.pop(context);
+                  // Navigate to the AboutApp screen.
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AboutApp(),
+                    ),
+                  );
+                },
+              ),
 
               const Spacer(),
 
               /// Logout button at the bottom of the Drawer.
-
+              
               Center(
                 child: SizedBox(
                   width: 250,
@@ -163,6 +162,8 @@ class SideDrawer extends StatelessWidget {
                       ),
                     ),
                     onPressed: () async {
+                      // Example of your logout flow.
+                      
                       await logoutPopup(context, const MSFatigue());
                     },
                     child: const Text(
