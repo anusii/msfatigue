@@ -144,7 +144,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                 ),
                 const Text(
-                  "Are you sure you want to end now? You can resume again within 2 hours and before midnight.",
+                  "Are you sure you want to end now? You can return to the survey any time before midnight.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 26,
@@ -338,7 +338,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       Center(
                         child: Text(
-                          'Question ${state.currentQuestionIndex + 1} of $questionTotal',
+                          'QUESTION ${state.currentQuestionIndex + 1} OF $questionTotal',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
