@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
@@ -111,19 +112,35 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'You\'ve been invited to participate in a fatigue survey for people with multiple sclerosis (MS).',
-                          style: TextStyle(fontSize: 16),
+                        MarkdownBody(
+                          selectable: true,
+                          data:
+                              "You\'ve been invited to participate in a fatigue survey for people with multiple sclerosis (MS).",
+                          styleSheet: MarkdownStyleSheet(
+                            p: const TextStyle(fontSize: 16),
+                          ),
                         ),
+
                         const SizedBox(height: 8),
-                        const Text(
-                          'The focus of the survey is your recent experiences of fatigue with a focus on how you are feeling \'right now\'.',
-                          style: TextStyle(fontSize: 16),
+
+                        MarkdownBody(
+                          selectable: true,
+                          data:
+                              "The focus of the survey is your recent experiences of fatigue with a focus on how you are feeling \'right now\'.",
+                          styleSheet: MarkdownStyleSheet(
+                            p: const TextStyle(fontSize: 16),
+                          ),
                         ),
+
                         const SizedBox(height: 8),
-                        const Text(
-                          'The survey should take 10-20 minutes to complete.',
-                          style: TextStyle(fontSize: 16),
+
+                        MarkdownBody(
+                          selectable: true,
+                          data:
+                              'The survey should take 10-20 minutes to complete.',
+                          styleSheet: MarkdownStyleSheet(
+                            p: const TextStyle(fontSize: 16),
+                          ),
                         ),
                         const SizedBox(height: 30),
 
