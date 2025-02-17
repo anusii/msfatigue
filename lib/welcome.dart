@@ -57,13 +57,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // Check if all credentials are present.
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-        (password != null && password!.isNotEmpty) &&
-        (preferredName != null && preferredName!.isNotEmpty);
+            (password != null && password!.isNotEmpty) &&
+            (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -72,9 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         title: iconImage,
         iconTheme: const IconThemeData(size: 50),
       ),
-
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
-
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -155,9 +152,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   if (!mounted) return;
 
                                   final storedUsername =
-                                      prefs.getString('msfatigue_username') ?? "";
+                                      prefs.getString('msfatigue_username') ??
+                                          "";
                                   final storedPassword =
-                                      prefs.getString('msfatigue_password') ?? "";
+                                      prefs.getString('msfatigue_password') ??
+                                          "";
 
                                   // Compare with secrets.dart
                                   if (storedUsername == expectedUsername &&
@@ -166,7 +165,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const ConsentScreen(),
+                                        builder: (context) =>
+                                            const ConsentScreen(),
                                       ),
                                     );
                                   } else {
@@ -175,7 +175,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       context: context,
                                       builder: (dialogCtx) {
                                         return AlertDialog(
-                                          title: const Text("Registration Error"),
+                                          title:
+                                              const Text("Registration Error"),
                                           content: const Text(
                                             "Your registration details are not recognised.\n\n"
                                             "Please contact the study team for assistance.",
@@ -198,14 +199,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     color: Colors.pink,
                                     width: 2,
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: const Text(
                                   'Continue ►',
-                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
                                 ),
                               ),
                             ),
@@ -266,10 +269,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             color: Colors.pink,
                                             width: 2,
                                           ),
-                                          padding:
-                                              const EdgeInsets.symmetric(vertical: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                         child: const Text(
@@ -292,7 +296,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   const SizedBox(height: 20),
 
                   // Bottom dot image.
-                  
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
                     child: Image.asset(
