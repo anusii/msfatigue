@@ -57,8 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // Check if all credentials are present.
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
-        (password != null && password!.isNotEmpty) &&
-        (preferredName != null && preferredName!.isNotEmpty);
+            (password != null && password!.isNotEmpty) &&
+            (preferredName != null && preferredName!.isNotEmpty);
 
     return Scaffold(
       key: scaffoldKey,
@@ -192,7 +192,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       context: context,
                                       builder: (dialogCtx) {
                                         return AlertDialog(
-                                          title: const Text("Registration Error"),
+                                          title:
+                                              const Text("Registration Error"),
                                           content: const Text(
                                             "Your registration details are not recognised.\n\n"
                                             "Please contact the study team for assistance.",
