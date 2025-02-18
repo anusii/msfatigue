@@ -1,7 +1,7 @@
 name: msfatigue
 description: 'Collect surveys to review fatigue with MS.'
 publish_to: 'none'
-version: 0.0.6+4
+version: 0.0.7+4
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
