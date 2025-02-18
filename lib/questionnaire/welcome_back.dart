@@ -277,8 +277,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     child: OutlinedButton(
                       onPressed: () {
                         showWarning(
-                          'Info',
-                          "Take care. When you are ready you can come back to the survey.",
+                          'Take Care',
+                          "When you are ready you can always come back to the survey.",
                           context,
                         );
                       },
