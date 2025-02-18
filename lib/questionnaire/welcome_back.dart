@@ -225,7 +225,9 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const QuestionPage(),
+                            builder: (context) => QuestionPage(
+                              savedResponses: dataResponses,
+                            ),
                           ),
                         );
                       },

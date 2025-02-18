@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
@@ -11,7 +11,12 @@ import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key});
+  /// If non-null, [savedResponses] contains a map of [question -> answer]
+  /// to pre-fill the user's answers on load.
+
+  final Map<String, String?>? savedResponses;
+
+  const QuestionPage({super.key, this.savedResponses});
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -20,6 +25,7 @@ class QuestionPage extends StatefulWidget {
 class _QuestionPageState extends State<QuestionPage> {
   List<String> questions = [];
   String? webId;
+
   final List<String> options = [
     "Strongly disagree",
     "Disagree",
@@ -64,8 +70,8 @@ class _QuestionPageState extends State<QuestionPage> {
     });
 
     if (!mounted) return;
-    // Tell the bloc to initialize the responses map with these questions.
 
+    // Tell the bloc to initialize the responses map with these questions.
     context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
   }
 
@@ -82,7 +88,8 @@ class _QuestionPageState extends State<QuestionPage> {
       } else if (line.startsWith('## Answer Options')) {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
-        // Typically each question is "1. Something" => we substring after the dot+space.
+        // Typically each question is "1. Something"
+        // => substring after the dot+space.
 
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
@@ -213,7 +220,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 final List<String> questionKeys = state.responses.keys.toList();
                 final int questionTotal = questionKeys.length;
 
-                // Ensure we don't go out of range if there's a mismatch in question count.
+                // Guard if there's a mismatch or out-of-range index.
 
                 if (currentQuestionIndex >= questionKeys.length) {
                   return const Center(child: Text("No more questions."));
@@ -223,11 +230,18 @@ class _QuestionPageState extends State<QuestionPage> {
 
                 final String currentQuestion =
                     questionKeys[currentQuestionIndex];
-                
+
                 // The previously selected response (if any) for this question.
 
-                final String? selectedResponse =
-                    state.responses[currentQuestion];
+                String? selectedResponse = state.responses[currentQuestion];
+
+                if (widget.savedResponses != null &&
+                    widget.savedResponses!.containsKey(currentQuestion) &&
+                    state.responses[currentQuestion] == null) {
+                  selectedResponse = widget.savedResponses![currentQuestion];
+                }
+
+                // This method is called when user taps the "Next" button.
 
                 Future<void> handleNext() async {
                   // Dispatch NextQuestion event.
@@ -257,7 +271,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     await saveToPod(dataRecords, fileName, context);
                   }
 
-                  // If this was the last question, navigate to submit.
+                  // If this was the last question, navigate to SubmitConfirmation.
 
                   if (currentQuestionIndex == questionTotal - 1) {
                     _submitSurvey();
@@ -269,7 +283,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // Header with iconImage & "End now" button.
+                      // Header: msFatigue icon & "End now" button.
 
                       SizedBox(
                         width: double.infinity,
@@ -301,7 +315,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(5),
 
-                      // Progress bar (placeholder 0% fill for now).
+                      // (Optional) progress bar placeholder.
 
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -315,8 +329,6 @@ class _QuestionPageState extends State<QuestionPage> {
                                 borderRadius: BorderRadius.circular(3),
                               ),
                             ),
-                            // Example: 0% fill => replace widthFactor with a fraction if you want.
-
                             FractionallySizedBox(
                               widthFactor: 0.0,
                               child: Container(
@@ -356,20 +368,20 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(10),
 
-                      // Options list.
+                      // The 6 multiple choice options.
 
                       Expanded(
                         child: ListView.builder(
                           itemCount: options.length,
                           itemBuilder: (context, index) {
-                            // Check if this option matches the previously selected response.
+                            // By default, check if the chosen response matches this option.
 
-                            final bool isSelected =
+                            bool isSelected =
                                 (selectedResponse == options[index]);
 
                             return GestureDetector(
                               onTap: () {
-                                // Dispatch UpdateResponse.
+                                // The user picks this option => dispatch UpdateResponse.
 
                                 context.read<SurveyBloc>().add(
                                       UpdateResponse(
@@ -410,7 +422,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
                       const Gap(25),
 
-                      // Bottom row with "Previous", "Next", etc.
+                      // Bottom row with "Previous", "Next" etc.
 
                       Padding(
                         padding:
@@ -426,16 +438,19 @@ class _QuestionPageState extends State<QuestionPage> {
                                           .add(PreviousQuestion());
                                     }
                                   : null,
-                              icon: Icon(Icons.arrow_left,
-                                  color: (currentQuestionIndex > 0)
-                                      ? Colors.grey[700]
-                                      : Colors.grey),
+                              icon: Icon(
+                                Icons.arrow_left,
+                                color: (currentQuestionIndex > 0)
+                                    ? Colors.grey[700]
+                                    : Colors.grey,
+                              ),
                               label: Text(
                                 "Previous    ",
                                 style: TextStyle(
-                                    color: (currentQuestionIndex > 0)
-                                        ? Colors.grey[700]
-                                        : Colors.grey),
+                                  color: (currentQuestionIndex > 0)
+                                      ? Colors.grey[700]
+                                      : Colors.grey,
+                                ),
                               ),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(
@@ -451,14 +466,10 @@ class _QuestionPageState extends State<QuestionPage> {
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
-
-                            // Example: Some placeholder text or a dynamic element, e.g. copyright.
-
                             const Text(
                               '© 2025 ANU',
                               style: TextStyle(fontSize: 12),
                             ),
-
                             OutlinedButton.icon(
                               onPressed: (selectedResponse != null &&
                                       selectedResponse.isNotEmpty)
