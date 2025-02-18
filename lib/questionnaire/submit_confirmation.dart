@@ -47,7 +47,6 @@ class SubmitConfirmation extends StatelessWidget {
           },
         ),
       ),
-      
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(

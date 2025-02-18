@@ -57,6 +57,7 @@ flutter:
     - assets/images/
     - assets/markdown/fatigue_questionnaire.md
     - assets/markdown/fatigue_small_questionnaire.md
+    - assets/markdown/participant.md
 
 # Update icons with `dart run flutter_launcher_icons`
 
