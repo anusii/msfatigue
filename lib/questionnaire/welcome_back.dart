@@ -201,7 +201,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     ),
                     child: Text(
                       hasPartialData
-                          ? 'Survey not fully submitted yet. You can resume your progress.'
+                          ? 'Survey not submitted yet and can be resumed'
                           : latestUploadDate.isNotEmpty
                               ? 'Survey last completed: $latestUploadDate'
                               : 'Survey not submitted yet.',
@@ -218,7 +218,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   // "Continue" button.
 
                   SizedBox(
-                    width: 330,
+                    width: 320,
                     child: ElevatedButton(
                       onPressed: () {
                         // Implement navigation to survey.
@@ -271,7 +271,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   const SizedBox(height: 8),
 
                   SizedBox(
-                    width: 330,
+                    width: 320,
                     height: 46,
                     child: OutlinedButton(
                       onPressed: () {
@@ -289,7 +289,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         ),
                       ),
                       child: const Text(
-                        "I'm too tired for the survey at this time.",
+                        "I'm too tired to do the survey today",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
