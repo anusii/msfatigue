@@ -388,7 +388,7 @@ class _QuestionPageState extends State<QuestionPage> {
                             return GestureDetector(
                               onTap: () {
                                 // The user picks this option => dispatch an UpdateResponse.
-                                
+
                                 context.read<SurveyBloc>().add(
                                       UpdateResponse(
                                         questionIndex: currentQuestionIndex,

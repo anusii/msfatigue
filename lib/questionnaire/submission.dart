@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/welcome_back.dart';
+import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
@@ -15,8 +16,118 @@ import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 // Assume _scaffoldKey is defined globally for this widget.
 
-class SubmissionPage extends StatelessWidget {
+class SubmissionPage extends StatefulWidget {
   const SubmissionPage({super.key});
+
+  @override
+  State<SubmissionPage> createState() => _SubmissionPageState();
+}
+
+class _SubmissionPageState extends State<SubmissionPage> {
+  /// Show a dialog to confirm if the user really wants to end now.
+  /// Adjust the logic here if you want different end-behavior.
+
+  Future<void> _showEndDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(width: 2, color: Colors.pink),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 30),
+                const Text(
+                  "Are you sure you want to end now?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                const Text(
+                  "You can return to the survey any time before midnight.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                const SizedBox(height: 40),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(dialogContext);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SurveyCompleted(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 200,
+                    height: 46,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFFF79D4), Color(0xFFFF5A5F)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Yes, end now",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 200,
+                  height: 46,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.pink),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "No, return to the survey",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +163,26 @@ class SubmissionPage extends StatelessWidget {
             );
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: OutlinedButton(
+              onPressed: _showEndDialog,
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.pink, width: 1.8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              ),
+              child: const Text(
+                'End now',
+                style: TextStyle(color: Colors.pinkAccent),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
@@ -119,7 +250,7 @@ class SubmissionPage extends StatelessWidget {
                       final webId = prefs.getString('webId') ?? '';
                       if (webId.isNotEmpty) {
                         // Convert the responses Map to a list of records.
-                        
+
                         final List<({String key, dynamic value})> dataRecords =
                             surveyState.responses.entries
                                 .map((entry) =>
