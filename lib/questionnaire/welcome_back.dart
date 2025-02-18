@@ -5,6 +5,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/questionnaire/question.dart';
+import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
@@ -38,7 +39,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   }
 
   /// extracted from the file with the latest date in [filesResources].
-  
+
   String getLatestDate(List<String> filesResources) {
     DateTime? latestDate;
 
@@ -79,7 +80,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   }
 
   /// Load the latest upload date from POD.
-  
+
   Future<void> _latestUploadDate() async {
     try {
       final dirUrl = await getDirUrl('msfatigue/data');
@@ -123,10 +124,14 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.grey,
-                size: 28, // smaller, grey
+              icon: GradientIcon(
+                icon: Icons.menu,
+                size: 40.0,
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               onPressed: () => Scaffold.of(context).openDrawer(),
             );
@@ -141,7 +146,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
         ),
       ),
 
-      // If you'd like a drawer, reference your side drawer here. 
+      // If you'd like a drawer, reference your side drawer here.
       drawer: SideDrawer(scaffoldKey: _scaffoldKey),
 
       body: SingleChildScrollView(
@@ -158,14 +163,17 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      greetingText,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                    child: Align(
+                      alignment: Alignment.centerLeft, // Force left alignment
+                      child: Text(
+                        greetingText,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.start,
                     ),
                   ),
 
@@ -199,7 +207,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   // "Continue" button.
 
                   SizedBox(
-                    width: 320,
+                    width: 330,
                     child: ElevatedButton(
                       onPressed: () {
                         // Implement navigation to survey.
@@ -219,7 +227,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         shadowColor: Colors.transparent,
                       ),
                       child: Container(
-                        width: 320,
+                        width: 330,
                         height: 46,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
@@ -235,7 +243,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                         ),
                         child: const Center(
                           child: Text(
-                            'Continue  ►',
+                            'Take me to the survey',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -250,7 +258,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   const SizedBox(height: 8),
 
                   SizedBox(
-                    width: 320,
+                    width: 330,
                     height: 46,
                     child: OutlinedButton(
                       onPressed: () {

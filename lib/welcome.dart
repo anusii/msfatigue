@@ -24,11 +24,11 @@ class GradientIcon extends StatelessWidget {
   final Gradient gradient;
 
   const GradientIcon({
-    Key? key,
+    super.key,
     required this.icon,
     required this.size,
     required this.gradient,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     // Check if all credentials are present.
-    
+
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
             (password != null && password!.isNotEmpty) &&
@@ -109,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               // ),
               icon: GradientIcon(
                 icon: Icons.menu,
-                size: 30.0,
+                size: 40.0,
                 gradient: LinearGradient(
                   colors: [Colors.black, Colors.grey],
                   begin: Alignment.topCenter,

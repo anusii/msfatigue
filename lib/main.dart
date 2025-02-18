@@ -65,10 +65,10 @@ Future<void> main() async {
       username.isNotEmpty && password.isNotEmpty && preferredName.isNotEmpty;
 
   // Decide which screen to show on startup.
-  
+
   final Widget initialScreen = allCredentialsPresent
-      ? const WelcomeBackScreen()  // If all creds exist, show "WelcomeBackScreen".
-      : const WelcomeScreen();      // Otherwise, show "WelcomeScreen".
+      ? const WelcomeBackScreen() // If all creds exist, show "WelcomeBackScreen".
+      : const WelcomeScreen(); // Otherwise, show "WelcomeScreen".
 
   final surveyFilename = await createSurveyFilename();
 

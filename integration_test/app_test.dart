@@ -7,7 +7,7 @@ import 'package:msfatigue/features/review/panel.dart';
 import 'package:msfatigue/features/survey/panel.dart';
 import 'package:msfatigue/main.dart' as app;
 
-/// zy 20250218 Temporarily not fix the errors as put 
+/// zy 20250218 Temporarily not fix the errors as put
 /// other development issues first.
 
 void main() {
