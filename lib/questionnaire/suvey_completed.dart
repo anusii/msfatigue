@@ -24,25 +24,32 @@ class SurveyCompleted extends StatelessWidget {
           size: 40,
           color: Colors.grey,
         ),
+        
       ),
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            
             const Gap(30),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: const Text(
-                "Thank you - Your survey has been saved. You can complete another survey tomorrow (i.e., after midnight tonight).",
-                style: TextStyle(
-                  fontSize: 22,
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: const Text(
+                  "Your data matters!\n      Thank you",
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-                textAlign: TextAlign.left,
               ),
             ),
-            Image.asset(
-              'assets/images/bottom_dot_six.png',
-              height: 300,
+            Center(
+              child: Image.asset(
+                'assets/images/bottom_dot_six.png',
+                height: 300,
+              ),
             ),
           ],
         ),

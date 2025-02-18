@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/submit_confirmation.dart';
+import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
@@ -199,7 +199,7 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SubmitConfirmation(),
+        builder: (context) => SurveyCompleted(),
       ),
     );
   }
