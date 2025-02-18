@@ -41,7 +41,7 @@ class SubmitConfirmation extends StatelessWidget {
                 icon: Icons.menu,
                 size: 40.0,
                 gradient: LinearGradient(
-                  colors: [Colors.black, Colors.grey],
+                  colors: [Colors.black, Colors.grey.shade50],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),

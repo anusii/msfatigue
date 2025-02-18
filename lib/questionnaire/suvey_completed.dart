@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
+import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/questionnaire/welcome_back.dart';
 
@@ -140,6 +141,23 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
         toolbarHeight: 80,
         centerTitle: true,
         iconTheme: const IconThemeData(size: 40, color: Colors.grey),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: GradientIcon(
+                icon: Icons.menu,
+                size: 40.0,
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey.shade50],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
         title: iconImage,
         actions: [
           Padding(

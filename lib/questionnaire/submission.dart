@@ -179,8 +179,8 @@ class _SubmissionPageState extends State<SubmissionPage> {
               icon: GradientIcon(
                 icon: Icons.menu,
                 size: 40.0,
-                gradient: const LinearGradient(
-                  colors: [Colors.black, Colors.grey],
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey.shade50],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),

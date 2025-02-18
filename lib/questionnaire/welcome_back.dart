@@ -1,7 +1,8 @@
+import 'package:intl/intl.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -137,7 +138,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 icon: Icons.menu,
                 size: 40.0,
                 gradient: LinearGradient(
-                  colors: [Colors.black, Colors.grey],
+                  colors: [Colors.black, Colors.grey.shade50],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
