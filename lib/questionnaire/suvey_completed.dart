@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/image/image.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 
 class SurveyCompleted extends StatefulWidget {
   const SurveyCompleted({super.key});
@@ -23,8 +24,9 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
       context: context,
       builder: (BuildContext dialogContext) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
             decoration: BoxDecoration(
@@ -35,16 +37,15 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 const Text(
                   "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black),
+                    fontSize: 28,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 40),
                 const Text(
@@ -56,7 +57,8 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(dialogContext);
-                    // _submitSurvey();
+                    // Perform "end now" logic, e.g. pop to home
+                    // Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   child: Container(
                     width: 200,
@@ -74,9 +76,10 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                       child: Text(
                         "Yes, end now",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -90,16 +93,18 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
                       child: Text(
                         "No, return to the survey",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -109,6 +114,18 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
           ),
         );
       },
+    );
+  }
+
+  /// Navigate to WelcomeBackScreen.
+  
+  void _goHome() {
+    // If you want to remove the entire navigation stack:
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const WelcomeBackScreen()),
+      (route) => false,
     );
   }
 
@@ -124,8 +141,6 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
         centerTitle: true,
         iconTheme: const IconThemeData(size: 40, color: Colors.grey),
         title: iconImage,
-
-        // Place the "End now" button in the top-right corner of the app bar.
 
         actions: [
           Padding(
@@ -156,12 +171,10 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
             const Gap(30),
             Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: const Text(
                   "Your data matters!\n      Thank you",
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
+                  style: TextStyle(fontSize: 25),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -173,6 +186,49 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                 height: 300,
               ),
             ),
+            const Gap(30),
+
+            // Home button that navigates to WelcomeBackScreen.
+
+            SizedBox(
+              width: 260,
+              child: ElevatedButton(
+                onPressed: _goHome,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFFF79D4),
+                        Color(0xFFFF5A5F),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 46,
+                    child: const Text(
+                      'Home',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
