@@ -21,7 +21,7 @@ class _DummySheetState extends State<DummySheet> {
 
   Future<void> _loadParticipantSheet() async {
     final mdString =
-        await rootBundle.loadString('markdown/participant.md');
+        await rootBundle.loadString('assets/markdown/participant.md');
     if (!mounted) return;
     setState(() {
       participantMd = mdString;
