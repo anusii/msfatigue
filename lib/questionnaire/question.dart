@@ -2,19 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
-import 'package:msfatigue/constants/app.dart';
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/submit_confirmation.dart';
-import 'package:msfatigue/utils/markdown_survey_data.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key});
+  /// If non-null, [savedResponses] contains a map of [question -> answer]
+  /// to pre-fill the user's answers on load.
+
+  final Map<String, String?>? savedResponses;
+
+  const QuestionPage({super.key, this.savedResponses});
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -23,6 +25,7 @@ class QuestionPage extends StatefulWidget {
 class _QuestionPageState extends State<QuestionPage> {
   List<String> questions = [];
   String? webId;
+
   final List<String> options = [
     "Strongly disagree",
     "Disagree",
@@ -31,6 +34,7 @@ class _QuestionPageState extends State<QuestionPage> {
     "Don't know",
     "Not applicable",
   ];
+
   final List<Color> gradientColors = [
     const Color(0xFFFFE6EB),
     const Color(0xFFFFD6DE),
@@ -40,21 +44,14 @@ class _QuestionPageState extends State<QuestionPage> {
     const Color.fromARGB(255, 220, 215, 215),
   ];
 
-  List<String> savedQuestions = [];
-  List<String> savedSurveyAnswers = [];
-  List<int?> qChosenList = [];
-
   @override
   void initState() {
     super.initState();
     _loadQuestions();
-    _initializeSurveyData();
     _loadWebId();
   }
 
-  /// Loads the webId from SharedPreferences using the SurveyBloc's instance.
-  /// This method is called during widget initialization to check if a webId exists.
-
+  /// Loads the webId from SharedPreferences via the SurveyBloc's instance.
   Future<void> _loadWebId() async {
     final prefs = context.read<SurveyBloc>().sharedPreferences;
     setState(() {
@@ -62,37 +59,23 @@ class _QuestionPageState extends State<QuestionPage> {
     });
   }
 
-  // Load the survey data using the utils function.
-
-  Future<void> _initializeSurveyData() async {
-    final loadedQuestions = (await markDownSurveyData(surveyFilePath)).first;
-    final loadedAnswers = (await markDownSurveyData(surveyFilePath)).last;
-
-    setState(() {
-      savedQuestions = loadedQuestions;
-      savedSurveyAnswers = loadedAnswers;
-      qChosenList = List.filled(questions.length,
-          null); // Initialize qChosenList based on questions length.
-    });
-  }
-
+  /// Reads the markdown file containing the questions from assets.
   Future<void> _loadQuestions() async {
     final data = await rootBundle
         .loadString('assets/markdown/fatigue_small_questionnaire.md');
-
-    // Check if the widget is still mounted.
-
     if (!mounted) return;
 
     setState(() {
       questions = _parseQuestions(data);
     });
 
-    // Check again if mounted before using context for the bloc.
-
     if (!mounted) return;
+
+    // Tell the bloc to initialize the responses map with these questions.
     context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
   }
+
+  /// Extracts lines from the markdown between "## Questions" and "## Answer Options".
 
   List<String> _parseQuestions(String data) {
     final lines = data.split('\n');
@@ -105,13 +88,16 @@ class _QuestionPageState extends State<QuestionPage> {
       } else if (line.startsWith('## Answer Options')) {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
-        // Assumes each question line is prefixed with a number and a dot (e.g., "1. Question text")
+        // Typically each question is "1. Something"
+        // => substring after the dot+space.
 
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
     return extractedQuestions;
   }
+
+  /// Show a dialog to confirm ending the survey early.
 
   Future<void> _showEndDialog() async {
     showDialog(
@@ -130,6 +116,8 @@ class _QuestionPageState extends State<QuestionPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Close button.
+
                 Padding(
                   padding: const EdgeInsets.only(top: 0.0, right: 8.0),
                   child: Align(
@@ -137,9 +125,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     child: IconButton(
                       icon: const Icon(Icons.close,
                           color: Colors.black, size: 30),
-                      onPressed: () {
-                        Navigator.pop(dialogContext);
-                      },
+                      onPressed: () => Navigator.pop(dialogContext),
                     ),
                   ),
                 ),
@@ -185,9 +171,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   width: 200,
                   height: 46,
                   child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext);
-                    },
+                    onPressed: () => Navigator.pop(dialogContext),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
                       shape: RoundedRectangleBorder(
@@ -213,6 +197,8 @@ class _QuestionPageState extends State<QuestionPage> {
     );
   }
 
+  /// Submits the survey by navigating to the SubmitConfirmation page.
+
   void _submitSurvey() {
     Navigator.push(
       context,
@@ -231,60 +217,80 @@ class _QuestionPageState extends State<QuestionPage> {
           : BlocBuilder<SurveyBloc, SurveyState>(
               builder: (context, state) {
                 final int currentQuestionIndex = state.currentQuestionIndex;
-                final List<String> questionsList =
-                    state.responses.keys.toList();
-                final int questionTotal = questionsList.length;
+                final List<String> questionKeys = state.responses.keys.toList();
+                final int questionTotal = questionKeys.length;
+
+                // Guard if there's a mismatch or out-of-range index.
+
+                if (currentQuestionIndex >= questionKeys.length) {
+                  return const Center(child: Text("No more questions."));
+                }
+
+                // The question text is the current key from the bloc's responses map.
 
                 final String currentQuestion =
-                    questionsList[currentQuestionIndex];
-                final String? selectedResponse =
-                    state.responses[currentQuestion];
+                    questionKeys[currentQuestionIndex];
 
-                // Function to handle next button press.
+                // The previously selected response (if any) for this question.
+
+                String? selectedResponse = state.responses[currentQuestion];
+
+                if (widget.savedResponses != null &&
+                    widget.savedResponses!.containsKey(currentQuestion) &&
+                    state.responses[currentQuestion] == null) {
+                  selectedResponse = widget.savedResponses![currentQuestion];
+                }
+
+                // This method is called when user taps the "Next" button.
 
                 Future<void> handleNext() async {
+                  // Dispatch NextQuestion event.
+
                   context.read<SurveyBloc>().add(NextQuestion());
 
-                  // Only save to pod if webId exists and is not empty.
+                  // Optionally, save partial data to POD if webId is set.
 
                   if (webId != null && webId!.isNotEmpty) {
-                    final surveyState =
-                        BlocProvider.of<SurveyBloc>(context).state;
-                    String fileName = surveyState.surveyFilename;
-                    Map dataResponses = surveyState.responses;
+                    final newState = context.read<SurveyBloc>().state;
+                    final String fileName = newState.surveyFilename;
+                    final Map<String, String?> dataResponses =
+                        newState.responses;
 
-                    List<({String key, dynamic value})> dataRecords = [];
-                    for (int i = 0; i < dataResponses.keys.length; i++) {
+                    // Convert the map to your desired record format.
+
+                    final List<({String key, dynamic value})> dataRecords = [];
+                    int index = 0;
+                    for (var entry in dataResponses.entries) {
                       dataRecords.add((
-                        key: i.toString(),
-                        value:
-                            '{${dataResponses.keys.toList()[i]}} {${dataResponses.values.toList()[i]}}'
+                        key: index.toString(),
+                        value: '{${entry.key}} {${entry.value}}'
                       ));
+                      index++;
                     }
 
                     await saveToPod(dataRecords, fileName, context);
                   }
 
-                  if (currentQuestionIndex == questions.length - 1) {
+                  // If this was the last question, navigate to SubmitConfirmation.
+
+                  if (currentQuestionIndex == questionTotal - 1) {
                     _submitSurvey();
                   }
                 }
 
-                // Rest of the build method remains the same until the bottom navigation buttons.
-
                 return Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      // Header: msFatigue icon & "End now" button.
+
                       SizedBox(
                         width: double.infinity,
                         height: 80,
                         child: Stack(
                           children: [
-                            Center(
-                              child: iconImage,
-                            ),
+                            Center(child: iconImage),
                             Positioned(
                               right: 16,
                               top: 16,
@@ -294,8 +300,7 @@ class _QuestionPageState extends State<QuestionPage> {
                                   side: const BorderSide(
                                       color: Colors.pink, width: 1.8),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
+                                      borderRadius: BorderRadius.circular(5)),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                 ),
@@ -309,6 +314,9 @@ class _QuestionPageState extends State<QuestionPage> {
                         ),
                       ),
                       const Gap(5),
+
+                      // (Optional) progress bar placeholder.
+
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0.0, vertical: 8.0),
@@ -322,13 +330,12 @@ class _QuestionPageState extends State<QuestionPage> {
                               ),
                             ),
                             FractionallySizedBox(
-                              widthFactor: 0,
+                              widthFactor: 0.0,
                               child: Container(
                                 height: 6,
                                 decoration: BoxDecoration(
                                   gradient: const LinearGradient(
-                                    colors: [Colors.red, Colors.pink],
-                                  ),
+                                      colors: [Colors.red, Colors.pink]),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
@@ -336,14 +343,20 @@ class _QuestionPageState extends State<QuestionPage> {
                           ],
                         ),
                       ),
+
+                      // "QUESTION x OF y".
+
                       Center(
                         child: Text(
-                          'QUESTION ${state.currentQuestionIndex + 1} OF $questionTotal',
+                          'QUESTION ${currentQuestionIndex + 1} OF $questionTotal',
                           style:
                               const TextStyle(fontSize: 12, color: Colors.pink),
                         ),
                       ),
                       const Gap(10),
+
+                      // Current question text.
+
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
@@ -354,55 +367,63 @@ class _QuestionPageState extends State<QuestionPage> {
                         ),
                       ),
                       const Gap(10),
+
+                      // The 6 multiple choice options.
+
                       Expanded(
                         child: ListView.builder(
                           itemCount: options.length,
                           itemBuilder: (context, index) {
-                            final bool isSelected =
-                                selectedResponse == options[index];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 0.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  context.read<SurveyBloc>().add(
-                                        UpdateResponse(
-                                          questionIndex: currentQuestionIndex,
-                                          response: options[index],
-                                        ),
-                                      );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0, horizontal: 16.0),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? (index >= gradientColors.length - 2
-                                            ? Colors.grey[600]
-                                            : Colors.pink[300])
-                                        : gradientColors[index],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(width: 30),
-                                      Text(
-                                        options[index],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
+                            // By default, check if the chosen response matches this option.
+
+                            bool isSelected =
+                                (selectedResponse == options[index]);
+
+                            return GestureDetector(
+                              onTap: () {
+                                // The user picks this option => dispatch UpdateResponse.
+
+                                context.read<SurveyBloc>().add(
+                                      UpdateResponse(
+                                        questionIndex: currentQuestionIndex,
+                                        response: options[index],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? (index >= gradientColors.length - 2
+                                          ? Colors.grey[600]
+                                          : Colors.pink[300])
+                                      : gradientColors[index],
+                                ),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 30),
+                                    Text(
+                                      options[index],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: isSelected
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             );
                           },
                         ),
                       ),
+
                       const Gap(25),
+
+                      // Bottom row with "Previous", "Next" etc.
+
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
@@ -419,15 +440,25 @@ class _QuestionPageState extends State<QuestionPage> {
                                   : null,
                               icon: Icon(
                                 Icons.arrow_left,
-                                color: Colors.grey.shade700,
-                                size: 25,
+                                color: (currentQuestionIndex > 0)
+                                    ? Colors.grey[700]
+                                    : Colors.grey,
                               ),
-                              label: Text("Previous    ",
-                                  style:
-                                      TextStyle(color: Colors.grey.shade700)),
+                              label: Text(
+                                "Previous    ",
+                                style: TextStyle(
+                                  color: (currentQuestionIndex > 0)
+                                      ? Colors.grey[700]
+                                      : Colors.grey,
+                                ),
+                              ),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(
-                                    color: Colors.grey.shade700, width: 2),
+                                  color: (currentQuestionIndex > 0)
+                                      ? Colors.grey.shade700
+                                      : Colors.grey,
+                                  width: 2,
+                                ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: const EdgeInsets.symmetric(
@@ -435,33 +466,40 @@ class _QuestionPageState extends State<QuestionPage> {
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
-                            Text(
-                              'Copyright © 2025 ANU',
+                            const Text(
+                              '© 2025 ANU',
                               style: TextStyle(fontSize: 12),
                             ),
                             OutlinedButton.icon(
-                              onPressed:
-                                  selectedResponse != null ? handleNext : null,
+                              onPressed: (selectedResponse != null &&
+                                      selectedResponse.isNotEmpty)
+                                  ? handleNext
+                                  : null,
                               icon: Text(
                                 "    Next",
                                 style: TextStyle(
-                                    color: selectedResponse != null
-                                        ? Colors.pink
-                                        : Colors.grey),
+                                  color: (selectedResponse != null &&
+                                          selectedResponse.isNotEmpty)
+                                      ? Colors.pink
+                                      : Colors.grey,
+                                ),
                               ),
                               label: Icon(
                                 Icons.arrow_right,
-                                color: selectedResponse != null
+                                color: (selectedResponse != null &&
+                                        selectedResponse.isNotEmpty)
                                     ? Colors.pink
                                     : Colors.grey,
                                 size: 25,
                               ),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(
-                                    width: 2,
-                                    color: selectedResponse != null
-                                        ? Colors.pink
-                                        : Colors.grey),
+                                  width: 2,
+                                  color: (selectedResponse != null &&
+                                          selectedResponse.isNotEmpty)
+                                      ? Colors.pink
+                                      : Colors.grey,
+                                ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: const EdgeInsets.symmetric(

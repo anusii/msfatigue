@@ -57,6 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     // Check if all credentials are present.
+
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
             (password != null && password!.isNotEmpty) &&
@@ -83,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               // ),
               icon: GradientIcon(
                 icon: Icons.menu,
-                size: 30.0,
+                size: 40.0,
                 gradient: LinearGradient(
                   colors: [Colors.black, Colors.grey.shade50],
                   begin: Alignment.topCenter,

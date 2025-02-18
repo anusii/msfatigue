@@ -5,9 +5,10 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
-import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
@@ -36,10 +37,14 @@ class SubmitConfirmation extends StatelessWidget {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.grey,
-                size: 50,
+              icon: GradientIcon(
+                icon: Icons.menu,
+                size: 40.0,
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               onPressed: () => Scaffold.of(context).openDrawer(),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -134,7 +139,7 @@ class SubmitConfirmation extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WelcomeScreen(),
+                            builder: (context) => WelcomeBackScreen(),
                           ),
                         );
                       }
