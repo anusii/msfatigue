@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
+import 'package:msfatigue/questionnaire/submission.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
@@ -13,7 +14,6 @@ import 'package:msfatigue/widgets/image/image.dart';
 class QuestionPage extends StatefulWidget {
   /// If non-null, [savedResponses] contains a map of [question -> answer]
   /// to pre-fill the user's answers on load.
-
   final Map<String, String?>? savedResponses;
 
   const QuestionPage({super.key, this.savedResponses});
@@ -60,6 +60,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   /// Reads the markdown file containing the questions from assets.
+
   Future<void> _loadQuestions() async {
     final data = await rootBundle
         .loadString('assets/markdown/fatigue_small_questionnaire.md');
@@ -90,7 +91,6 @@ class _QuestionPageState extends State<QuestionPage> {
       } else if (isQuestion && line.trim().isNotEmpty) {
         // Typically each question is "1. Something"
         // => substring after the dot+space.
-
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
@@ -98,7 +98,6 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   /// Show a dialog to confirm ending the survey early.
-
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,
@@ -116,9 +115,7 @@ class _QuestionPageState extends State<QuestionPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 const Text(
                   "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
@@ -137,7 +134,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(dialogContext);
-                    _submitSurvey();
+                    _endSurvey();
                   },
                   child: Container(
                     width: 200,
@@ -193,13 +190,24 @@ class _QuestionPageState extends State<QuestionPage> {
     );
   }
 
-  /// Submits the survey by navigating to the SubmitConfirmation page.
+  /// Ends the survey by navigating to the SurveyCompleted page (or "SubmissionPage").
+
+  void _endSurvey() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveyCompleted(),
+      ),
+    );
+  }
+
+  /// Submits the survey by navigating to the SurveyCompleted page (or "SubmissionPage").
 
   void _submitSurvey() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SurveyCompleted(),
+        builder: (context) => SubmissionPage(),
       ),
     );
   }
@@ -216,7 +224,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 final List<String> questionKeys = state.responses.keys.toList();
                 final int questionTotal = questionKeys.length;
 
-                // Guard if there's a mismatch or out-of-range index.
+                // If mismatch or out-of-range.
 
                 if (currentQuestionIndex >= questionKeys.length) {
                   return const Center(child: Text("No more questions."));
@@ -231,20 +239,22 @@ class _QuestionPageState extends State<QuestionPage> {
 
                 String? selectedResponse = state.responses[currentQuestion];
 
+                // Check if we have a widget.savedResponses & the bloc doesn't yet have an answer.
+
                 if (widget.savedResponses != null &&
                     widget.savedResponses!.containsKey(currentQuestion) &&
                     state.responses[currentQuestion] == null) {
                   selectedResponse = widget.savedResponses![currentQuestion];
                 }
 
-                // This method is called when user taps the "Next" button.
+                // Called when user taps the "Next" button.
 
                 Future<void> handleNext() async {
-                  // Dispatch NextQuestion event.
+                  // 1) Dispatch NextQuestion.
 
                   context.read<SurveyBloc>().add(NextQuestion());
 
-                  // Optionally, save partial data to POD if webId is set.
+                  // 2) Optionally, save partial data to POD if webId is set.
 
                   if (webId != null && webId!.isNotEmpty) {
                     final newState = context.read<SurveyBloc>().state;
@@ -267,7 +277,9 @@ class _QuestionPageState extends State<QuestionPage> {
                     await saveToPod(dataRecords, fileName, context);
                   }
 
-                  // If this was the last question, navigate to SubmitConfirmation.
+                  // 3) If this is the last question, navigate to submission.
+                  // Since the [currentQuestionIndex]is updated after goes to
+                  // next page, [currentQuestionIndex] is 10 when in last qestion.
 
                   if (currentQuestionIndex == questionTotal - 1) {
                     _submitSurvey();
@@ -279,7 +291,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // Header: msFatigue icon & "End now" button.
+                      // Header: msFatigue icon + "End now" button.
 
                       SizedBox(
                         width: double.infinity,
@@ -311,7 +323,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(5),
 
-                      // (Optional) progress bar placeholder.
+                      // Optional progress bar placeholder.
 
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -364,20 +376,18 @@ class _QuestionPageState extends State<QuestionPage> {
                       ),
                       const Gap(10),
 
-                      // The 6 multiple choice options.
+                      // Build the list of 6 options.
 
                       Expanded(
                         child: ListView.builder(
                           itemCount: options.length,
                           itemBuilder: (context, index) {
-                            // By default, check if the chosen response matches this option.
-
                             bool isSelected =
                                 (selectedResponse == options[index]);
 
                             return GestureDetector(
                               onTap: () {
-                                // The user picks this option => dispatch UpdateResponse.
+                                // The user picks this option => dispatch an UpdateResponse.
 
                                 context.read<SurveyBloc>().add(
                                       UpdateResponse(
@@ -418,7 +428,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
                       const Gap(25),
 
-                      // Bottom row with "Previous", "Next" etc.
+                      // Bottom row with "Previous" and "Next".
 
                       Padding(
                         padding:
@@ -467,6 +477,8 @@ class _QuestionPageState extends State<QuestionPage> {
                               style: TextStyle(fontSize: 12),
                             ),
                             OutlinedButton.icon(
+                              // Only enable "Next" if there's a selected response.
+
                               onPressed: (selectedResponse != null &&
                                       selectedResponse.isNotEmpty)
                                   ? handleNext
