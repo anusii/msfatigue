@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
@@ -31,6 +33,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   }
 
   /// Load the user's preferred name from SharedPreferences.
+
   Future<void> _loadPreferredName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -102,6 +105,12 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final surveyState = context.read<SurveyBloc>().state;
+    final dataResponses = surveyState.responses;
+
+    final bool hasPartialData =
+        dataResponses.values.any((r) => r != null && r.isNotEmpty);
+
     // Build a custom greeting, e.g. "Welcome back, Graham!" if _preferredName is set.
 
     final userNameString = (_preferredName == null || _preferredName!.isEmpty)
@@ -191,9 +200,11 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       color: Colors.pink.shade50,
                     ),
                     child: Text(
-                      latestUploadDate.isNotEmpty
-                          ? 'Survey last completed: $latestUploadDate'
-                          : 'Survey not submitted yet.',
+                      hasPartialData
+                          ? 'Survey not fully submitted yet. You can resume your progress.'
+                          : latestUploadDate.isNotEmpty
+                              ? 'Survey last completed: $latestUploadDate'
+                              : 'Survey not submitted yet.',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,

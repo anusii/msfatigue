@@ -5,6 +5,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/welcome.dart';
@@ -138,7 +139,7 @@ class SubmitConfirmation extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WelcomeScreen(),
+                            builder: (context) => WelcomeBackScreen(),
                           ),
                         );
                       }
