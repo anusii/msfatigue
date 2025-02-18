@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:gap/gap.dart';
+
 import 'package:msfatigue/welcome.dart';
 
 void showWarning(String title, String content, BuildContext context) {
@@ -7,7 +9,23 @@ void showWarning(String title, String content, BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title),
+        title: Row(
+          children: [
+            Icon(
+              Icons.health_and_safety,
+              size: 24,
+              color: Color(0xFFFF79D4),
+            ),
+            Gap(20),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         content: Text(content),
         actions: <Widget>[
           TextButton(
