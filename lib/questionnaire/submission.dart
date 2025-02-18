@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
@@ -206,7 +204,6 @@ class _SubmissionPageState extends State<SubmissionPage> {
               'assets/images/bottom_dot_five.png',
               height: 300,
             ),
-            Gap(25),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
               child: Row(
@@ -274,7 +271,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WelcomeBackScreen(),
+                            builder: (context) => SurveyCompleted(),
                           ),
                         );
                       }

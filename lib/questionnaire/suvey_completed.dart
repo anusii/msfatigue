@@ -173,7 +173,7 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: const Text(
                   "Your data matters!\n      Thank you",
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.left,
                 ),
               ),
