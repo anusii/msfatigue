@@ -116,28 +116,24 @@ class _QuestionPageState extends State<QuestionPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Close button.
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 0.0, right: 8.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.close,
-                          color: Colors.black, size: 30),
-                      onPressed: () => Navigator.pop(dialogContext),
-                    ),
-                  ),
+                SizedBox(
+                  height: 30,
                 ),
                 const Text(
-                  "Are you sure you want to end now? You can return to the survey any time before midnight.",
+                  "Are you sure you want to end now?",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 26,
+                      fontSize: 28,
                       fontWeight: FontWeight.w400,
                       color: Colors.black),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 40),
+                const Text(
+                  "You can return to the survey any time before midnight.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                const SizedBox(height: 40),
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(dialogContext);
