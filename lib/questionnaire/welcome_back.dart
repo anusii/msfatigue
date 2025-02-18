@@ -278,7 +278,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       onPressed: () {
                         showWarning(
                           'Info',
-                          "That's okay. When you are ready you can come back to the survey.",
+                          "Take care. When you are ready you can come back to the survey.",
                           context,
                         );
                       },
