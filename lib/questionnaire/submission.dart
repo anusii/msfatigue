@@ -188,7 +188,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
           children: [
             Image.asset(
               'assets/images/bottom_dot_four.png',
-              height: 300,
+              height: 260,
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -202,7 +202,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 )),
             Image.asset(
               'assets/images/bottom_dot_five.png',
-              height: 300,
+              height: 260,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
