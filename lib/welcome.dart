@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/page/credentials_page.dart';
+import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
 /// Helper function to format the preferred name:
@@ -16,33 +18,6 @@ String formatPreferredName(String name) {
   if (name.isEmpty) return name;
   if (name.length == 1) return name.toUpperCase();
   return name[0].toUpperCase() + name.substring(1).toLowerCase();
-}
-
-class GradientIcon extends StatelessWidget {
-  final IconData icon;
-  final double size;
-  final Gradient gradient;
-
-  const GradientIcon({
-    Key? key,
-    required this.icon,
-    required this.size,
-    required this.gradient,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return gradient.createShader(bounds);
-      },
-      child: Icon(
-        icon,
-        size: size,
-        color: Colors.white, // The color here is overridden by the shader
-      ),
-    );
-  }
 }
 
 class WelcomeScreen extends StatefulWidget {
