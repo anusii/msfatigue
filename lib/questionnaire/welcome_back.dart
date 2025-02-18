@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 import 'package:msfatigue/widgets/image/image.dart';
+import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 class WelcomeBackScreen extends StatefulWidget {
   const WelcomeBackScreen({super.key});
@@ -16,14 +18,27 @@ class WelcomeBackScreen extends StatefulWidget {
 
 class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   String latestUploadDate = '';
+  String? _preferredName; // Load from SharedPreferences
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
     _latestUploadDate();
+    _loadPreferredName();
   }
 
-  /// Returns the timestamp string (e.g., "20250206T134801")
-  /// extracted from the file with the latest date in [fileResources].
+  /// Load the user's preferred name from SharedPreferences.
+  Future<void> _loadPreferredName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _preferredName = prefs.getString('msfatigue_preferredName');
+    });
+  }
+
+  /// extracted from the file with the latest date in [filesResources].
+  
   String getLatestDate(List<String> filesResources) {
     DateTime? latestDate;
 
@@ -57,51 +72,78 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       }
     }
 
-    if (latestDate == null) return ''; // Handle empty list case
+    if (latestDate == null) return ''; // If no files or parse errors
+    // Change format to remove leading zero in hour: 'h' instead of 'hh'.
 
-    return DateFormat('d MMMM yyyy hh:mm a').format(latestDate);
+    return DateFormat('d MMMM yyyy h:mm a').format(latestDate.toLocal());
   }
 
+  /// Load the latest upload date from POD.
+  
   Future<void> _latestUploadDate() async {
     try {
-      // Get URL of directory containing blood pressure data.
-
       final dirUrl = await getDirUrl('msfatigue/data');
-
-      // Retrieve list of files (resources) in directory.
-
       final resources = await getResourcesInContainer(dirUrl);
-
       List<String> filesResources = resources.files;
-
-      // Convert the list of resources to a single string (each resource on a new line).
 
       setState(() {
         latestUploadDate = getLatestDate(filesResources);
       });
     } catch (e) {
       setState(() {
+        // If an error occurs, fallback to "Now".
+
         DateTime today = DateTime.now();
-        latestUploadDate = DateFormat('d MMMM yyyy hh:mm a').format(today);
+        latestUploadDate = DateFormat('d MMMM yyyy h:mm a').format(today);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Build a custom greeting, e.g. "Welcome back, Graham!" if _preferredName is set.
+
+    final userNameString = (_preferredName == null || _preferredName!.isEmpty)
+        ? ""
+        : ", ${_preferredName!}";
+    final greetingText = "Welcome back$userNameString!";
+
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
+
+      // Remove the default back arrow -> add a grey hamburger icon
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
+        centerTitle: true,
+
+        // Provide a custom leading icon
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.grey,
+                size: 28, // smaller, grey
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            );
+          },
+        ),
+
+        automaticallyImplyLeading: false, // don't show default back arrow
         title: iconImage,
         iconTheme: const IconThemeData(
           size: 40,
           color: Colors.grey,
         ),
-        centerTitle: true,
       ),
+
+      // If you'd like a drawer, reference your side drawer here. 
+      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -111,16 +153,26 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 10),
-                  const Text(
-                    'Welcome back!',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+
+                  // "Welcome back, Graham!" aligned to the left.
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      greetingText,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.center,
                   ),
+
                   const SizedBox(height: 16),
+
+                  // Pink container with last completed date.
+
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
@@ -141,7 +193,11 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ),
+
                   const SizedBox(height: 30),
+
+                  // "Continue" button.
+
                   SizedBox(
                     width: 320,
                     child: ElevatedButton(
@@ -190,16 +246,19 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 8),
+
                   SizedBox(
                     width: 320,
                     height: 46,
                     child: OutlinedButton(
                       onPressed: () {
                         showWarning(
-                            'Info',
-                            "That's okay. When you are ready you can come back to the survey.",
-                            context);
+                          'Info',
+                          "That's okay. When you are ready you can come back to the survey.",
+                          context,
+                        );
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 1),
@@ -215,9 +274,12 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
+
+                  // Bottom image
                   Image.asset(
                     'assets/images/bottom_dot_three.png',
                     width: MediaQuery.of(context).size.width,
