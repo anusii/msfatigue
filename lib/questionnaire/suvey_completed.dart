@@ -118,7 +118,7 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
   }
 
   /// Navigate to WelcomeBackScreen.
-  
+
   void _goHome() {
     // If you want to remove the entire navigation stack:
 
@@ -141,7 +141,6 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
         centerTitle: true,
         iconTheme: const IconThemeData(size: 40, color: Colors.grey),
         title: iconImage,
-
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
