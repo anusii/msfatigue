@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/question.dart';
-import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
+import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
