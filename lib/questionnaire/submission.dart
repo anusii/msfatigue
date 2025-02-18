@@ -8,11 +8,9 @@ import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/utils/pod.dart';
+import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-import 'package:msfatigue/widgets/drawer/side_drawer.dart';
-
-// Assume _scaffoldKey is defined globally for this widget.
 
 class SubmissionPage extends StatefulWidget {
   const SubmissionPage({super.key});
@@ -22,13 +20,13 @@ class SubmissionPage extends StatefulWidget {
 }
 
 class _SubmissionPageState extends State<SubmissionPage> {
-  /// Show a dialog to confirm if the user really wants to end now.
-  /// Adjust the logic here if you want different end-behavior.
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Show a dialog to confirm if the user really wants to end now.
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
+      builder: (dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -127,30 +125,61 @@ class _SubmissionPageState extends State<SubmissionPage> {
     );
   }
 
+  /// Called when the user taps the "Submit" button.
+
+  Future<void> _handleSubmit() async {
+    // Get the current SurveyState
+    final surveyState = context.read<SurveyBloc>().state;
+
+    // Retrieve preferences to check for webId
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final webId = prefs.getString('webId') ?? '';
+
+    if (webId.isNotEmpty) {
+      // Convert the responses Map to a list of records
+      final dataRecords = surveyState.responses.entries
+          .map((entry) => (key: entry.key, value: entry.value))
+          .toList();
+
+      // Generate a filename
+      final fileName = createSurveyFilename();
+
+      // Save data to POD
+      if (!mounted) return;
+      await saveToPod(dataRecords, fileName, context, isSubmit: true);
+    }
+
+    // After saving, navigate to SurveyCompleted
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveyCompleted(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
     return Scaffold(
-      key: scaffoldKey,
+      key: _scaffoldKey,
+
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
         centerTitle: true,
         title: iconImage,
-        iconTheme: const IconThemeData(
-          size: 40,
-          color: Colors.grey,
-        ),
+        iconTheme: const IconThemeData(size: 40, color: Colors.grey),
         leading: Builder(
-          builder: (BuildContext context) {
+          builder: (context) {
             return IconButton(
               icon: GradientIcon(
                 icon: Icons.menu,
                 size: 40.0,
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [Colors.black, Colors.grey],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -161,6 +190,9 @@ class _SubmissionPageState extends State<SubmissionPage> {
             );
           },
         ),
+
+        // "End now" button at top-right.
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -182,119 +214,84 @@ class _SubmissionPageState extends State<SubmissionPage> {
           ),
         ],
       ),
-      drawer: SideDrawer(scaffoldKey: scaffoldKey),
+
+      drawer: SideDrawer(scaffoldKey: _scaffoldKey),
+
+      // The rest of the content can be scrolled.
+
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/bottom_dot_four.png',
               height: 260,
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                child: MarkdownBody(
-                  selectable: true,
-                  data: "Are you ready to submit?",
-                  styleSheet: MarkdownStyleSheet(
-                    p: const TextStyle(
-                        fontSize: 26, fontWeight: FontWeight.w500),
-                  ),
-                )),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: MarkdownBody(
+                selectable: true,
+                data: "Are you ready to submit?",
+                styleSheet: MarkdownStyleSheet(
+                  p: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
             Image.asset(
               'assets/images/bottom_dot_five.png',
               height: 260,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context); // Go to previous question
-                    },
-                    icon: Icon(
-                      Icons.arrow_left,
-                      color: Colors.grey.shade700,
-                      size: 25,
-                    ),
-                    label: Text(
-                      "Previous   ",
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 12),
-                      side: BorderSide(color: Colors.grey.shade700, width: 2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  OutlinedButton.icon(
-                    onPressed: () async {
-                      // Retrieve the current SurveyState from the bloc before async operation.
+            // You can put more text or instructions here
+            const SizedBox(height: 80),
+          ],
+        ),
+      ),
 
-                      final surveyState = context.read<SurveyBloc>().state;
+      // Pin "Previous" and "Submit" buttons at bottom with margin 10.
 
-                      // Get the SharedPreferences instance and check webId.
-
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      final webId = prefs.getString('webId') ?? '';
-                      if (webId.isNotEmpty) {
-                        // Convert the responses Map to a list of records.
-
-                        final List<({String key, dynamic value})> dataRecords =
-                            surveyState.responses.entries
-                                .map((entry) =>
-                                    (key: entry.key, value: entry.value))
-                                .toList();
-
-                        // Generate a filename.
-
-                        final String fileName = createSurveyFilename();
-
-                        // Save data to POD.
-
-                        if (!context.mounted) return;
-                        await saveToPod(dataRecords, fileName, context,
-                            isSubmit: true);
-                      }
-
-                      // If successful, navigate to SurveyCompleted screen.
-
-                      if (context.mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SurveyCompleted(),
-                          ),
-                        );
-                      }
-                    },
-                    icon: const Text(
-                      "    Submit",
-                      style: TextStyle(color: Colors.pink),
-                    ),
-                    label: const Icon(
-                      Icons.arrow_right,
-                      color: Colors.pink,
-                      size: 25,
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(width: 2, color: Colors.pink),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 12),
-                    ),
-                  ),
-                ],
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            OutlinedButton.icon(
+              onPressed: () {
+                // e.g. go back to previous question
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_left,
+                color: Colors.grey.shade700,
+                size: 25,
+              ),
+              label: Text(
+                "Previous",
+                style: TextStyle(color: Colors.grey.shade700),
+              ),
+              style: OutlinedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                side: BorderSide(color: Colors.grey.shade700, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            OutlinedButton.icon(
+              onPressed: _handleSubmit,
+              icon: const Text(
+                " Submit",
+                style: TextStyle(color: Colors.pink),
+              ),
+              label:
+                  const Icon(Icons.arrow_right, color: Colors.pink, size: 25),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(width: 2, color: Colors.pink),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               ),
             ),
           ],
