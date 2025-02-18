@@ -104,7 +104,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                   MarkdownBody(
                     selectable: true,
                     data:
-                        'I have read the Participant Information Sheet and hereby provide my consent to participate in this study.',
+                        '**Please confirm:** *I have read the Participant Information Sheet and hereby provide my consent to participate in this study.*',
                     styleSheet: MarkdownStyleSheet(
                       p: const TextStyle(fontSize: 16),
                     ),
