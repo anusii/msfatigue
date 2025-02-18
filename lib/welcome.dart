@@ -55,6 +55,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         : "Welcome ${formatPreferredName(preferredName!)}!";
 
     // Check if all credentials are present.
+    
     final bool allCredentialsPresent =
         (username != null && username!.isNotEmpty) &&
             (password != null && password!.isNotEmpty) &&

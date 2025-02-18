@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/main.dart';
+import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-
-import 'package:package_info_plus/package_info_plus.dart';
 
 class SideDrawer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -198,7 +197,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     onPressed: () async {
                       // Example of your logout flow.
 
-                      await logoutPopup(context, const MSFatigue());
+                      const MSFatigue(initialScreen: WelcomeScreen());
                     },
                     child: const Text(
                       'Logout',

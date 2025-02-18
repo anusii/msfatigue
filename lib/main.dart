@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams
+/// Authors: Graham Williams, Zheyuan Xu
 
 library;
 
@@ -34,15 +34,14 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart'; // Import the WelcomeBackScreen
 
 // Dummy implementations for desktop support.
-
 bool isDesktop(dynamic platformWrapper) => true;
 
 class PlatformWrapper {}
 
 // Example implementation of createSurveyFilename().
-
 Future<String> createSurveyFilename() async {
   final now = DateTime.now();
   final formatter = DateFormat('yyyyMMddTHHmmss');
@@ -54,8 +53,22 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Get SharedPreferences instance.
-
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Check if credentials exist.
+
+  final username = prefs.getString('msfatigue_username') ?? "";
+  final password = prefs.getString('msfatigue_password') ?? "";
+  final preferredName = prefs.getString('msfatigue_preferredName') ?? "";
+
+  final bool allCredentialsPresent =
+      username.isNotEmpty && password.isNotEmpty && preferredName.isNotEmpty;
+
+  // Decide which screen to show on startup.
+  
+  final Widget initialScreen = allCredentialsPresent
+      ? const WelcomeBackScreen()  // If all creds exist, show "WelcomeBackScreen".
+      : const WelcomeScreen();      // Otherwise, show "WelcomeScreen".
 
   final surveyFilename = await createSurveyFilename();
 
@@ -77,22 +90,25 @@ Future<void> main() async {
 
   runApp(
     BlocProvider(
-      create: (_) =>
-          SurveyBloc(surveyFilename: surveyFilename, sharedPreferences: prefs),
-      child: const MSFatigue(),
+      create: (_) => SurveyBloc(
+        surveyFilename: surveyFilename,
+        sharedPreferences: prefs,
+      ),
+      child: MSFatigue(initialScreen: initialScreen),
     ),
   );
 }
 
 class MSFatigue extends StatelessWidget {
-  const MSFatigue({super.key});
+  final Widget initialScreen;
+  const MSFatigue({super.key, required this.initialScreen});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'MS Fatigue',
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      home: initialScreen,
     );
   }
 }
