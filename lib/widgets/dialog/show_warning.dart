@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 
-import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 
 void showWarning(String title, String content, BuildContext context) {
   showDialog<void>(
@@ -35,7 +35,7 @@ void showWarning(String title, String content, BuildContext context) {
 
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                MaterialPageRoute(builder: (context) => const WelcomeBackScreen()),
               );
             },
             child: const Text('OK'),
