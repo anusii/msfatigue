@@ -57,7 +57,7 @@ jobs:
 
   build-release-upload-linux:
     if: contains(github.event.head_commit.message, 'bump version')
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Clone repository
@@ -69,7 +69,7 @@ jobs:
         with:
           channel: stable
           architecture: x64
-          flutter-version: 3.24.0
+          flutter-version: 3.29.0
       - run: flutter --version
       - name: Install dependencies
         run: |
@@ -108,7 +108,7 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
-          flutter-version: '3.24.0'
+          flutter-version: '3.29.0'
       - name: Install project dependencies
         run: flutter pub get
       - name: Generate intermediates
@@ -146,7 +146,7 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
-          flutter-version: '3.24.0'
+          flutter-version: '3.29.0'
       - name: Install project dependencies
         run: flutter pub get
       - name: Generate intermediates
