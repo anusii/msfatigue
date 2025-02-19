@@ -21,7 +21,7 @@ class _ConsentSettingsState extends State<ConsentSettings> {
   }
 
   /// Loads the consent date from SharedPreferences, if any.
-  
+
   Future<void> _loadConsentDate() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
