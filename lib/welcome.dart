@@ -36,7 +36,7 @@ String formatPreferredName(String name) {
     // Two or more parts => capitalize each part.
 
     final capitalizedParts = parts.map((part) {
-      if (part.isEmpty) return part; 
+      if (part.isEmpty) return part;
       if (part.length == 1) {
         return part.toUpperCase();
       } else {
@@ -45,7 +45,7 @@ String formatPreferredName(String name) {
     }).toList();
 
     // Join them back with a space.
-    
+
     return capitalizedParts.join(' ');
   }
 }

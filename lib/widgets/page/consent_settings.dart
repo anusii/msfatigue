@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:msfatigue/widgets/image/image.dart';
 
-class ConsentSettings extends StatelessWidget {
+class ConsentSettings extends StatefulWidget {
   const ConsentSettings({super.key});
+
+  @override
+  State<ConsentSettings> createState() => _ConsentSettingsState();
+}
+
+class _ConsentSettingsState extends State<ConsentSettings> {
+  String? _consentDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConsentDate();
+  }
+
+  /// Loads the consent date from SharedPreferences, if any.
+  
+  Future<void> _loadConsentDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _consentDate = prefs.getString('consentDate');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +37,12 @@ class ConsentSettings extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 125,
-        // Remove the leading property since we'll add the close button to actions.
+
+        // Remove the leading arrow since we use a close button in actions.
 
         automaticallyImplyLeading: false,
         title: iconImage,
         centerTitle: true,
-        // Add the close button to the actions list (right side).
 
         actions: [
           Padding(
@@ -47,13 +71,38 @@ class ConsentSettings extends StatelessWidget {
                 fontWeight: FontWeight.w300,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
+
+            // If we have a date, show it. Otherwise fallback text.
+
+            if (_consentDate != null && _consentDate!.isNotEmpty) ...[
+              Text(
+                'You consented to sharing your survey data for this research project on $_consentDate.',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ] else ...[
+              const Text(
+                'No consent date recorded. You have not consented yet.',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             RichText(
               text: const TextSpan(
                 style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.black,
+                ),
                 children: [
                   TextSpan(
                     text: 'Previously agreed consent\n\n',
