@@ -163,7 +163,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     // Record the consent date in SharedPreferences.
-                    
+
                     await _recordConsentDate();
 
                     if (!mounted) return;
@@ -186,7 +186,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     ),
                   ),
                   child: const Text(
-                    "Yes I Consent  >",
+                    "Yes I Consent   ►",
                     style: TextStyle(fontSize: 16, color: Colors.pink),
                   ),
                 ),
