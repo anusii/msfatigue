@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown_tooltip/markdown_tooltip.dart';
+
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/main.dart';
 import 'package:msfatigue/welcome.dart';
@@ -159,16 +162,28 @@ class _SideDrawerState extends State<SideDrawer> {
                     applicationName: 'MS Fatigue Survey',
                     applicationVersion: 'Version ${_appVersion.split("+")[0]}',
                     applicationLegalese:
-                        'Copyright © 2025 ANU\nApp License GPLv3',
+                        'Copyright © 2025 ANU\nApp License GPLv3\n',
                     children: [
-                      const Text(
-                          "\nThe MS Fatigue app presents a survey to collect data on your experience of fatigue. "
-                          "This data will contribute towards our understanding of fatigue amongst people "
-                          "affected by multiple sclerosis. We thank you for your important contribution to "
-                          "this research.\n\n"
-                          "The survery was developed by the ANU's John Curtin School of Medical Research and the research is in "
-                          "collaboration with the School of Computing.\n\n"
-                          "This app was developed by the ANU's Software Innovation Institute.\n\n"),
+                      MarkdownBody(
+                        data: wordWrap('''
+
+                          The **MS Fatigue** app is a survey to collect data on
+                          your experience of fatigue.  This data will contribute
+                          towards research on understanding fatigue amongst
+                          people affected by multiple sclerosis. We thank you
+                          for your important contribution to this research.
+
+                          The survery was developed by ANU's [John Curtin School
+                          of Medical Research](https://anu.edu.au) and the research is in
+                          collaboration with the School of Computing.
+
+                          The app itself was designed by ANU's [Human Centred
+                          Design](https:anu.edu.au) team and implemented by
+                          ANU's [Software Innovation
+                          Institute](https://sii.anu.edu.au).
+
+                          '''),
+                      ),
                     ],
                   );
                 },
