@@ -163,7 +163,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     // Record the consent date in SharedPreferences.
-                    
+
                     await _recordConsentDate();
 
                     if (!mounted) return;

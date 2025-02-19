@@ -16,7 +16,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String? password;
   String? preferredName;
 
-  // For toggling password on this screen (outside dialog).
+  // For toggling password on this screen (outside the dialog).
 
   bool _showPassword = false;
 
@@ -139,13 +139,16 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     );
 
     if (updated == true && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-      );
+      // After the user taps "Update," reload credentials to reflect changes.
+
+      await _loadCredentials();
+
+      // The user remains on this page to review updates (no navigation).
     }
   }
 
+  /// Basic capitalization for single-part name.
+  
   String formatPreferredName(String name) {
     if (name.isEmpty) return name;
     if (name.length == 1) return name.toUpperCase();
@@ -159,8 +162,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
             (password != null && password!.isNotEmpty) &&
             (preferredName != null && preferredName!.isNotEmpty);
 
-    // For the main screen's password display (not the dialog).
-
+    // Display for password (****** or actual text).
+    
     String passwordDisplay;
     if (password == null || password!.isEmpty) {
       passwordDisplay = "Not set";
@@ -189,7 +192,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 size: 40,
               ),
               padding: EdgeInsets.zero,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WelcomeScreen(),
+                ),
+              ),
             ),
           ),
         ],
