@@ -223,23 +223,29 @@ class _SubmissionPageState extends State<SubmissionPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/bottom_dot_four.png',
-              height: 260,
+            Center(
+              child: Image.asset(
+                'assets/images/bottom_dot_four.png',
+                height: 260,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: MarkdownBody(
-                selectable: true,
-                data: "Are you ready to submit?",
-                styleSheet: MarkdownStyleSheet(
-                  p: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: MarkdownBody(
+                  selectable: true,
+                  data: "Are you ready to submit?",
+                  styleSheet: MarkdownStyleSheet(
+                    p: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
             ),
-            Image.asset(
-              'assets/images/bottom_dot_five.png',
-              height: 260,
+            Center(
+              child: Image.asset(
+                'assets/images/bottom_dot_five.png',
+                height: 260,
+              ),
             ),
             // You can put more text or instructions here
             const SizedBox(height: 80),
