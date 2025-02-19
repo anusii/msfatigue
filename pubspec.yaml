@@ -1,5 +1,5 @@
 name: msfatigue
-description: 'Collect surveys to review fatigue with MS.'
+description: 'Collect surveys to review fatigue associated with MS.'
 publish_to: 'none'
 version: 1.0.0+4
 
