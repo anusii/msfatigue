@@ -20,103 +20,103 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
   /// Show a dialog to confirm if the user really wants to end now.
   /// Adjust the logic here if you want different end-behavior.
 
-  Future<void> _showEndDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(width: 2, color: Colors.pink),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 30),
-                const Text(
-                  "Are you sure you want to end now?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Text(
-                  "You can return to the survey any time before midnight.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                const SizedBox(height: 40),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(dialogContext);
-                    // Perform "end now" logic, e.g. pop to home
-                    // Navigator.popUntil(context, (route) => route.isFirst);
-                  },
-                  child: Container(
-                    width: 200,
-                    height: 46,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFFF79D4), Color(0xFFFF5A5F)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Yes, end now",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: 200,
-                  height: 46,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(dialogContext),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.pink),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "No, return to the survey",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // Future<void> _showEndDialog() async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext dialogContext) {
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16),
+  //         ),
+  //         child: Container(
+  //           padding: const EdgeInsets.fromLTRB(24, 5, 24, 24),
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(16),
+  //             border: Border.all(width: 2, color: Colors.pink),
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const SizedBox(height: 30),
+  //               const Text(
+  //                 "Are you sure you want to end now?",
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(
+  //                   fontSize: 28,
+  //                   fontWeight: FontWeight.w400,
+  //                   color: Colors.black,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 40),
+  //               const Text(
+  //                 "You can return to the survey any time before midnight.",
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(fontSize: 16, color: Colors.black),
+  //               ),
+  //               const SizedBox(height: 40),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(dialogContext);
+  //                   // Perform "end now" logic, e.g. pop to home
+  //                   // Navigator.popUntil(context, (route) => route.isFirst);
+  //                 },
+  //                 child: Container(
+  //                   width: 200,
+  //                   height: 46,
+  //                   padding: const EdgeInsets.symmetric(vertical: 12),
+  //                   decoration: BoxDecoration(
+  //                     gradient: const LinearGradient(
+  //                       colors: [Color(0xFFFF79D4), Color(0xFFFF5A5F)],
+  //                       begin: Alignment.centerLeft,
+  //                       end: Alignment.centerRight,
+  //                     ),
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   child: const Center(
+  //                     child: Text(
+  //                       "Yes, end now",
+  //                       style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 16,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               SizedBox(
+  //                 width: 200,
+  //                 height: 46,
+  //                 child: OutlinedButton(
+  //                   onPressed: () => Navigator.pop(dialogContext),
+  //                   style: OutlinedButton.styleFrom(
+  //                     side: const BorderSide(color: Colors.pink),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(5),
+  //                     ),
+  //                     padding: EdgeInsets.zero,
+  //                   ),
+  //                   child: const Center(
+  //                     child: Text(
+  //                       "No, return to the survey",
+  //                       style: TextStyle(
+  //                         color: Colors.black,
+  //                         fontWeight: FontWeight.w300,
+  //                         fontSize: 16,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   /// Navigate to WelcomeBackScreen.
 
