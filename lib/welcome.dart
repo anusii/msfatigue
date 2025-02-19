@@ -115,19 +115,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 8),
+                        Image.asset(
+                          'assets/images/title_dot_one.png',
+                          width: 325,
+                          fit: BoxFit.fitWidth,
+                        ),
                         Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            Positioned(
-                              top: -25,
-                              left: 0,
-                              child: Image.asset(
-                                'assets/images/title_dot_one.png',
-                                width: 325,
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
                             Text(
                               welcomeText,
                               style: const TextStyle(
