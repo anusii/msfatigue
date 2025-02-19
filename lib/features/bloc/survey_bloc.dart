@@ -53,15 +53,15 @@ class ClearSurvey extends SurveyEvent {
 
 class SurveyState extends Equatable {
   /// Map where each key is a question and its value is the answer (which can be null).
-  
+
   final Map<String, String?> responses;
 
   /// The index (in insertion order) of the currently displayed question.
-  
+
   final int currentQuestionIndex;
 
   /// The survey filename generated at startup.
-  
+
   final String surveyFilename;
 
   const SurveyState({
@@ -123,18 +123,20 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
     on<NextQuestion>((event, emit) {
       if (state.currentQuestionIndex < state.responses.length - 1) {
-        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1));
+        emit(state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex + 1));
       }
     });
 
     on<PreviousQuestion>((event, emit) {
       if (state.currentQuestionIndex > 0) {
-        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1));
+        emit(state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex - 1));
       }
     });
 
     // ClearSurvey resets the responses and current question index.
-    
+
     on<ClearSurvey>((event, emit) {
       emit(SurveyState(
         responses: {},

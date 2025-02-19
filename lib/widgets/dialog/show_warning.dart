@@ -35,7 +35,8 @@ void showWarning(String title, String content, BuildContext context) {
 
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const WelcomeBackScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const WelcomeBackScreen()),
               );
             },
             child: const Text('OK'),

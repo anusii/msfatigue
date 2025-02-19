@@ -6,7 +6,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown_tooltip/markdown_tooltip.dart';
 
 import 'package:msfatigue/constants/layout.dart';
-import 'package:msfatigue/main.dart';
 import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
@@ -212,7 +211,11 @@ class _SideDrawerState extends State<SideDrawer> {
                     onPressed: () async {
                       // Example of your logout flow.
 
-                      const MSFatigue(initialScreen: WelcomeScreen());
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WelcomeScreen()),
+                      );
                     },
                     child: const Text(
                       'Logout',
