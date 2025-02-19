@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown_tooltip/markdown_tooltip.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -192,9 +193,20 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    "Yes I Consent   ►",
-                    style: TextStyle(fontSize: 16, color: Colors.pink),
+                  child: MarkdownTooltip(
+                    message: '''
+
+                    By consenting you agree to share your survey answers with
+                    the researchers at ANU who are conducting this research into
+                    fatigure experienced by those affected by multiple
+                    sclerosis. You can withdraw your consent at any time through
+                    the **Withdraw** button in the side menu.
+
+                    ''',
+                    child: const Text(
+                      "Yes I Consent   ►",
+                      style: TextStyle(fontSize: 16, color: Colors.pink),
+                    ),
                   ),
                 ),
               ],
