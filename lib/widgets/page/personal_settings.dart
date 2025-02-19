@@ -147,14 +147,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     }
   }
 
-  /// Basic capitalization for single-part name.
-  
-  String formatPreferredName(String name) {
-    if (name.isEmpty) return name;
-    if (name.length == 1) return name.toUpperCase();
-    return name[0].toUpperCase() + name.substring(1).toLowerCase();
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool allCredentialsPresent =
@@ -163,7 +155,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
             (preferredName != null && preferredName!.isNotEmpty);
 
     // Display for password (****** or actual text).
-    
+
     String passwordDisplay;
     if (password == null || password!.isEmpty) {
       passwordDisplay = "Not set";
@@ -210,7 +202,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 24),
                 const Text(
                   "Username:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -306,6 +297,15 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Support',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                    'If you are experiencing any issues with the app, or need any support please contact, xxx@anu.edu.au'),
               ],
             ),
           ),
