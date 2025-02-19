@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/welcome.dart';
@@ -304,6 +305,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   'Support:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                Gap(5),
                 Text(
                     'If you are experiencing any issues with the app, or need any support please contact, xxx@anu.edu.au'),
               ],
