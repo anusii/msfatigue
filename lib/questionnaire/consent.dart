@@ -159,7 +159,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     ),
                   ),
                   child: const Text(
-                    "<  No I Don't Consent",
+                    "◄   No I Don't Consent",
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                 ),
