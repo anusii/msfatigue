@@ -48,7 +48,7 @@ class AccountDetails extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No Pod URI found"));
+            return const Center(child: Text("No save location currently set."));
           }
 
           // Retrieve the Pod URI and derive the current Solid server.

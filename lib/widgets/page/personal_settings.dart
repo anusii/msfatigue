@@ -67,7 +67,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         return StatefulBuilder(
           builder: (ctx, setStateDialog) {
             return AlertDialog(
-              title: const Text("Update Credentials"),
+              title: const Text("Update Details"),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -271,7 +271,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                           ),
                         ),
                         child: const Text(
-                          "Clear Credentials",
+                          "Clear Details",
                           style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
                       ),
@@ -292,7 +292,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                         ),
                       ),
                       child: const Text(
-                        "Update Credentials",
+                        "Update Details",
                         style: TextStyle(fontSize: 16, color: Colors.blue),
                       ),
                     ),

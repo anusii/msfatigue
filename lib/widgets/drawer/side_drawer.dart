@@ -95,7 +95,7 @@ class _SideDrawerState extends State<SideDrawer> {
               /// 1) Personal settings.
 
               ListTile(
-                title: const Text('Personal settings'),
+                title: const Text('Account details'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
                   Navigator.pop(context);
@@ -112,7 +112,7 @@ class _SideDrawerState extends State<SideDrawer> {
               /// 2) Account details.
 
               ListTile(
-                title: const Text('Account details'),
+                title: const Text('Save location'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
                   Navigator.pop(context);

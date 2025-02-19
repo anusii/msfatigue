@@ -202,7 +202,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     ),
                     child: Text(
                       hasPartialData
-                          ? 'Survey not submitted yet and can be resumed'
+                          ? 'Partial survey saved. It can be resumed until midnight.'
                           : latestUploadDate.isNotEmpty
                               ? 'Survey last completed: $latestUploadDate'
                               : 'Survey not submitted yet.',
