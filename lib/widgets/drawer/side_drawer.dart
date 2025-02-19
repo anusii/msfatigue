@@ -217,11 +217,19 @@ class _SideDrawerState extends State<SideDrawer> {
                             builder: (context) => const WelcomeScreen()),
                       );
                     },
-                    child: const Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
+                    child: MarkdownTooltip(
+                      message: '''
+
+                    You can remove your consent and thus also remove access for
+                    the researchers to your data for this research at any time.
+
+                    ''',
+                      child: Text(
+                        'Discontinue',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),
