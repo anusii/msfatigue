@@ -91,7 +91,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
             MarkdownBody(
               data:
-                  'Here is the [Participant Information Sheet](info) for the MS Fatigue Survey.',
+                  'Please review the [Participant Information Sheet](info) for this research study on MS Fatigue.',
               onTapLink: (text, href, title) {
                 if (href == 'info') {
                   Navigator.push(
@@ -124,7 +124,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             MarkdownBody(
               selectable: true,
               data:
-                  '**Please confirm:** *I have read the Participant Information Sheet and hereby provide my consent to participate in this study.*',
+                  '**Please confirm** *that you have read the Participant Information Sheet provided in the above link and that you hereby give your consent to participate in this study.*',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
