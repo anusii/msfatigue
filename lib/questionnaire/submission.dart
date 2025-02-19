@@ -128,46 +128,46 @@ class _SubmissionPageState extends State<SubmissionPage> {
   /// Called when the user taps the "Submit" button.
 
   Future<void> _handleSubmit() async {
-  // Get the current SurveyState from the bloc.
+    // Get the current SurveyState from the bloc.
 
-  final surveyState = context.read<SurveyBloc>().state;
+    final surveyState = context.read<SurveyBloc>().state;
 
-  // Retrieve SharedPreferences instance and check for webId.
+    // Retrieve SharedPreferences instance and check for webId.
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final webId = prefs.getString('webId') ?? '';
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final webId = prefs.getString('webId') ?? '';
 
-  if (webId.isNotEmpty) {
-    // Convert the responses Map to a list of records.
+    if (webId.isNotEmpty) {
+      // Convert the responses Map to a list of records.
 
-    final dataRecords = surveyState.responses.entries
-        .map((entry) => (key: entry.key, value: entry.value))
-        .toList();
+      final dataRecords = surveyState.responses.entries
+          .map((entry) => (key: entry.key, value: entry.value))
+          .toList();
 
-    // Generate a filename.
+      // Generate a filename.
 
-    final String fileName = createSurveyFilename();
+      final String fileName = createSurveyFilename();
 
-    // Save data to POD.
+      // Save data to POD.
+
+      if (!mounted) return;
+      await saveToPod(dataRecords, fileName, context, isSubmit: true);
+    }
+
+    // Clear the bloc state before submitting.
+
+    context.read<SurveyBloc>().add(const ClearSurvey());
+
+    // After saving and clearing the bloc, navigate to SurveyCompleted.
 
     if (!mounted) return;
-    await saveToPod(dataRecords, fileName, context, isSubmit: true);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SurveyCompleted(),
+      ),
+    );
   }
-
-  // Clear the bloc state before submitting.
-
-  context.read<SurveyBloc>().add(const ClearSurvey());
-
-  // After saving and clearing the bloc, navigate to SurveyCompleted.
-  
-  if (!mounted) return;
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => SurveyCompleted(),
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +246,8 @@ class _SubmissionPageState extends State<SubmissionPage> {
                   selectable: true,
                   data: "Are you ready to submit?",
                   styleSheet: MarkdownStyleSheet(
-                    p: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                    p: const TextStyle(
+                        fontSize: 26, fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

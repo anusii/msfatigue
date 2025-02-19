@@ -369,7 +369,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                         child: Text(
-                          currentQuestion,
+                          '${currentQuestionIndex + 1}. $currentQuestion',
                           textAlign: TextAlign.start,
                           style: const TextStyle(fontSize: 18),
                         ),
