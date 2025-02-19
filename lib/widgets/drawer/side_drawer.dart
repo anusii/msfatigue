@@ -220,12 +220,13 @@ class _SideDrawerState extends State<SideDrawer> {
                     child: MarkdownTooltip(
                       message: '''
 
-                    You can remove your consent and thus also remove access for
-                    the researchers to your data for this research at any time.
+                    You can withdraw your consent and thus also remove access
+                    for the researchers to your data for this research at any
+                    time.
 
                     ''',
                       child: Text(
-                        'Discontinue',
+                        'Withdraw',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
