@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
@@ -368,10 +369,12 @@ class _QuestionPageState extends State<QuestionPage> {
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                        child: Text(
-                          '${currentQuestionIndex + 1}. $currentQuestion',
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(fontSize: 18),
+                        child: MarkdownBody(
+                          data: '${currentQuestionIndex + 1}. $currentQuestion',
+                          styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(fontSize: 18.0),
+                            listBullet: TextStyle(fontSize: 18.0),
+                          ),
                         ),
                       ),
                       const Gap(10),
