@@ -301,7 +301,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                   height: 20,
                 ),
                 Text(
-                  'Support',
+                  'Support:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
