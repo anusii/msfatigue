@@ -128,36 +128,46 @@ class _SubmissionPageState extends State<SubmissionPage> {
   /// Called when the user taps the "Submit" button.
 
   Future<void> _handleSubmit() async {
-    // Get the current SurveyState
-    final surveyState = context.read<SurveyBloc>().state;
+  // Get the current SurveyState from the bloc.
 
-    // Retrieve preferences to check for webId
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final webId = prefs.getString('webId') ?? '';
+  final surveyState = context.read<SurveyBloc>().state;
 
-    if (webId.isNotEmpty) {
-      // Convert the responses Map to a list of records
-      final dataRecords = surveyState.responses.entries
-          .map((entry) => (key: entry.key, value: entry.value))
-          .toList();
+  // Retrieve SharedPreferences instance and check for webId.
 
-      // Generate a filename
-      final fileName = createSurveyFilename();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final webId = prefs.getString('webId') ?? '';
 
-      // Save data to POD
-      if (!mounted) return;
-      await saveToPod(dataRecords, fileName, context, isSubmit: true);
-    }
+  if (webId.isNotEmpty) {
+    // Convert the responses Map to a list of records.
 
-    // After saving, navigate to SurveyCompleted
+    final dataRecords = surveyState.responses.entries
+        .map((entry) => (key: entry.key, value: entry.value))
+        .toList();
+
+    // Generate a filename.
+
+    final String fileName = createSurveyFilename();
+
+    // Save data to POD.
+
     if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SurveyCompleted(),
-      ),
-    );
+    await saveToPod(dataRecords, fileName, context, isSubmit: true);
   }
+
+  // Clear the bloc state before submitting.
+
+  context.read<SurveyBloc>().add(const ClearSurvey());
+
+  // After saving and clearing the bloc, navigate to SurveyCompleted.
+  
+  if (!mounted) return;
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => SurveyCompleted(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

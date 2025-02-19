@@ -40,19 +40,28 @@ class NextQuestion extends SurveyEvent {}
 
 class PreviousQuestion extends SurveyEvent {}
 
+/// New event to clear the survey responses.
+
+class ClearSurvey extends SurveyEvent {
+  const ClearSurvey();
+
+  @override
+  List<Object> get props => [];
+}
+
 /// --- SURVEY STATE ---
 
 class SurveyState extends Equatable {
-  /// Map where each key is a question (String) and its value is the answer (String?)
-
+  /// Map where each key is a question and its value is the answer (which can be null).
+  
   final Map<String, String?> responses;
 
   /// The index (in insertion order) of the currently displayed question.
-
+  
   final int currentQuestionIndex;
 
   /// The survey filename generated at startup.
-
+  
   final String surveyFilename;
 
   const SurveyState({
@@ -74,26 +83,27 @@ class SurveyState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [responses, currentQuestionIndex];
+  List<Object?> get props => [responses, currentQuestionIndex, surveyFilename];
 }
 
 /// --- SURVEY BLOC ---
 
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
-  final SharedPreferences sharedPreferences; // Add this
+  final SharedPreferences sharedPreferences;
   final String surveyFilename;
 
   SurveyBloc({required this.surveyFilename, required this.sharedPreferences})
       : super(SurveyState(
-            responses: {},
-            currentQuestionIndex: 0,
-            surveyFilename: surveyFilename)) {
-    on<InitializeSurvey>((event, emit) async {
+          responses: {},
+          currentQuestionIndex: 0,
+          surveyFilename: surveyFilename,
+        )) {
+    on<InitializeSurvey>((event, emit) {
+      // Create a map with each question initialized to null.
+
       final Map<String, String?> responses = {
         for (var question in event.questions) question: null,
       };
-      // Emit a new state, preserving the filename.
-
       emit(SurveyState(
         responses: responses,
         currentQuestionIndex: 0,
@@ -113,16 +123,24 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
     on<NextQuestion>((event, emit) {
       if (state.currentQuestionIndex < state.responses.length - 1) {
-        emit(state.copyWith(
-            currentQuestionIndex: state.currentQuestionIndex + 1));
+        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1));
       }
     });
 
     on<PreviousQuestion>((event, emit) {
       if (state.currentQuestionIndex > 0) {
-        emit(state.copyWith(
-            currentQuestionIndex: state.currentQuestionIndex - 1));
+        emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1));
       }
+    });
+
+    // ClearSurvey resets the responses and current question index.
+    
+    on<ClearSurvey>((event, emit) {
+      emit(SurveyState(
+        responses: {},
+        currentQuestionIndex: 0,
+        surveyFilename: state.surveyFilename,
+      ));
     });
   }
 }
