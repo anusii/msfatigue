@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/features/bloc/survey_bloc.dart';
+import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/page/dummy_sheet.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/welcome.dart';
-import 'package:msfatigue/questionnaire/welcome_back.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -50,6 +52,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
+
+    final surveyState = context.read<SurveyBloc>().state;
+    final dataResponses = surveyState.responses;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -170,7 +175,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WelcomeBackScreen(),
+                        builder: (context) => QuestionPage(
+                          savedResponses: dataResponses,
+                        ),
                       ),
                     );
                   },
