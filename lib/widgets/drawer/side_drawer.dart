@@ -111,23 +111,6 @@ class _SideDrawerState extends State<SideDrawer> {
               ),
               const Divider(height: 2, color: Colors.black),
 
-              /// 2) Account details.
-
-              ListTile(
-                title: const Text('Save location'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccountDetails(),
-                    ),
-                  );
-                },
-              ),
-              const Divider(height: 2, color: Colors.black),
-
               /// 3) Consent settings.
 
               ListTile(
@@ -139,6 +122,23 @@ class _SideDrawerState extends State<SideDrawer> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const ConsentSettings(),
+                    ),
+                  );
+                },
+              ),
+              const Divider(height: 2, color: Colors.black),
+
+              /// 2) Account details.
+
+              ListTile(
+                title: const Text('Save location'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AccountDetails(),
                     ),
                   );
                 },
