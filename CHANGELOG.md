@@ -13,8 +13,13 @@ Binaries to download latest version:
 [**MacOS**](https://solidcommunity.au/msfatigue-dev-macos.zip) -
 [**Windows**](https://solidcommunity.au/msfatigue-dev-windows-inno.exe).
 
-## 0.1 Beta Release for Participant Feedback
+## 1.1 Backend Operational
 
+## 1.0 Beta Release for Participant Feedback
+
++ Release version 1.0.0 [1.0.0 20250220 gjw]
++ Format questions with numbered indented paragraphs [0.0.12 20250220 gjw]
++ Complete design implementation [0.0.11 20250220 zy]
 + Bug fixes for handling preferred name [0.0.10 20250219 zy]
 + Fine tuning the interface look and feel and wording [0.0.9 20250219 gjw]
 + Workflow review and update [0.0.8 20250219 zy]
