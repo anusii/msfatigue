@@ -159,26 +159,26 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
           },
         ),
         title: iconImage,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: OutlinedButton(
-              onPressed: _showEndDialog,
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.pink, width: 1.8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              ),
-              child: const Text(
-                'End now',
-                style: TextStyle(color: Colors.pinkAccent),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 16),
+        //     child: OutlinedButton(
+        //       onPressed: _showEndDialog,
+        //       style: OutlinedButton.styleFrom(
+        //         side: const BorderSide(color: Colors.pink, width: 1.8),
+        //         shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(5),
+        //         ),
+        //         padding:
+        //             const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        //       ),
+        //       child: const Text(
+        //         'End now',
+        //         style: TextStyle(color: Colors.pinkAccent),
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       drawer: SideDrawer(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
