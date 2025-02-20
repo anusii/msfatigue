@@ -131,7 +131,7 @@ class _SideDrawerState extends State<SideDrawer> {
               /// 2) Account details.
 
               ListTile(
-                title: const Text('Save location'),
+                title: const Text('Previous surveys'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
                   Navigator.pop(context);
