@@ -7,7 +7,6 @@ import 'package:markdown_tooltip/markdown_tooltip.dart';
 
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/welcome.dart';
-import 'package:msfatigue/widgets/page/account_details.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
 import 'package:msfatigue/widgets/image/image.dart';

@@ -15,6 +15,7 @@ import 'package:msfatigue/widgets/image/image.dart';
 class QuestionPage extends StatefulWidget {
   /// If non-null, [savedResponses] contains a map of [question -> answer]
   /// to pre-fill the user's answers on load.
+  
   final Map<String, String?>? savedResponses;
 
   const QuestionPage({super.key, this.savedResponses});
@@ -53,6 +54,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   /// Loads the webId from SharedPreferences via the SurveyBloc's instance.
+  
   Future<void> _loadWebId() async {
     final prefs = context.read<SurveyBloc>().sharedPreferences;
     setState(() {
@@ -73,11 +75,13 @@ class _QuestionPageState extends State<QuestionPage> {
 
     if (!mounted) return;
 
-    // Tell the bloc to initialize the responses map with these questions.
-    context.read<SurveyBloc>().add(InitializeSurvey(questions: questions));
+    // Initialize survey with saved responses.
+    
+    context.read<SurveyBloc>().add(InitializeSurvey(
+          questions: questions,
+          savedResponses: widget.savedResponses,
+        ));
   }
-
-  /// Extracts lines from the markdown between "## Questions" and "## Answer Options".
 
   List<String> _parseQuestions(String data) {
     final lines = data.split('\n');
@@ -90,8 +94,6 @@ class _QuestionPageState extends State<QuestionPage> {
       } else if (line.startsWith('## Answer Options')) {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
-        // Typically each question is "1. Something"
-        // => substring after the dot+space.
         extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
@@ -225,19 +227,11 @@ class _QuestionPageState extends State<QuestionPage> {
                 final List<String> questionKeys = state.responses.keys.toList();
                 final int questionTotal = questionKeys.length;
 
-                // If mismatch or out-of-range.
-
                 if (currentQuestionIndex >= questionKeys.length) {
                   return const Center(child: Text("No more questions."));
                 }
 
-                // The question text is the current key from the bloc's responses map.
-
-                final String currentQuestion =
-                    questionKeys[currentQuestionIndex];
-
-                // The previously selected response (if any) for this question.
-
+                final String currentQuestion = questionKeys[currentQuestionIndex];
                 String? selectedResponse = state.responses[currentQuestion];
 
                 // Check if we have a widget.savedResponses & the bloc doesn't yet have an answer.
