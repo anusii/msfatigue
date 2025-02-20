@@ -130,20 +130,20 @@ class _SideDrawerState extends State<SideDrawer> {
 
               /// 2) Account details.
 
-              ListTile(
-                title: const Text('Save location'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccountDetails(),
-                    ),
-                  );
-                },
-              ),
-              const Divider(height: 2, color: Colors.black),
+              // ListTile(
+              //   title: const Text('Save location'),
+              //   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              //   onTap: () async {
+              //     Navigator.pop(context);
+              //     await Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const AccountDetails(),
+              //       ),
+              //     );
+              //   },
+              // ),
+              // const Divider(height: 2, color: Colors.black),
 
               /// 4) About the app.
 
@@ -220,13 +220,11 @@ class _SideDrawerState extends State<SideDrawer> {
                     child: MarkdownTooltip(
                       message: '''
 
-                    You can withdraw your consent and thus also remove access
-                    for the researchers to your data for this research at any
-                    time.
+                    You can logout from your connection to the storage.
 
                     ''',
                       child: Text(
-                        'Withdraw',
+                        'Logout',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
