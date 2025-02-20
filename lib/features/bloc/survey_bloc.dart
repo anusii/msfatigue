@@ -4,25 +4,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SurveyEvent extends Equatable {
   const SurveyEvent();
+
   @override
   List<Object> get props => [];
 }
 
-/// Event to initialize the survey with a list of questions.
-
 class InitializeSurvey extends SurveyEvent {
   final List<String> questions;
-  const InitializeSurvey({required this.questions});
+  final Map<String, String?>? savedResponses;
+
+  const InitializeSurvey({
+    required this.questions,
+    this.savedResponses,
+  });
 
   @override
   List<Object> get props => [questions];
 }
 
-/// Event to update the response for a specific question.
-
 class UpdateResponse extends SurveyEvent {
   final int questionIndex;
   final String response;
+
   const UpdateResponse({
     required this.questionIndex,
     required this.response,
@@ -32,15 +35,9 @@ class UpdateResponse extends SurveyEvent {
   List<Object> get props => [questionIndex, response];
 }
 
-/// Event to move to the next question.
-
 class NextQuestion extends SurveyEvent {}
 
-/// Event to move to the previous question.
-
 class PreviousQuestion extends SurveyEvent {}
-
-/// New event to clear the survey responses.
 
 class ClearSurvey extends SurveyEvent {
   const ClearSurvey();
@@ -49,19 +46,9 @@ class ClearSurvey extends SurveyEvent {
   List<Object> get props => [];
 }
 
-/// --- SURVEY STATE ---
-
 class SurveyState extends Equatable {
-  /// Map where each key is a question and its value is the answer (which can be null).
-
   final Map<String, String?> responses;
-
-  /// The index (in insertion order) of the currently displayed question.
-
   final int currentQuestionIndex;
-
-  /// The survey filename generated at startup.
-
   final String surveyFilename;
 
   const SurveyState({
@@ -69,6 +56,16 @@ class SurveyState extends Equatable {
     required this.currentQuestionIndex,
     required this.surveyFilename,
   });
+
+  int get firstUnansweredQuestionIndex {
+    final questions = responses.keys.toList();
+    for (int i = 0; i < questions.length; i++) {
+      if (responses[questions[i]] == null) {
+        return i;
+      }
+    }
+    return questions.length - 1; // All questions answered, return last question
+  }
 
   SurveyState copyWith({
     Map<String, String?>? responses,
@@ -86,8 +83,6 @@ class SurveyState extends Equatable {
   List<Object?> get props => [responses, currentQuestionIndex, surveyFilename];
 }
 
-/// --- SURVEY BLOC ---
-
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
   final SharedPreferences sharedPreferences;
   final String surveyFilename;
@@ -99,14 +94,26 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
           surveyFilename: surveyFilename,
         )) {
     on<InitializeSurvey>((event, emit) {
-      // Create a map with each question initialized to null.
+      // Create a map with questions, using saved responses if available.
 
       final Map<String, String?> responses = {
-        for (var question in event.questions) question: null,
+        for (var question in event.questions)
+          question: event.savedResponses?[question],
       };
+
+      // Find the first unanswered question.
+      
+      int startIndex = 0;
+      for (var i = 0; i < event.questions.length; i++) {
+        if (responses[event.questions[i]] == null) {
+          startIndex = i;
+          break;
+        }
+      }
+
       emit(SurveyState(
         responses: responses,
-        currentQuestionIndex: 0,
+        currentQuestionIndex: startIndex,
         surveyFilename: state.surveyFilename,
       ));
     });
@@ -134,8 +141,6 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             currentQuestionIndex: state.currentQuestionIndex - 1));
       }
     });
-
-    // ClearSurvey resets the responses and current question index.
 
     on<ClearSurvey>((event, emit) {
       emit(SurveyState(
