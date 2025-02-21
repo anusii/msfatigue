@@ -338,6 +338,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       data: '${currentIndex + 1}. $currentQuestion',
                       styleSheet: MarkdownStyleSheet(
                         p: const TextStyle(fontSize: 18),
+                        listIndent: 32.0,
                       ),
                     ),
                   ),
