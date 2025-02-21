@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/constants/secrets.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/welcome.dart';
 
 class PersonalSettings extends StatefulWidget {
@@ -185,12 +187,31 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 size: 40,
               ),
               padding: EdgeInsets.zero,
-              onPressed: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WelcomeScreen(),
-                ),
-              ),
+              onPressed: () async {
+                // Capture the navigator before the async gap.
+
+                final navigator = Navigator.of(context);
+                final prefs = await SharedPreferences.getInstance();
+                if (!mounted) return;
+
+                final username = prefs.getString('msfatigue_username') ?? "";
+                final password = prefs.getString('msfatigue_password') ?? "";
+
+                if (username == expectedUsername &&
+                    password == expectedPassword) {
+                  navigator.pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const WelcomeBackScreen(),
+                    ),
+                  );
+                } else {
+                  navigator.pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const WelcomeScreen(),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ],

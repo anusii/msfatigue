@@ -15,7 +15,7 @@ import 'package:msfatigue/widgets/image/image.dart';
 class QuestionPage extends StatefulWidget {
   /// If non-null, [savedResponses] contains a map of [question -> answer]
   /// to pre-fill the user's answers on load.
-  
+
   final Map<String, String?>? savedResponses;
 
   const QuestionPage({super.key, this.savedResponses});
@@ -54,7 +54,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   /// Loads the webId from SharedPreferences via the SurveyBloc's instance.
-  
+
   Future<void> _loadWebId() async {
     final prefs = context.read<SurveyBloc>().sharedPreferences;
     setState(() {
@@ -76,7 +76,7 @@ class _QuestionPageState extends State<QuestionPage> {
     if (!mounted) return;
 
     // Initialize survey with saved responses.
-    
+
     context.read<SurveyBloc>().add(InitializeSurvey(
           questions: questions,
           savedResponses: widget.savedResponses,
@@ -231,7 +231,8 @@ class _QuestionPageState extends State<QuestionPage> {
                   return const Center(child: Text("No more questions."));
                 }
 
-                final String currentQuestion = questionKeys[currentQuestionIndex];
+                final String currentQuestion =
+                    questionKeys[currentQuestionIndex];
                 String? selectedResponse = state.responses[currentQuestion];
 
                 // Check if we have a widget.savedResponses & the bloc doesn't yet have an answer.

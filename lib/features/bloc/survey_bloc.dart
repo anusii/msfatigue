@@ -102,7 +102,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       };
 
       // Find the first unanswered question.
-      
+
       int startIndex = 0;
       for (var i = 0; i < event.questions.length; i++) {
         if (responses[event.questions[i]] == null) {
