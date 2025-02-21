@@ -1,33 +1,31 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/submission.dart';
 import 'package:msfatigue/questionnaire/suvey_completed.dart';
+import 'package:msfatigue/questionnaire/submission.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
 class QuestionPage extends StatefulWidget {
-  /// If non-null, [savedResponses] contains a map of [question -> answer]
-  /// to pre-fill the user's answers on load.
+  /// Optionally pre-fill answers (map of question -> answer)
 
   final Map<String, String?>? savedResponses;
-
   const QuestionPage({super.key, this.savedResponses});
-
   @override
   State<QuestionPage> createState() => _QuestionPageState();
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  List<String> questions = [];
   String? webId;
-
   final List<String> options = [
     "Strongly disagree",
     "Disagree",
@@ -36,7 +34,6 @@ class _QuestionPageState extends State<QuestionPage> {
     "Don't know",
     "Not applicable",
   ];
-
   final List<Color> gradientColors = [
     const Color(0xFFFFE6EB),
     const Color(0xFFFFD6DE),
@@ -49,11 +46,9 @@ class _QuestionPageState extends State<QuestionPage> {
   @override
   void initState() {
     super.initState();
-    _loadQuestions();
     _loadWebId();
+    _loadQuestionsIntoBloc();
   }
-
-  /// Loads the webId from SharedPreferences via the SurveyBloc's instance.
 
   Future<void> _loadWebId() async {
     final prefs = context.read<SurveyBloc>().sharedPreferences;
@@ -62,49 +57,56 @@ class _QuestionPageState extends State<QuestionPage> {
     });
   }
 
-  /// Reads the markdown file containing the questions from assets.
-
-  Future<void> _loadQuestions() async {
+  Future<void> _loadQuestionsIntoBloc() async {
     final data = await rootBundle
         .loadString('assets/markdown/fatigue_small_questionnaire.md');
     if (!mounted) return;
+    final List<String> loadedQuestions = _parseQuestions(data);
 
-    setState(() {
-      questions = _parseQuestions(data);
-    });
+    // Initialize the bloc with the question list.
+    final surveyBloc = context.read<SurveyBloc>();
+    surveyBloc.add(InitializeSurvey(questions: loadedQuestions));
 
-    if (!mounted) return;
-
-    // Initialize survey with saved responses.
-
-    context.read<SurveyBloc>().add(InitializeSurvey(
-          questions: questions,
-          savedResponses: widget.savedResponses,
-        ));
+    // Load saved responses from SharedPreferences.
+    final prefs = await SharedPreferences.getInstance();
+    final savedResponsesString = prefs.getString('surveyResponses');
+    if (savedResponsesString != null && savedResponsesString.isNotEmpty) {
+      final Map<String, dynamic> decoded = json.decode(savedResponsesString);
+      for (int i = 0; i < loadedQuestions.length; i++) {
+        final question = loadedQuestions[i];
+        if (decoded.containsKey(question) && decoded[question] != null) {
+          final answer = decoded[question] as String;
+          if (answer.isNotEmpty) {
+            surveyBloc.add(UpdateResponse(questionIndex: i, response: answer));
+          }
+        }
+      }
+    }
+    // Load last saved question index.
+    final int lastIndex = prefs.getInt('lastQuestionIndex') ?? 0;
+    surveyBloc.add(SetQuestionIndex(lastIndex));
   }
 
   List<String> _parseQuestions(String data) {
     final lines = data.split('\n');
-    final List<String> extractedQuestions = [];
+    final List<String> extracted = [];
     bool isQuestion = false;
-
     for (var line in lines) {
       if (line.startsWith('## Questions')) {
         isQuestion = true;
       } else if (line.startsWith('## Answer Options')) {
         isQuestion = false;
       } else if (isQuestion && line.trim().isNotEmpty) {
-        extractedQuestions.add(line.substring(line.indexOf('.') + 2).trim());
+        extracted.add(line.substring(line.indexOf('.') + 2).trim());
       }
     }
-    return extractedQuestions;
+    return extracted;
   }
 
-  /// Show a dialog to confirm ending the survey early.
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
+      builder: (dialogCtx) {
         return Dialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -136,7 +138,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 const SizedBox(height: 40),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(dialogContext);
+                    Navigator.pop(dialogCtx);
                     _endSurvey();
                   },
                   child: Container(
@@ -167,7 +169,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   width: 200,
                   height: 46,
                   child: OutlinedButton(
-                    onPressed: () => Navigator.pop(dialogContext),
+                    onPressed: () => Navigator.pop(dialogCtx),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
                       shape: RoundedRectangleBorder(
@@ -209,318 +211,272 @@ class _QuestionPageState extends State<QuestionPage> {
   void _submitSurvey() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => SubmissionPage(),
-      ),
+      MaterialPageRoute(builder: (context) => const SubmissionPage()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: questions.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : BlocBuilder<SurveyBloc, SurveyState>(
-              builder: (context, state) {
-                final int currentQuestionIndex = state.currentQuestionIndex;
-                final List<String> questionKeys = state.responses.keys.toList();
-                final int questionTotal = questionKeys.length;
-
-                if (currentQuestionIndex >= questionKeys.length) {
-                  return const Center(child: Text("No more questions."));
+    return BlocListener<SurveyBloc, SurveyState>(
+      listener: (context, state) async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('surveyResponses', json.encode(state.responses));
+        await prefs.setInt('lastQuestionIndex', state.currentQuestionIndex);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: BlocBuilder<SurveyBloc, SurveyState>(
+          builder: (context, state) {
+            if (state.questionList.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final List<String> questionList = state.questionList;
+            final int currentIndex = state.currentQuestionIndex;
+            final int questionTotal = questionList.length;
+            if (currentIndex >= questionTotal) {
+              return const Center(child: Text("No more questions."));
+            }
+            final String currentQuestion = questionList[currentIndex];
+            String? selectedResponse = state.responses[currentQuestion];
+            if (widget.savedResponses != null &&
+                widget.savedResponses!.containsKey(currentQuestion) &&
+                state.responses[currentQuestion] == null) {
+              selectedResponse = widget.savedResponses![currentQuestion];
+            }
+            Future<void> handleNext() async {
+              context.read<SurveyBloc>().add(NextQuestion());
+              if (webId != null && webId!.isNotEmpty) {
+                final newState = context.read<SurveyBloc>().state;
+                final String fileName = newState.surveyFilename;
+                final Map<String, String?> dataResponses = newState.responses;
+                final List<({String key, dynamic value})> dataRecords = [];
+                int index = 0;
+                for (var entry in dataResponses.entries) {
+                  dataRecords.add((
+                    key: index.toString(),
+                    value: '{${entry.key}} {${entry.value}}'
+                  ));
+                  index++;
                 }
+                await saveToPod(dataRecords, fileName, context);
+              }
+              if (currentIndex == questionTotal - 1) {
+                _submitSurvey();
+              }
+            }
 
-                final String currentQuestion =
-                    questionKeys[currentQuestionIndex];
-                String? selectedResponse = state.responses[currentQuestion];
-
-                // Check if we have a widget.savedResponses & the bloc doesn't yet have an answer.
-
-                if (widget.savedResponses != null &&
-                    widget.savedResponses!.containsKey(currentQuestion) &&
-                    state.responses[currentQuestion] == null) {
-                  selectedResponse = widget.savedResponses![currentQuestion];
-                }
-
-                // Called when user taps the "Next" button.
-
-                Future<void> handleNext() async {
-                  // 1) Dispatch NextQuestion.
-
-                  context.read<SurveyBloc>().add(NextQuestion());
-
-                  // 2) Optionally, save partial data to POD if webId is set.
-
-                  if (webId != null && webId!.isNotEmpty) {
-                    final newState = context.read<SurveyBloc>().state;
-                    final String fileName = newState.surveyFilename;
-                    final Map<String, String?> dataResponses =
-                        newState.responses;
-
-                    // Convert the map to your desired record format.
-
-                    final List<({String key, dynamic value})> dataRecords = [];
-                    int index = 0;
-                    for (var entry in dataResponses.entries) {
-                      dataRecords.add((
-                        key: index.toString(),
-                        value: '{${entry.key}} {${entry.value}}'
-                      ));
-                      index++;
-                    }
-
-                    await saveToPod(dataRecords, fileName, context);
-                  }
-
-                  // 3) If this is the last question, navigate to submission.
-                  // Since the [currentQuestionIndex]is updated after goes to
-                  // next page, [currentQuestionIndex] is 10 when in last qestion.
-
-                  if (currentQuestionIndex == questionTotal - 1) {
-                    _submitSurvey();
-                  }
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Header: msFatigue icon + "End now" button.
-
-                      SizedBox(
-                        width: double.infinity,
-                        height: 80,
-                        child: Stack(
-                          children: [
-                            Center(child: iconImage),
-                            Positioned(
-                              right: 16,
-                              top: 16,
-                              child: OutlinedButton(
-                                onPressed: _showEndDialog,
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                      color: Colors.pink, width: 1.8),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                ),
-                                child: const Text(
-                                  'End now',
-                                  style: TextStyle(color: Colors.pinkAccent),
-                                ),
-                              ),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 80,
+                    child: Stack(
+                      children: [
+                        Center(child: iconImage),
+                        Positioned(
+                          right: 16,
+                          top: 16,
+                          child: OutlinedButton(
+                            onPressed: _showEndDialog,
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: Colors.pink, width: 1.8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                             ),
-                          ],
-                        ),
-                      ),
-                      const Gap(5),
-
-                      // Optional progress bar placeholder.
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0.0, vertical: 8.0),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: Colors.pink[100],
-                                borderRadius: BorderRadius.circular(3),
-                              ),
+                            child: const Text(
+                              'End now',
+                              style: TextStyle(color: Colors.pinkAccent),
                             ),
-                            FractionallySizedBox(
-                              widthFactor: 0.0,
-                              child: Container(
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                      colors: [Colors.red, Colors.pink]),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // "QUESTION x OF y".
-
-                      Center(
-                        child: Text(
-                          'QUESTION ${currentQuestionIndex + 1} OF $questionTotal',
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.pink),
-                        ),
-                      ),
-                      const Gap(10),
-
-                      // Current question text.
-
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                        child: MarkdownBody(
-                          data: '${currentQuestionIndex + 1}. $currentQuestion',
-                          styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(fontSize: 18.0),
-                            listBullet: TextStyle(fontSize: 18.0),
                           ),
                         ),
-                      ),
-                      const Gap(10),
-
-                      // Build the list of 6 options.
-
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: options.length,
-                          itemBuilder: (context, index) {
-                            bool isSelected =
-                                (selectedResponse == options[index]);
-
-                            return GestureDetector(
-                              onTap: () {
-                                // The user picks this option => dispatch an UpdateResponse.
-
-                                context.read<SurveyBloc>().add(
-                                      UpdateResponse(
-                                        questionIndex: currentQuestionIndex,
-                                        response: options[index],
-                                      ),
-                                    );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0, horizontal: 16.0),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? (index >= gradientColors.length - 2
-                                          ? Colors.grey[600]
-                                          : Colors.pink[300])
-                                      : gradientColors[index],
-                                ),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 30),
-                                    Text(
-                                      options[index],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      const Gap(25),
-
-                      // Bottom row with "Previous" and "Next".
-
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton.icon(
-                              onPressed: currentQuestionIndex > 0
-                                  ? () {
-                                      context
-                                          .read<SurveyBloc>()
-                                          .add(PreviousQuestion());
-                                    }
-                                  : null,
-                              icon: Icon(
-                                Icons.arrow_left,
-                                color: (currentQuestionIndex > 0)
-                                    ? Colors.grey[700]
-                                    : Colors.grey,
-                              ),
-                              label: Text(
-                                "Previous    ",
-                                style: TextStyle(
-                                  color: (currentQuestionIndex > 0)
-                                      ? Colors.grey[700]
-                                      : Colors.grey,
-                                ),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: (currentQuestionIndex > 0)
-                                      ? Colors.grey.shade700
-                                      : Colors.grey,
-                                  width: 2,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 5),
-                                alignment: Alignment.centerLeft,
-                              ),
-                            ),
-                            const Text(
-                              '© 2025 ANU',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            OutlinedButton.icon(
-                              // Only enable "Next" if there's a selected response.
-
-                              onPressed: (selectedResponse != null &&
-                                      selectedResponse.isNotEmpty)
-                                  ? handleNext
-                                  : null,
-                              icon: Text(
-                                "    Next",
-                                style: TextStyle(
-                                  color: (selectedResponse != null &&
-                                          selectedResponse.isNotEmpty)
-                                      ? Colors.pink
-                                      : Colors.grey,
-                                ),
-                              ),
-                              label: Icon(
-                                Icons.arrow_right,
-                                color: (selectedResponse != null &&
-                                        selectedResponse.isNotEmpty)
-                                    ? Colors.pink
-                                    : Colors.grey,
-                                size: 25,
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  width: 2,
-                                  color: (selectedResponse != null &&
-                                          selectedResponse.isNotEmpty)
-                                      ? Colors.pink
-                                      : Colors.grey,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 5),
-                                alignment: Alignment.centerRight,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
+                  const Gap(5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0.0, vertical: 8.0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: Colors.pink[100],
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        ),
+                        FractionallySizedBox(
+                          widthFactor: 0.0,
+                          child: Container(
+                            height: 6,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                  colors: [Colors.red, Colors.pink]),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      'QUESTION ${currentIndex + 1} OF $questionTotal',
+                      style: const TextStyle(fontSize: 12, color: Colors.pink),
+                    ),
+                  ),
+                  const Gap(10),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                    child: MarkdownBody(
+                      data: '${currentIndex + 1}. $currentQuestion',
+                      styleSheet: MarkdownStyleSheet(
+                        p: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: options.length,
+                      itemBuilder: (context, index) {
+                        bool isSelected = (selectedResponse == options[index]);
+                        return GestureDetector(
+                          onTap: () {
+                            context.read<SurveyBloc>().add(
+                                  UpdateResponse(
+                                    questionIndex: currentIndex,
+                                    response: options[index],
+                                  ),
+                                );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 16.0),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? (index >= gradientColors.length - 2
+                                      ? Colors.grey[600]
+                                      : Colors.pink[300])
+                                  : gradientColors[index],
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 30),
+                                Text(
+                                  options[index],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const Gap(25),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: currentIndex > 0
+                              ? () {
+                                  context
+                                      .read<SurveyBloc>()
+                                      .add(PreviousQuestion());
+                                }
+                              : null,
+                          icon: Icon(
+                            Icons.arrow_left,
+                            color: (currentIndex > 0)
+                                ? Colors.grey[700]
+                                : Colors.grey,
+                          ),
+                          label: Text(
+                            "Previous  ",
+                            style: TextStyle(
+                              color: (currentIndex > 0)
+                                  ? Colors.grey[700]
+                                  : Colors.grey,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: (currentIndex > 0)
+                                  ? Colors.grey.shade700
+                                  : Colors.grey,
+                              width: 2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 5),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        const Text(
+                          '© 2025 ANU',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        OutlinedButton.icon(
+                          onPressed: (selectedResponse != null &&
+                                  selectedResponse.isNotEmpty)
+                              ? handleNext
+                              : null,
+                          icon: Text(
+                            "  Next",
+                            style: TextStyle(
+                              color: (selectedResponse != null &&
+                                      selectedResponse.isNotEmpty)
+                                  ? Colors.pink
+                                  : Colors.grey,
+                            ),
+                          ),
+                          label: Icon(
+                            Icons.arrow_right,
+                            color: (selectedResponse != null &&
+                                    selectedResponse.isNotEmpty)
+                                ? Colors.pink
+                                : Colors.grey,
+                            size: 25,
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              width: 2,
+                              color: (selectedResponse != null &&
+                                      selectedResponse.isNotEmpty)
+                                  ? Colors.pink
+                                  : Colors.grey,
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 5),
+                            alignment: Alignment.centerRight,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

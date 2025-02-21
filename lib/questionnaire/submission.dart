@@ -125,8 +125,6 @@ class _SubmissionPageState extends State<SubmissionPage> {
     );
   }
 
-  /// Called when the user taps the "Submit" button.
-
   Future<void> _handleSubmit() async {
     // Get the current SurveyState from the bloc.
 
@@ -145,26 +143,27 @@ class _SubmissionPageState extends State<SubmissionPage> {
           .toList();
 
       // Generate a filename.
-
       final String fileName = createSurveyFilename();
 
       // Save data to POD.
-
       if (!mounted) return;
       await saveToPod(dataRecords, fileName, context, isSubmit: true);
     }
 
-    // Clear the bloc state before submitting.
+    // Clear survey progress from the bloc.
 
     context.read<SurveyBloc>().add(const ClearSurvey());
 
-    // After saving and clearing the bloc, navigate to SurveyCompleted.
+    // Clear the saved last question index and survey responses.
+    await prefs.remove('lastQuestionIndex');
+    await prefs.remove('surveyResponses');
 
+    // After submission, navigate to SurveyCompleted.
     if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SurveyCompleted(),
+        builder: (context) => const SurveyCompleted(),
       ),
     );
   }
