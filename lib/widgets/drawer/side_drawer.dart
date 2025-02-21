@@ -171,14 +171,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           people affected by multiple sclerosis. We thank you
                           for your important contribution to this research.
 
-                          The survery was developed by ANU's [John Curtin School
-                          of Medical Research](https://anu.edu.au) and the research is in
-                          collaboration with the School of Computing.
-
-                          The app itself was designed by ANU's [Human Centred
-                          Design](https:anu.edu.au) team and implemented by
-                          ANU's [Software Innovation
-                          Institute](https://sii.anu.edu.au).
+                          This reasearch on MS Fatigue, the survey design, and
+                          the app design and development, is being underaken at
+                          the Australian National University as a collaboration
+                          across multiple Schools and Institutes.
 
                           '''),
                       ),
