@@ -173,7 +173,8 @@ class _SideDrawerState extends State<SideDrawer> {
 
                           This reasearch on MS Fatigue, the survey design, and
                           the app design and development, is being underaken at
-                          the Australian National University as a collaboration
+                          the [Australian National
+                          University](https://anu.edu.au) as a collaboration
                           across multiple Schools and Institutes.
 
                           '''),
