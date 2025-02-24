@@ -153,9 +153,11 @@ class _SubmissionPageState extends State<SubmissionPage> {
   }
 
   Future<void> _handleSubmit() async {
-    // Get the current SurveyState from the bloc.
+    // Capture all context-dependent objects before any async operations.
 
-    final surveyState = context.read<SurveyBloc>().state;
+    final surveyBloc = context.read<SurveyBloc>();
+    final surveyState = surveyBloc.state;
+    final navigator = Navigator.of(context);
 
     // Retrieve SharedPreferences instance and check for webId.
 
@@ -170,25 +172,36 @@ class _SubmissionPageState extends State<SubmissionPage> {
           .toList();
 
       // Generate a filename.
+
       final String fileName = createSurveyFilename();
 
-      // Save data to POD.
+      // Check if still mounted before using context for saveToPod.
+
       if (!mounted) return;
+
+      // Save data to POD.
+
       await saveToPod(dataRecords, fileName, context, isSubmit: true);
     }
 
     // Clear survey progress from the bloc.
+    // Check if mounted before accessing bloc again.
 
-    context.read<SurveyBloc>().add(const ClearSurvey());
+    if (!mounted) return;
+    surveyBloc.add(const ClearSurvey());
 
     // Clear the saved last question index and survey responses.
+
     await prefs.remove('lastQuestionIndex');
     await prefs.remove('surveyResponses');
 
-    // After submission, navigate to SurveyCompleted.
+    // Check if still mounted before navigation.
+
     if (!mounted) return;
-    Navigator.push(
-      context,
+
+    // Use the captured navigator for navigation.
+    
+    navigator.push(
       MaterialPageRoute(
         builder: (context) => const SurveyCompleted(),
       ),

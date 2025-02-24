@@ -195,13 +195,21 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
                 ElevatedButton(
                   onPressed: () async {
+                    // Start navigation process.
+
+                    final navigator = Navigator.of(context);
+
                     // Record the consent date in SharedPreferences.
 
                     await _recordConsentDate();
 
+                    // Check if the widget is still mounted after the async operation.
+
                     if (!mounted) return;
-                    Navigator.pushReplacement(
-                      context,
+
+                    // Use the captured navigator instance for navigation.
+
+                    navigator.pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => QuestionPage(
                           savedResponses: dataResponses,
