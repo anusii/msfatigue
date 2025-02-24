@@ -229,11 +229,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               width: 260,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  // Capture navigator before async operations.
-
-                                  final navigator = Navigator.of(context);
-
-                                  final prefs =
+                                  final SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   if (!mounted) return;
 
@@ -244,50 +240,52 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       prefs.getString('msfatigue_password') ??
                                           "";
 
+                                  // If credentials are valid, schedule navigation to ConsentScreen.
+
                                   if (storedUsername == expectedUsername &&
                                       storedPassword == expectedPassword) {
                                     if (!mounted) return;
-                                    // Use captured navigator instead of context directly.
-
-                                    navigator.push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ConsentScreen(),
-                                      ),
-                                    );
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const ConsentScreen()),
+                                      );
+                                    });
                                   } else {
+                                    // If credentials are invalid, schedule showing the error dialog.
+                                    
                                     if (!mounted) return;
-                                    // For dialogs, capture the current BuildContext's operations
-                                    // before showing the dialog.
-
-                                    showDialog(
-                                      context: context,
-                                      builder: (dialogCtx) {
-                                        return AlertDialog(
-                                          title:
-                                              const Text("Registration Error"),
-                                          content: const Text(
-                                            "Your registration details are not recognised.\n\n"
-                                            "Please contact the study team for assistance.",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(dialogCtx),
-                                              child: const Text("OK"),
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (dialogCtx) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                "Registration Error"),
+                                            content: const Text(
+                                              "Your registration details are not recognised.\n\n"
+                                              "Please contact the research team for assistance.",
                                             ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(dialogCtx),
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   side: const BorderSide(
-                                    color: Colors.pink,
-                                    width: 2,
-                                  ),
+                                      color: Colors.pink, width: 2),
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
