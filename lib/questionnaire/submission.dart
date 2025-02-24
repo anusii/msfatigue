@@ -200,7 +200,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
     if (!mounted) return;
 
     // Use the captured navigator for navigation.
-    
+
     navigator.push(
       MaterialPageRoute(
         builder: (context) => const SurveyCompleted(),

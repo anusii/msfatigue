@@ -229,6 +229,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               width: 260,
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  // Capture navigator before async operations.
+                                  
+                                  final navigator = Navigator.of(context);
+
                                   final prefs =
                                       await SharedPreferences.getInstance();
                                   if (!mounted) return;
@@ -243,8 +247,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   if (storedUsername == expectedUsername &&
                                       storedPassword == expectedPassword) {
                                     if (!mounted) return;
-                                    Navigator.push(
-                                      context,
+                                    // Use captured navigator instead of context directly.
+
+                                    navigator.push(
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             const ConsentScreen(),
@@ -252,6 +257,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     );
                                   } else {
                                     if (!mounted) return;
+                                    // For dialogs, capture the current BuildContext's operations
+                                    // before showing the dialog.
+
                                     showDialog(
                                       context: context,
                                       builder: (dialogCtx) {
