@@ -230,7 +230,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   // Capture navigator before async operations.
-                                  
+
                                   final navigator = Navigator.of(context);
 
                                   final prefs =
