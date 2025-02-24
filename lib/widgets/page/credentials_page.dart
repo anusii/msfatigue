@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/questionnaire/welcome_back.dart'; // Assuming you have this screen
 
 class CredentialsPage extends StatefulWidget {
   const CredentialsPage({super.key});
@@ -16,6 +18,15 @@ class _CredentialsPageState extends State<CredentialsPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _preferredNameController =
       TextEditingController();
+
+  // Simulated method for checking credentials (replace with your own validation logic).
+
+  Future<bool> validateCredentials(String username, String password) async {
+    // Simulate an API check for username/password validation
+    // For example, return true if username = 'admin' and password = 'password'
+
+    return username == expectedUsername && password == expectedPassword;
+  }
 
   Future<void> saveCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,6 +43,74 @@ class _CredentialsPageState extends State<CredentialsPage> {
       'msfatigue_password': prefs.getString('msfatigue_password'),
       'msfatigue_preferredName': prefs.getString('msfatigue_preferredName'),
     };
+  }
+
+  Future<void> handleSaveCredentials() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // Step 1: Validate credentials.
+
+    bool isValid = await validateCredentials(username, password);
+
+    if (!isValid) {
+      // Show an error dialog if credentials are incorrect.
+
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: const Text("Invalid Credentials"),
+            content: const Text(
+                "The username or password is incorrect.Please check and try again.\nIf you still encounter issues, please contact the research team."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    // Step 2: Save the credentials after validation.
+
+    await saveCredentials();
+
+    // Ensure we're still in the widget tree before proceeding.
+
+    if (!mounted) return;
+
+    // Step 3: Show success message and navigate to the appropriate screen.
+
+    scaffoldMessenger.showSnackBar(
+      const SnackBar(content: Text("Successfully registered")),
+    );
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedUsername = prefs.getString('msfatigue_username');
+    final savedPassword = prefs.getString('msfatigue_password');
+    final savedPreferredName = prefs.getString('msfatigue_preferredName');
+
+    // Navigate to different screens based on whether the user has credentials.
+
+    if (savedUsername != null &&
+        savedPassword != null &&
+        savedPreferredName != null) {
+      navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => const WelcomeBackScreen()),
+      );
+    } else {
+      navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+    }
   }
 
   @override
@@ -76,28 +155,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () async {
-                  // Capture the necessary objects from context before the async gap.
-
-                  final scaffoldMessenger = ScaffoldMessenger.of(context);
-                  final navigator = Navigator.of(context);
-
-                  await saveCredentials();
-
-                  // Guard all subsequent uses of context with the mounted check.
-
-                  if (!mounted) return;
-
-                  // Use the pre-captured scaffoldMessenger and navigator.
-
-                  scaffoldMessenger.showSnackBar(
-                    const SnackBar(content: Text("Successfully registered")),
-                  );
-                  navigator.pushReplacement(
-                    MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen()),
-                  );
-                },
+                onPressed: handleSaveCredentials,
                 child: const Text("Save"),
               ),
             ],
