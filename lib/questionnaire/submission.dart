@@ -50,7 +50,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Show a dialog to confirm if the user really wants to end now.
-  
+
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,

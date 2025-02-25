@@ -32,6 +32,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
+import 'package:msfatigue/features/login/solid_authenticate.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/utils/format_preferred_name.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
@@ -181,7 +182,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SizedBox(height: 30),
 
                         // If credentials are present, show the "Continue" button.
-                        
+
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
@@ -214,7 +215,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     });
                                   } else {
                                     // If credentials are invalid, schedule showing the error dialog.
-                                    
+
                                     if (!mounted) return;
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
@@ -296,16 +297,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     SizedBox(
                                       width: 300,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .push(
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const CredentialsPage(),
-                                            ),
-                                          )
-                                              .then((_) {
-                                            _loadCredentials();
+                                        onPressed: () async {
+                                          String podServer =
+                                              'https://pods.solidcommunity.au';
+                                          
+                                          /// Need first to anthenticate with the POD server.
+                                          
+                                          solidAuthenticate(podServer, context)
+                                              .then((auth_list) {
+                                            Navigator.of(context)
+                                                .push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const CredentialsPage(),
+                                              ),
+                                            )
+                                                .then((_) {
+                                              _loadCredentials();
+                                            });
                                           });
                                         },
                                         style: ElevatedButton.styleFrom(
