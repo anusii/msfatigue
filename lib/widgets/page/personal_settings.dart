@@ -18,9 +18,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String? username;
   String? password;
   String? preferredName;
-
-  // For toggling password on this screen (outside the dialog).
-
   bool _showPassword = false;
 
   @override
@@ -54,6 +51,28 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+    );
+  }
+
+  Future<void> _showCredentialsErrorDialog(BuildContext dialogContext) async {
+    return showDialog(
+      context: dialogContext, // Use the passed context from the update dialog.
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Invalid Credentials"),
+          content: const Text(
+            "The username or password you entered doesn't match our records.\nPlease check your details carefully and contact the research team if you continue to experience issues.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -115,15 +134,24 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    final newUsername = usernameController.text.trim();
+                    final newPassword = passwordController.text.trim();
+
+                    // Validate credentials against expected values.
+
+                    if (newUsername != expectedUsername ||
+                        newPassword != expectedPassword) {
+                      // Show error dialog but don't close the update dialog.
+
+                      await _showCredentialsErrorDialog(dialogContext);
+                      return;
+                    }
+
+                    // If credentials are valid, proceed with update.
+
                     final prefs = await SharedPreferences.getInstance();
-                    await prefs.setString(
-                      'msfatigue_username',
-                      usernameController.text.trim(),
-                    );
-                    await prefs.setString(
-                      'msfatigue_password',
-                      passwordController.text.trim(),
-                    );
+                    await prefs.setString('msfatigue_username', newUsername);
+                    await prefs.setString('msfatigue_password', newPassword);
                     await prefs.setString(
                       'msfatigue_preferredName',
                       preferredNameController.text.trim(),
@@ -142,11 +170,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     );
 
     if (updated == true && mounted) {
-      // After the user taps "Update," reload credentials to reflect changes.
-
       await _loadCredentials();
-
-      // The user remains on this page to review updates (no navigation).
     }
   }
 
@@ -156,8 +180,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         (username != null && username!.isNotEmpty) &&
             (password != null && password!.isNotEmpty) &&
             (preferredName != null && preferredName!.isNotEmpty);
-
-    // Display for password (****** or actual text).
 
     String passwordDisplay;
     if (password == null || password!.isEmpty) {
@@ -188,8 +210,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               ),
               padding: EdgeInsets.zero,
               onPressed: () async {
-                // Capture the navigator before the async gap.
-
                 final navigator = Navigator.of(context);
                 final prefs = await SharedPreferences.getInstance();
                 if (!mounted) return;
@@ -271,14 +291,13 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 SelectableText(
                   (preferredName == null || preferredName!.isEmpty)
                       ? "Not set"
-                      : formatPreferredName(preferredName!),
+                      : preferredName!,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Clear Credentials button
                     if (allCredentialsPresent)
                       ElevatedButton(
                         onPressed: _clearCredentials,
@@ -296,11 +315,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                           style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
                       ),
-
                     if (allCredentialsPresent) const SizedBox(width: 16),
-
-                    // Update Credentials button.
-
                     ElevatedButton(
                       onPressed: _showUpdateDialog,
                       style: ElevatedButton.styleFrom(
@@ -319,15 +334,13 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   'Support:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Gap(5),
-                Text(
+                const Gap(5),
+                const Text(
                     'If you are experiencing any issues with the app, or need any support please contact, xxx@anu.edu.au'),
               ],
             ),
