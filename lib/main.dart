@@ -27,32 +27,27 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/questionnaire/welcome_back.dart'; // Import the WelcomeBackScreen
 
 // Dummy implementations for desktop support.
+
 bool isDesktop(dynamic platformWrapper) => true;
 
 class PlatformWrapper {}
-
-// Example implementation of createSurveyFilename().
-Future<String> createSurveyFilename() async {
-  final now = DateTime.now();
-  final formatter = DateFormat('yyyyMMddTHHmmss');
-  final timestamp = formatter.format(now);
-  return 'survey_$timestamp.ttl';
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Get SharedPreferences instance.
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Check if credentials exist.
@@ -70,9 +65,10 @@ Future<void> main() async {
       ? const WelcomeBackScreen() // If all creds exist, show "WelcomeBackScreen".
       : const WelcomeScreen(); // Otherwise, show "WelcomeScreen".
 
-  final surveyFilename = await createSurveyFilename();
+  final surveyFilename = createSurveyFilename();
 
   // Desktop support (if needed).
+
   if (!kIsWeb && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
 

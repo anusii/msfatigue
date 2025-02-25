@@ -33,49 +33,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
+import 'package:msfatigue/utils/format_preferred_name.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/page/credentials_page.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-
-/// Helper function to format the preferred name:
-/// first letter uppercase and the rest lowercase.
-
-String formatPreferredName(String name) {
-  // Trim leading/trailing spaces and split on whitespace.
-
-  final parts = name.trim().split(RegExp(r'\s+'));
-
-  if (parts.isEmpty) {
-    // If somehow it's all spaces, just return empty.
-
-    return '';
-  } else if (parts.length == 1) {
-    // Only one part => capitalize first letter, rest lower.
-
-    final single = parts.first;
-    if (single.length == 1) {
-      return single.toUpperCase();
-    } else {
-      return single[0].toUpperCase() + single.substring(1).toLowerCase();
-    }
-  } else {
-    // Two or more parts => capitalize each part.
-
-    final capitalizedParts = parts.map((part) {
-      if (part.isEmpty) return part;
-      if (part.length == 1) {
-        return part.toUpperCase();
-      } else {
-        return part[0].toUpperCase() + part.substring(1).toLowerCase();
-      }
-    }).toList();
-
-    // Join them back with a space.
-
-    return capitalizedParts.join(' ');
-  }
-}
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -109,6 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Compute the welcome text.
+
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
@@ -134,11 +97,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              // icon: const Icon(
-              //   Icons.menu,
-              //   color: Colors.grey,
-              //   size: 30,
-              // ),
               icon: GradientIcon(
                 icon: Icons.menu,
                 size: 40.0,
@@ -223,13 +181,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SizedBox(height: 30),
 
                         // If credentials are present, show the "Continue" button.
+                        
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
                               width: 260,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final prefs =
+                                  final SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   if (!mounted) return;
 
@@ -240,46 +199,52 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       prefs.getString('msfatigue_password') ??
                                           "";
 
+                                  // If credentials are valid, schedule navigation to ConsentScreen.
+
                                   if (storedUsername == expectedUsername &&
                                       storedPassword == expectedPassword) {
                                     if (!mounted) return;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ConsentScreen(),
-                                      ),
-                                    );
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const ConsentScreen()),
+                                      );
+                                    });
                                   } else {
+                                    // If credentials are invalid, schedule showing the error dialog.
+                                    
                                     if (!mounted) return;
-                                    showDialog(
-                                      context: context,
-                                      builder: (dialogCtx) {
-                                        return AlertDialog(
-                                          title:
-                                              const Text("Registration Error"),
-                                          content: const Text(
-                                            "Your registration details are not recognised.\n\n"
-                                            "Please contact the study team for assistance.",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(dialogCtx),
-                                              child: const Text("OK"),
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (dialogCtx) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                "Registration Error"),
+                                            content: const Text(
+                                              "Your registration details are not recognised.\n\n"
+                                              "Please contact the research team for assistance.",
                                             ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(dialogCtx),
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   side: const BorderSide(
-                                    color: Colors.pink,
-                                    width: 2,
-                                  ),
+                                      color: Colors.pink, width: 2),
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(

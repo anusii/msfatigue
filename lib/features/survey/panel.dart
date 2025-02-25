@@ -67,6 +67,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   void initState() {
     super.initState();
     // Load the webId after the first frame.
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       webId = await getWebId();
     });
@@ -75,6 +76,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   }
 
   // Load the survey data using the utils function.
+
   Future<void> _initializeSurveyData() async {
     final loadedQuestions = (await markDownSurveyData(surveyFilePath)).first;
     final loadedAnswers = (await markDownSurveyData(surveyFilePath)).last;
@@ -88,6 +90,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
   }
 
   // Create a mapping of questions to answers using records.
+
   List<({String key, dynamic value})> _buildDataRecords() {
     List<({String key, dynamic value})> dataRecords = [];
 
@@ -135,7 +138,7 @@ class _SurveyPanelState extends State<SurveyPanel> {
         ),
       );
 
-      // Navigate to next screen or handle completion as needed
+      // Navigate to next screen or handle completion as needed.
 
       Navigator.pushReplacement(
         context,

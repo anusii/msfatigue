@@ -29,8 +29,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// --- SURVEY EVENTS ---
-
 abstract class SurveyEvent extends Equatable {
   const SurveyEvent();
   @override
@@ -38,6 +36,7 @@ abstract class SurveyEvent extends Equatable {
 }
 
 /// Initialize the survey with an ordered list of questions.
+
 class InitializeSurvey extends SurveyEvent {
   final List<String> questions;
   const InitializeSurvey({required this.questions});
@@ -46,6 +45,7 @@ class InitializeSurvey extends SurveyEvent {
 }
 
 /// Update the response for a specific question.
+
 class UpdateResponse extends SurveyEvent {
   final int questionIndex;
   final String response;
@@ -55,12 +55,15 @@ class UpdateResponse extends SurveyEvent {
 }
 
 /// Move to the next question.
+
 class NextQuestion extends SurveyEvent {}
 
 /// Move to the previous question.
+
 class PreviousQuestion extends SurveyEvent {}
 
 /// Set the current question index explicitly.
+
 class SetQuestionIndex extends SurveyEvent {
   final int newIndex;
   const SetQuestionIndex(this.newIndex);
@@ -69,6 +72,7 @@ class SetQuestionIndex extends SurveyEvent {
 }
 
 /// Clear all survey responses.
+
 class ClearSurvey extends SurveyEvent {
   const ClearSurvey();
   @override
@@ -79,15 +83,19 @@ class ClearSurvey extends SurveyEvent {
 
 class SurveyState extends Equatable {
   /// The original ordered list of questions.
+  
   final List<String> questionList;
 
   /// A map where each key is a question and its value is the answer (or null if unanswered).
+  
   final Map<String, String?> responses;
 
   /// The index (in the ordered list) of the currently displayed question.
+  
   final int currentQuestionIndex;
 
   /// The survey filename.
+  
   final String surveyFilename;
   const SurveyState({
     required this.questionList,

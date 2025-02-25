@@ -38,6 +38,7 @@ import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/page/dummy_sheet.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/utils/format_preferred_name.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -195,13 +196,21 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
                 ElevatedButton(
                   onPressed: () async {
+                    // Start navigation process.
+
+                    final navigator = Navigator.of(context);
+
                     // Record the consent date in SharedPreferences.
 
                     await _recordConsentDate();
 
+                    // Check if the widget is still mounted after the async operation.
+
                     if (!mounted) return;
-                    Navigator.pushReplacement(
-                      context,
+
+                    // Use the captured navigator instance for navigation.
+
+                    navigator.pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => QuestionPage(
                           savedResponses: dataResponses,
@@ -241,7 +250,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
             const SizedBox(height: 20),
 
-            // Bottom image
+            // Bottom image.
+            
             Image.asset(
               'assets/images/bottom_dot_two.png',
               width: MediaQuery.of(context).size.width,

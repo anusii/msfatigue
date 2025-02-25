@@ -33,6 +33,7 @@ import 'package:msfatigue/widgets/dialog/show_file_content.dart';
 
 /// A widget that displays a list of files. When a file row is tapped,
 /// a dialog is shown with the file's content.
+
 class FileRow extends StatefulWidget {
   final List<String> files;
 

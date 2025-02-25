@@ -81,28 +81,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     );
   }
 
-  Future<void> _showCredentialsErrorDialog(BuildContext dialogContext) async {
-    return showDialog(
-      context: dialogContext, // Use the passed context from the update dialog.
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Invalid Credentials"),
-          content: const Text(
-            "The username or password you entered doesn't match our records.\nPlease check your details carefully and contact the research team if you continue to experience issues.",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _showUpdateDialog() async {
     final usernameController = TextEditingController(text: username ?? "");
     final passwordController = TextEditingController(text: password ?? "");
@@ -168,9 +146,30 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
                     if (newUsername != expectedUsername ||
                         newPassword != expectedPassword) {
-                      // Show error dialog but don't close the update dialog.
+                      if (!mounted) return;
+                      // Use the State's context (captured as currentContext) rather than dialogContext.
 
-                      await _showCredentialsErrorDialog(dialogContext);
+                      final currentContext = context;
+                      await showDialog(
+                        context: currentContext,
+                        builder: (BuildContext errorDialogContext) {
+                          return AlertDialog(
+                            title: const Text("Invalid Credentials"),
+                            content: const Text(
+                              "The username or password you entered doesn't match our records.\nPlease check your details carefully and contact the research team if you continue to experience issues.",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(errorDialogContext).pop();
+                                },
+                                child: const Text("OK"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
                       return;
                     }
 
@@ -185,7 +184,9 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     );
 
                     if (!mounted) return;
-                    Navigator.pop(dialogContext, true);
+                    // Use the State's context to close the update dialog.
+
+                    Navigator.pop(context, true);
                   },
                   child: const Text("Update"),
                 ),
