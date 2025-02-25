@@ -1,6 +1,6 @@
 /// Consent settings Page used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-02-26 08:55:46 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -156,7 +156,7 @@ class _ConsentSettingsState extends State<ConsentSettings> {
                   TextSpan(
                     text:
                         'If you would like to withdraw your consent from this study, '
-                        'please email xxxx@anu.edu.au',
+                        'please email hanna.suominen@anu.edu.au',
                   ),
                 ],
               ),

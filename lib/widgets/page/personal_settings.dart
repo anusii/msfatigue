@@ -1,6 +1,6 @@
 /// PersonalSettings widget used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-02-26 08:56:02 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -369,7 +369,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 ),
                 const Gap(5),
                 const Text(
-                    'If you are experiencing any issues with the app, or need any support please contact, xxx@anu.edu.au'),
+                    'If you are experiencing any issues with the app, or need any support please contact, hanna.suominen@anu.edu.au'),
               ],
             ),
           ),
