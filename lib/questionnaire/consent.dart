@@ -38,6 +38,7 @@ import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/page/dummy_sheet.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/utils/format_preferred_name.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});

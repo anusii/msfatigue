@@ -33,49 +33,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
+import 'package:msfatigue/utils/format_preferred_name.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/page/credentials_page.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-
-/// Helper function to format the preferred name:
-/// first letter uppercase and the rest lowercase.
-
-String formatPreferredName(String name) {
-  // Trim leading/trailing spaces and split on whitespace.
-
-  final parts = name.trim().split(RegExp(r'\s+'));
-
-  if (parts.isEmpty) {
-    // If somehow it's all spaces, just return empty.
-
-    return '';
-  } else if (parts.length == 1) {
-    // Only one part => capitalize first letter, rest lower.
-
-    final single = parts.first;
-    if (single.length == 1) {
-      return single.toUpperCase();
-    } else {
-      return single[0].toUpperCase() + single.substring(1).toLowerCase();
-    }
-  } else {
-    // Two or more parts => capitalize each part.
-
-    final capitalizedParts = parts.map((part) {
-      if (part.isEmpty) return part;
-      if (part.length == 1) {
-        return part.toUpperCase();
-      } else {
-        return part[0].toUpperCase() + part.substring(1).toLowerCase();
-      }
-    }).toList();
-
-    // Join them back with a space.
-
-    return capitalizedParts.join(' ');
-  }
-}
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
