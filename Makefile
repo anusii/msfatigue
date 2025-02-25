@@ -2,7 +2,7 @@
 #
 # Makefile for the MSFatigue Flutter app.
 #
-# Time-stamp: <Monday 2024-12-02 12:50:52 +1100 >
+# Time-stamp: <Saturday 2025-02-22 05:14:32 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -18,12 +18,19 @@
 #   Trivial update or bug fix
 
 APP=$(shell pwd | xargs basename)
-VER=
+VER = $(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 DATE=$(shell date +%Y-%m-%d)
 
 # Identify a destination used by install.mk
 
 DEST=/var/www/html/$(APP)
+
+# The host for the repository of packages, the path on the server to
+# the download folder, and the URL to the downloads.
+
+REPO=solidcommunity.au
+RLOC=/var/www/html/installers/
+DWLD=https://$(REPO)/installers
 
 ########################################################################
 # Supported Makefile modules.
@@ -31,6 +38,7 @@ DEST=/var/www/html/$(APP)
 # Often the support Makefiles will be in the local support folder, or
 # else installed in the local user's shares.
 
+INC_BASE=$(HOME)/.local/share/make
 INC_BASE=support
 
 # Specific Makefiles will be loaded if they are found in
@@ -40,6 +48,7 @@ INC_BASE=support
 
 INC_DOCKER=skip
 INC_MLHUB=skip
+INC_WEBCAM=skip
 
 # Load any modules available.
 
@@ -56,6 +65,8 @@ endif
 
 define HELP
 $(APP):
+
+  ginstall   After a github build download bundles and upload to $(REPO)
 
   flat		Checkout, build, install msfatigue-flat.solidcommunity.au
   grad		Checkout, build, install msfatigue-grad.solidcommunity.au
@@ -99,3 +110,39 @@ grad:
 	sudo rsync -azvh build/web/ /var/www/html/msfatigue-$@
 	sudo chmod -R a+rX /var/www/html/msfatigue-$@
 	git checkout dev
+
+# Android: Upload to Solid Community installers for general access.
+
+# Make apk on this machine to deal with signing. Then a ginstall of
+# the built bundles from github, installed to solidcommunity.au and
+# moved into ARCHIVE.
+
+apk::
+	rsync -avzh installers/$(APP).apk $(REPO):$(RLOC)
+	ssh $(REPO) chmod a+r $(RLOC)/$(APP).apk
+	mv -f installers/$(APP)-*.apk installers/ARCHIVE
+	rm -f installers/$(APP).apk
+
+deb:
+	(cd installers; make $@)
+	rsync -avzh installers/$(APP)_$(VER)_amd64.deb $(REPO):$(RLOC)/$(APP)_amd64.deb
+	ssh $(REPO) chmod a+r $(RLOC)/$(APP)_amd64.deb
+	wget $(DWLD)/$(APP)_amd64.deb -O $(APP)_amd64.deb
+	wajig install $(APP)_amd64.deb
+	rm -f $(APP)_amd64.deb
+	mv -f installers/$(APP)_*.deb installers/ARCHIVE
+
+# 20250110 gjw A ginstall of the github built bundles, and the locally
+# built apk installed to the repository and moved into ARCHIVE.
+#
+# 20250218 gjw Remove the deb build for now as it is placing the data
+# and lib folders into /ust/bin/ which when we try to add another
+# package also tries to do that, which is how I found the issue.
+#
+# 20250222 gjw Solved the issue by putting the package files into
+# /usr/lib/rattle and then symlinked the executable to
+# /usr/bin/rattle. This is working so add deb into the install and now
+# utilise that for the default install on my machine.
+
+ginstall: deb apk
+	(cd installers; make $@)
