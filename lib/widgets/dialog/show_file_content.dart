@@ -36,6 +36,7 @@ import 'package:msfatigue/utils/rdf.dart';
 /// Shows a dialog with the content of the selected file.
 ///
 /// [fileName] is displayed in the dialog's title and [content] in its body.
+
 void showFileContent(
   String fileName,
   BuildContext context,

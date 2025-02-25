@@ -71,6 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Compute the welcome text.
+
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
         ? "Welcome!"
         : "Welcome ${formatPreferredName(preferredName!)}!";
@@ -96,11 +97,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              // icon: const Icon(
-              //   Icons.menu,
-              //   color: Colors.grey,
-              //   size: 30,
-              // ),
               icon: GradientIcon(
                 icon: Icons.menu,
                 size: 40.0,
@@ -185,6 +181,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SizedBox(height: 30),
 
                         // If credentials are present, show the "Continue" button.
+                        
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(

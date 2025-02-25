@@ -250,7 +250,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
             const SizedBox(height: 20),
 
-            // Bottom image
+            // Bottom image.
+            
             Image.asset(
               'assets/images/bottom_dot_two.png',
               width: MediaQuery.of(context).size.width,

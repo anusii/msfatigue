@@ -91,10 +91,12 @@ class _QuestionPageState extends State<QuestionPage> {
     final List<String> loadedQuestions = _parseQuestions(data);
 
     // Initialize the bloc with the question list.
+
     final surveyBloc = context.read<SurveyBloc>();
     surveyBloc.add(InitializeSurvey(questions: loadedQuestions));
 
     // Load saved responses from SharedPreferences.
+
     final prefs = await SharedPreferences.getInstance();
     final savedResponsesString = prefs.getString('surveyResponses');
     if (savedResponsesString != null && savedResponsesString.isNotEmpty) {
@@ -110,6 +112,7 @@ class _QuestionPageState extends State<QuestionPage> {
       }
     }
     // Load last saved question index.
+    
     final int lastIndex = prefs.getInt('lastQuestionIndex') ?? 0;
     surveyBloc.add(SetQuestionIndex(lastIndex));
   }
