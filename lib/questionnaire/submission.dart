@@ -284,7 +284,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: MarkdownBody(
                   selectable: true,
-                  data: "Thank You.\n\nAre you ready to submit now?",
+                  data: '''Thank You.\n\nAre you ready to submit now?''',
                   styleSheet: MarkdownStyleSheet(
                     p: const TextStyle(
                         fontSize: 26, fontWeight: FontWeight.w500),

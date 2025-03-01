@@ -365,7 +365,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     child: MarkdownBody(
-                      data: '${currentIndex + 1}. $currentQuestion',
+                      data: '''${currentIndex + 1}. $currentQuestion''',
                       styleSheet: MarkdownStyleSheet(
                         p: const TextStyle(fontSize: 18),
                         listIndent: 32.0,

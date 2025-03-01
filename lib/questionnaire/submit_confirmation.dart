@@ -91,8 +91,8 @@ class SubmitConfirmation extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                 child: MarkdownBody(
                   selectable: true,
-                  data: "Thank you for your participation.\n\n"
-                      "Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.",
+                  data: '''Thank you for your participation.\n\n
+                      Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.''',
                   styleSheet: MarkdownStyleSheet(
                     p: const TextStyle(fontSize: 18),
                   ),
