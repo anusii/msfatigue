@@ -181,7 +181,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SizedBox(height: 30),
 
                         // If credentials are present, show the "Continue" button.
-                        
+
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
@@ -214,7 +214,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     });
                                   } else {
                                     // If credentials are invalid, schedule showing the error dialog.
-                                    
+
                                     if (!mounted) return;
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {

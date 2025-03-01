@@ -76,7 +76,7 @@ class _ReviewPanelState extends State<ReviewPanel> {
           );
         } else {
           // Handle the case where no data is available.
-          
+
           return const Center(child: Text('No data available'));
         }
       },

@@ -83,19 +83,19 @@ class ClearSurvey extends SurveyEvent {
 
 class SurveyState extends Equatable {
   /// The original ordered list of questions.
-  
+
   final List<String> questionList;
 
   /// A map where each key is a question and its value is the answer (or null if unanswered).
-  
+
   final Map<String, String?> responses;
 
   /// The index (in the ordered list) of the currently displayed question.
-  
+
   final int currentQuestionIndex;
 
   /// The survey filename.
-  
+
   final String surveyFilename;
   const SurveyState({
     required this.questionList,

@@ -119,7 +119,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
             MarkdownBody(
               data:
-                  'Please review the [Participant Information Sheet](info) for this research study on MS Fatigue.',
+                  '''Please review the [Participant Information Sheet](info) for this research study on MS Fatigue.''',
               onTapLink: (text, href, title) {
                 if (href == 'info') {
                   Navigator.push(
@@ -143,7 +143,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             MarkdownBody(
               selectable: true,
               data:
-                  "The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).",
+                  '''The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).''',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
@@ -152,7 +152,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             MarkdownBody(
               selectable: true,
               data:
-                  '**Please confirm** *that you have read the Participant Information Sheet provided in the above link and that you hereby give your consent to participate in this study.*',
+                  '''**Please confirm** *that you have read the Participant Information Sheet provided in the above link and that you hereby give your consent to participate in this study.*''',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
@@ -251,7 +251,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             const SizedBox(height: 20),
 
             // Bottom image.
-            
+
             Image.asset(
               'assets/images/bottom_dot_two.png',
               width: MediaQuery.of(context).size.width,

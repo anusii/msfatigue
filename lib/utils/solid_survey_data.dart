@@ -48,7 +48,7 @@ Future<({List<String> files, List<String> subDirs})> solidSurveyData() async {
     );
   } else {
     // Return empty lists with explicit typing as List<String>.
-    
+
     return (files: <String>[], subDirs: <String>[]);
   }
 }

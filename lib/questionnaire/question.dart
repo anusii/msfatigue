@@ -112,7 +112,7 @@ class _QuestionPageState extends State<QuestionPage> {
       }
     }
     // Load last saved question index.
-    
+
     final int lastIndex = prefs.getInt('lastQuestionIndex') ?? 0;
     surveyBloc.add(SetQuestionIndex(lastIndex));
   }
