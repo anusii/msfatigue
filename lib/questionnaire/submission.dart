@@ -1,6 +1,6 @@
 /// Submission screen used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-03-03 12:30:10 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -284,7 +284,13 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: MarkdownBody(
                   selectable: true,
-                  data: '''Thank You.\n\nAre you ready to submit now?''',
+                  data: '''
+
+                  Thank You.
+
+                  Are you ready to submit now?
+
+                  ''',
                   styleSheet: MarkdownStyleSheet(
                     p: const TextStyle(
                         fontSize: 26, fontWeight: FontWeight.w500),

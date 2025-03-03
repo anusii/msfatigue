@@ -1,6 +1,6 @@
 /// SubmitConfirmation screen used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-03-03 12:29:43 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -91,8 +91,16 @@ class SubmitConfirmation extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                 child: MarkdownBody(
                   selectable: true,
-                  data: '''Thank you for your participation.\n\n
-                      Any questions you have already answered will be saved until Midnight. You can come back before then to complete the survey. To continue now, tap **Resume**. Otherwise tap **Finish**.''',
+                  data: '''
+
+                  Thank you for your participation.
+
+                  Any questions you have already answered will be saved until
+                  Midnight. You can come back before then to complete the
+                  survey. To continue now, tap **Resume**. Otherwise tap
+                  **Finish**.
+
+                  ''',
                   styleSheet: MarkdownStyleSheet(
                     p: const TextStyle(fontSize: 18),
                   ),

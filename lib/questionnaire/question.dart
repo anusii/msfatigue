@@ -1,6 +1,6 @@
 /// Question page used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-03-03 12:31:58 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -365,7 +365,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     child: MarkdownBody(
-                      data: '''${currentIndex + 1}. $currentQuestion''',
+                      data: '${currentIndex + 1}. $currentQuestion',
                       styleSheet: MarkdownStyleSheet(
                         p: const TextStyle(fontSize: 18),
                         listIndent: 32.0,

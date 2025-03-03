@@ -1,6 +1,6 @@
 /// Consent page used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-03-03 12:28:35 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -118,8 +118,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
             // Participant Information Sheet link.
 
             MarkdownBody(
-              data:
-                  '''Please review the [Participant Information Sheet](info) for this research study on MS Fatigue.''',
+              data: '''
+
+                  Please review the [Participant Information Sheet](info) for
+                  this research study on MS Fatigue.
+
+                  ''',
               onTapLink: (text, href, title) {
                 if (href == 'info') {
                   Navigator.push(
@@ -142,8 +146,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
             const SizedBox(height: 8),
             MarkdownBody(
               selectable: true,
-              data:
-                  '''The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).''',
+              data: '''
+
+                  The ethical aspects of this research have been approved by the
+                  ANU Human Research Ethics Committee (2024/0698).
+
+                  ''',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
@@ -151,8 +159,13 @@ class _ConsentScreenState extends State<ConsentScreen> {
             const SizedBox(height: 8),
             MarkdownBody(
               selectable: true,
-              data:
-                  '''**Please confirm** *that you have read the Participant Information Sheet provided in the above link and that you hereby give your consent to participate in this study.*''',
+              data: '''
+
+                  **Please confirm** *that you have read the Participant
+                    Information Sheet provided in the above link and that you
+                    hereby give your consent to participate in this study.*
+
+                  ''',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
