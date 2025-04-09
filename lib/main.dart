@@ -1,6 +1,6 @@
 /// A Survey App for MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2024-08-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-04-09 14:52:11 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -24,6 +24,8 @@
 /// Authors: Graham Williams, Zheyuan Xu
 
 library;
+
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -69,7 +71,7 @@ Future<void> main() async {
 
   // Desktop support (if needed).
 
-  if (!kIsWeb && isDesktop(PlatformWrapper())) {
+  if (!kIsWeb && !Platform.isAndroid && isDesktop(PlatformWrapper())) {
     await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
