@@ -3,15 +3,16 @@
 Recorded here are the high level changes for the MSFatigue app.
 
 Guide: Each version update is recorded here with a short user-oriented
-description of the update. Updates in the 0.0.n series are heading
-toward a 0.1 release.
+description of the update. Updates in the 1.0.n series are heading
+toward a 1.1 release.
 
 Run through a browser: https://msfatigue.solidcommunity.au
 
 Binaries to download latest version:
-[**GNU/Linux**](https://solidcommunity.au/msfatigue-dev-linux.zip) -
-[**MacOS**](https://solidcommunity.au/msfatigue-dev-macos.zip) -
-[**Windows**](https://solidcommunity.au/msfatigue-dev-windows-inno.exe).
+[[**Android**](https://solidcommunity.au/installers/msfatigue.apk) -
+[**GNU/Linux**](https://solidcommunity.au/installers/msfatigue-dev-linux.zip) -
+[**MacOS**](https://solidcommunity.au/installers/msfatigue-dev-macos.zip) -
+[**Windows**](https://solidcommunity.au/installers/msfatigue-dev-windows-inno.exe).
 
 ## 1.1 Backend Operational
 
