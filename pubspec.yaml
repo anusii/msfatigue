@@ -17,7 +17,7 @@ dependencies:
   solidpod:
     git:
       url: https://github.com/anusii/solidpod
-      ref: dc/254_refactor_parseTTL
+      ref: dev
   markdown_tooltip: ^0.0.6
   window_manager: ^0.4.3
   universal_io: ^2.2.2
@@ -32,10 +32,6 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.14
-  dart_code_metrics:
-    git:
-      url: https://github.com/anusii/dart-code-metrics.git
-      ref: dev
   flutter_test:
     sdk: flutter
 
