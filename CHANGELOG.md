@@ -15,6 +15,8 @@ Binaries to download latest version:
 
 ## 1.1 Backend Operational
 
++ ANDROID: Support build for mobile. [1.0.1 20250409 gjw]
+
 ## 1.0 Beta Release for Participant Feedback
 
 + Release version 1.0.0 [1.0.0 20250220 gjw]
