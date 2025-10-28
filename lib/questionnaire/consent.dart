@@ -29,16 +29,16 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown_tooltip/markdown_tooltip.dart';
 import 'package:intl/intl.dart';
+import 'package:markdown_tooltip/markdown_tooltip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/question.dart';
-import 'package:msfatigue/widgets/page/dummy_sheet.dart';
-import 'package:msfatigue/widgets/image/image.dart';
-import 'package:msfatigue/welcome.dart';
 import 'package:msfatigue/utils/format_preferred_name.dart';
+import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/image/image.dart';
+import 'package:msfatigue/widgets/page/dummy_sheet.dart';
 
 class ConsentScreen extends StatefulWidget {
   const ConsentScreen({super.key});
@@ -79,8 +79,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
     // Format "Welcome <Name>!" if we have a preferredName.
 
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
-        ? "Welcome!"
-        : "Welcome ${formatPreferredName(preferredName!)}!";
+        ? 'Welcome!'
+        : 'Welcome ${formatPreferredName(preferredName!)}!';
 
     final surveyState = context.read<SurveyBloc>().state;
     final dataResponses = surveyState.responses;
@@ -143,7 +143,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             MarkdownBody(
               selectable: true,
               data:
-                  "The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).",
+                  'The ethical aspects of this research have been approved by the ANU Human Research Ethics Committee (2024/0698).',
               styleSheet: MarkdownStyleSheet(
                 p: const TextStyle(fontSize: 16),
               ),
@@ -229,7 +229,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: MarkdownTooltip(
+                  child: const MarkdownTooltip(
                     message: '''
 
                     By consenting you agree to share your survey answers with
@@ -239,8 +239,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     the **Withdraw** button in the side menu.
 
                     ''',
-                    child: const Text(
-                      "Yes I Consent   ►",
+                    child: Text(
+                      'Yes I Consent   ►',
                       style: TextStyle(fontSize: 16, color: Colors.pink),
                     ),
                   ),
@@ -251,7 +251,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             const SizedBox(height: 20),
 
             // Bottom image.
-            
+
             Image.asset(
               'assets/images/bottom_dot_two.png',
               width: MediaQuery.of(context).size.width,

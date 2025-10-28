@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Thursday 2025-02-06 21:54:30 +1100 Graham Williams>
+# Time-stamp: <Friday 2025-10-24 13:39:19 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -28,8 +28,8 @@ endif
 define INSTALL_HELP
 installs:
 
-  prod     Install $(APP) flutter app into $(PROD)
-  install  Install $(APP) flutter app into $(MINE)
+  prod     Install $(APP) into $(PROD)
+  install  Install $(APP) into $(MINE)
 
 endef
 export INSTALL_HELP
@@ -40,9 +40,9 @@ help::
 ########################################################################
 # LOCAL TARGETS
 
-# Only when the main branch is present will the app be installed into
-# the appname folder on the server. Otherwise the developer's username
-# is used as the install destination.
+# Only when the dev (or main) branch is present will the app be installed
+# into the appname folder on the server. Otherwise the developer's
+# username is used as the install destination.
 
 install: $(USER).install
 
@@ -52,22 +52,33 @@ else
 prod: $(USER).install
 endif
 
-# Build and install a flutter app.
+# Build and install a flutter app on $(APP).host.com
 #
-# 1. Add a DNS A Record entry to the domain server;
-# 2. Add the server name to the appropriate Caddyfile;
-# 3. Clone the relevant git repository on the host server;
-# 4. For production install be sure to be on the main branch;
+# 1. Add a DNS A Record entry to the domain server for the new app;
+# 2. Add the app name to the appropriate Caddyfile;
+# 3. Clone the relevant app git repository on the host server;
+# 4. For production install be sure to be on the main or dev branch as above;
 # 5. `make -n prod` to check what will be done and confirm it looks okay
 # 6. `make prod`
+#
+# 20251024
+#
+#   The `--wasm` build results in Chrome not being able to get a popup
+#   on LOGIN. The error message includes:
+#
+#   Unsupported operation: Cannot create a keyfinder without the
+#   packages dart:html or package:shared_preferences
+#
+#   Works just fine on FireFox.
+#
+#   Revert to JacaScript for now until we resolve the Google Chrome
+#   issue.
 
 %.install:
 	cp web/index.html web/index.html.bak
 	perl -pi -e 's|^  <base href=.*$$|  <base href="/$*/">|' web/index.html
-	flutter build web
+	flutter build web --release --no-wasm-dry-run
 	mv web/index.html.bak web/index.html
-	if [ ! -e $(DEST:$(APP)=$*) ]; then \
-		sudo mkdir $(DEST:$(APP)=$*); \
-	fi
-	sudo rsync -azvh build/web/ $(DEST:$(APP)=$*)
-	sudo chmod -R a+rX $(DEST:$(APP)=$*)
+	ssh solidcommunity.au 'if [ ! -e $(DEST:$(APP)=$*) ]; then echo mkdir /$(DEST:$(APP)=$*); fi'
+	rsync -azvh build/web/ solidcommunity.au:$(DEST:$(APP)=$*) --exclude '*~' --exclude '*.bak'
+	ssh solidcommunity.au sudo chmod -R a+rX $(DEST:$(APP)=$*)

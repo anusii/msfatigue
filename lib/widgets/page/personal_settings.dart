@@ -1,6 +1,6 @@
 /// PersonalSettings widget used in MS Fatigue Project.
 ///
-// Time-stamp: <Wednesday 2025-02-26 08:56:02 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 10:04:37 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -30,7 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:msfatigue/constants/secrets.dart';
+import 'package:msfatigue/constants/secrets.dart.~2~';
 import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/welcome.dart';
 
@@ -82,10 +82,10 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   }
 
   Future<void> _showUpdateDialog() async {
-    final usernameController = TextEditingController(text: username ?? "");
-    final passwordController = TextEditingController(text: password ?? "");
+    final usernameController = TextEditingController(text: username ?? '');
+    final passwordController = TextEditingController(text: password ?? '');
     final preferredNameController =
-        TextEditingController(text: preferredName ?? "");
+        TextEditingController(text: preferredName ?? '');
 
     final updated = await showDialog<bool>(
       context: context,
@@ -94,20 +94,20 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         return StatefulBuilder(
           builder: (ctx, setStateDialog) {
             return AlertDialog(
-              title: const Text("Update Details"),
+              title: const Text('Update Details'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
                       controller: usernameController,
-                      decoration: const InputDecoration(labelText: "Username"),
+                      decoration: const InputDecoration(labelText: 'Username'),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: passwordController,
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        labelText: 'Password',
                         suffixIcon: IconButton(
                           icon: Icon(
                             localShowPassword
@@ -127,7 +127,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     TextField(
                       controller: preferredNameController,
                       decoration:
-                          const InputDecoration(labelText: "Preferred Name"),
+                          const InputDecoration(labelText: 'Preferred Name'),
                     ),
                   ],
                 ),
@@ -135,7 +135,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext, false),
-                  child: const Text("Cancel"),
+                  child: const Text('Cancel'),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -154,7 +154,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                         context: currentContext,
                         builder: (BuildContext errorDialogContext) {
                           return AlertDialog(
-                            title: const Text("Invalid Credentials"),
+                            title: const Text('Invalid Credentials'),
                             content: const Text(
                               "The username or password you entered doesn't match our records.\nPlease check your details carefully and contact the research team if you continue to experience issues.",
                             ),
@@ -163,7 +163,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                                 onPressed: () {
                                   Navigator.of(errorDialogContext).pop();
                                 },
-                                child: const Text("OK"),
+                                child: const Text('OK'),
                               ),
                             ],
                           );
@@ -188,7 +188,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
                     Navigator.pop(context, true);
                   },
-                  child: const Text("Update"),
+                  child: const Text('Update'),
                 ),
               ],
             );
@@ -211,9 +211,9 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
     String passwordDisplay;
     if (password == null || password!.isEmpty) {
-      passwordDisplay = "Not set";
+      passwordDisplay = 'Not set';
     } else {
-      passwordDisplay = _showPassword ? password! : "******";
+      passwordDisplay = _showPassword ? password! : '******';
     }
 
     return Scaffold(
@@ -242,8 +242,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 final prefs = await SharedPreferences.getInstance();
                 if (!mounted) return;
 
-                final username = prefs.getString('msfatigue_username') ?? "";
-                final password = prefs.getString('msfatigue_password') ?? "";
+                final username = prefs.getString('msfatigue_username') ?? '';
+                final password = prefs.getString('msfatigue_password') ?? '';
 
                 if (username == expectedUsername &&
                     password == expectedPassword) {
@@ -273,17 +273,17 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Username:",
+                  'Username:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 SelectableText(
-                  username ?? "Not set",
+                  username ?? 'Not set',
                   style: const TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  "Password:",
+                  'Password:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
@@ -312,13 +312,13 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  "Preferred Name:",
+                  'Preferred Name:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 SelectableText(
                   (preferredName == null || preferredName!.isEmpty)
-                      ? "Not set"
+                      ? 'Not set'
                       : preferredName!,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
@@ -333,13 +333,15 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                           backgroundColor: Colors.white,
                           side: const BorderSide(color: Colors.red, width: 2),
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
+                            vertical: 16,
+                            horizontal: 24,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: const Text(
-                          "Clear Details",
+                          'Clear Details',
                           style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
                       ),
@@ -350,13 +352,15 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                         backgroundColor: Colors.white,
                         side: const BorderSide(color: Colors.blue, width: 2),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 24),
+                          vertical: 16,
+                          horizontal: 24,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text(
-                        "Update Details",
+                        'Update Details',
                         style: TextStyle(fontSize: 16, color: Colors.blue),
                       ),
                     ),
@@ -369,7 +373,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                 ),
                 const Gap(5),
                 const Text(
-                    'If you are experiencing any issues with the app, or need any support please contact, hanna.suominen@anu.edu.au'),
+                  'If you are experiencing any issues with the app, or need any support please contact, hanna.suominen@anu.edu.au',
+                ),
               ],
             ),
           ),

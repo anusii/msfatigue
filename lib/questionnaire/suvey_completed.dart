@@ -29,10 +29,10 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 
+import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-import 'package:msfatigue/questionnaire/welcome_back.dart';
 
 class SurveyCompleted extends StatefulWidget {
   const SurveyCompleted({super.key});
@@ -213,11 +213,11 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Gap(30),
-            Center(
+            const Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Text(
-                  "Your data matters!\n      Thank you",
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  'Your data matters!\n      Thank you',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,
                 ),
@@ -272,7 +272,7 @@ class _SurveyCompletedState extends State<SurveyCompleted> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

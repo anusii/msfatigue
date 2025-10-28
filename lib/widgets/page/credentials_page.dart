@@ -1,6 +1,6 @@
 /// Credentials Page used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 10:03:54 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -29,9 +29,9 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:msfatigue/constants/secrets.dart';
-import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/constants/secrets.dart.~2~';
 import 'package:msfatigue/questionnaire/welcome_back.dart'; // Assuming you have this screen
+import 'package:msfatigue/welcome.dart';
 
 class CredentialsPage extends StatefulWidget {
   const CredentialsPage({super.key});
@@ -60,7 +60,9 @@ class _CredentialsPageState extends State<CredentialsPage> {
     await prefs.setString('msfatigue_username', _usernameController.text);
     await prefs.setString('msfatigue_password', _passwordController.text);
     await prefs.setString(
-        'msfatigue_preferredName', _preferredNameController.text);
+      'msfatigue_preferredName',
+      _preferredNameController.text,
+    );
   }
 
   Future<Map<String, String?>> getCredentials() async {
@@ -91,13 +93,14 @@ class _CredentialsPageState extends State<CredentialsPage> {
         context: context,
         builder: (BuildContext dialogContext) {
           return AlertDialog(
-            title: const Text("Invalid Credentials"),
+            title: const Text('Invalid Credentials'),
             content: const Text(
-                "The username or password is incorrect.Please check and try again.\nIf you still encounter issues, please contact the research team."),
+              'The username or password is incorrect.Please check and try again.\nIf you still encounter issues, please contact the research team.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
-                child: const Text("OK"),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -117,7 +120,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
     // Step 3: Show success message and navigate to the appropriate screen.
 
     scaffoldMessenger.showSnackBar(
-      const SnackBar(content: Text("Successfully registered")),
+      const SnackBar(content: Text('Successfully registered')),
     );
 
     final prefs = await SharedPreferences.getInstance();
@@ -152,7 +155,7 @@ class _CredentialsPageState extends State<CredentialsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Enter Credentials"),
+        title: const Text('Enter Credentials'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -162,14 +165,14 @@ class _CredentialsPageState extends State<CredentialsPage> {
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
-                  labelText: "Username",
+                  labelText: 'Username',
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: "Password",
+                  labelText: 'Password',
                 ),
                 obscureText: true,
               ),
@@ -177,13 +180,13 @@ class _CredentialsPageState extends State<CredentialsPage> {
               TextField(
                 controller: _preferredNameController,
                 decoration: const InputDecoration(
-                  labelText: "Preferred Name",
+                  labelText: 'Preferred Name',
                 ),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: handleSaveCredentials,
-                child: const Text("Save"),
+                child: const Text('Save'),
               ),
             ],
           ),

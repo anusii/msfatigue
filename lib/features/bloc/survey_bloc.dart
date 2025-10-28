@@ -83,19 +83,19 @@ class ClearSurvey extends SurveyEvent {
 
 class SurveyState extends Equatable {
   /// The original ordered list of questions.
-  
+
   final List<String> questionList;
 
   /// A map where each key is a question and its value is the answer (or null if unanswered).
-  
+
   final Map<String, String?> responses;
 
   /// The index (in the ordered list) of the currently displayed question.
-  
+
   final int currentQuestionIndex;
 
   /// The survey filename.
-  
+
   final String surveyFilename;
   const SurveyState({
     required this.questionList,
@@ -128,21 +128,25 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
   final SharedPreferences sharedPreferences;
   final String surveyFilename;
   SurveyBloc({required this.surveyFilename, required this.sharedPreferences})
-      : super(SurveyState(
-          questionList: const [],
-          responses: const {},
-          currentQuestionIndex: 0,
-          surveyFilename: surveyFilename,
-        )) {
+      : super(
+          SurveyState(
+            questionList: const [],
+            responses: const {},
+            currentQuestionIndex: 0,
+            surveyFilename: surveyFilename,
+          ),
+        ) {
     on<InitializeSurvey>((event, emit) {
       final List<String> qList = event.questions;
       final Map<String, String?> responsesMap = {for (var q in qList) q: null};
-      emit(SurveyState(
-        questionList: qList,
-        responses: responsesMap,
-        currentQuestionIndex: 0,
-        surveyFilename: state.surveyFilename,
-      ));
+      emit(
+        SurveyState(
+          questionList: qList,
+          responses: responsesMap,
+          currentQuestionIndex: 0,
+          surveyFilename: state.surveyFilename,
+        ),
+      );
     });
     on<UpdateResponse>((event, emit) {
       final Map<String, String?> newResponses = Map.from(state.responses);
@@ -156,14 +160,20 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
     on<NextQuestion>((event, emit) {
       final int maxIndex = state.questionList.length - 1;
       if (state.currentQuestionIndex < maxIndex) {
-        emit(state.copyWith(
-            currentQuestionIndex: state.currentQuestionIndex + 1));
+        emit(
+          state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex + 1,
+          ),
+        );
       }
     });
     on<PreviousQuestion>((event, emit) {
       if (state.currentQuestionIndex > 0) {
-        emit(state.copyWith(
-            currentQuestionIndex: state.currentQuestionIndex - 1));
+        emit(
+          state.copyWith(
+            currentQuestionIndex: state.currentQuestionIndex - 1,
+          ),
+        );
       }
     });
     on<SetQuestionIndex>((event, emit) {
@@ -175,14 +185,16 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
     });
     on<ClearSurvey>((event, emit) {
       final Map<String, String?> cleared = {
-        for (var q in state.questionList) q: null
+        for (var q in state.questionList) q: null,
       };
-      emit(SurveyState(
-        questionList: state.questionList,
-        responses: cleared,
-        currentQuestionIndex: 0,
-        surveyFilename: state.surveyFilename,
-      ));
+      emit(
+        SurveyState(
+          questionList: state.questionList,
+          responses: cleared,
+          currentQuestionIndex: 0,
+          surveyFilename: state.surveyFilename,
+        ),
+      );
     });
   }
 }

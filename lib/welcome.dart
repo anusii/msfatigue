@@ -1,12 +1,12 @@
 /// A Welcome Page for MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 09:58:05 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Zheyuan Xu
 
@@ -28,16 +28,15 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/consent.dart';
 import 'package:msfatigue/utils/format_preferred_name.dart';
 import 'package:msfatigue/widgets/drawer/side_drawer.dart';
-import 'package:msfatigue/widgets/page/credentials_page.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
+import 'package:msfatigue/widgets/page/credentials_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -73,8 +72,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // Compute the welcome text.
 
     final welcomeText = (preferredName == null || preferredName!.isEmpty)
-        ? "Welcome!"
-        : "Welcome ${formatPreferredName(preferredName!)}!";
+        ? 'Welcome!'
+        : 'Welcome ${formatPreferredName(preferredName!)}!';
 
     // Check if all credentials are present.
 
@@ -181,7 +180,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SizedBox(height: 30),
 
                         // If credentials are present, show the "Continue" button.
-                        
+
                         if (allCredentialsPresent)
                           Center(
                             child: SizedBox(
@@ -194,10 +193,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                                   final storedUsername =
                                       prefs.getString('msfatigue_username') ??
-                                          "";
+                                          '';
                                   final storedPassword =
                                       prefs.getString('msfatigue_password') ??
-                                          "";
+                                          '';
 
                                   // If credentials are valid, schedule navigation to ConsentScreen.
 
@@ -208,13 +207,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                         .addPostFrameCallback((_) {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (_) =>
-                                                const ConsentScreen()),
+                                          builder: (_) => const ConsentScreen(),
+                                        ),
                                       );
                                     });
                                   } else {
                                     // If credentials are invalid, schedule showing the error dialog.
-                                    
+
                                     if (!mounted) return;
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
@@ -223,16 +222,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                         builder: (dialogCtx) {
                                           return AlertDialog(
                                             title: const Text(
-                                                "Registration Error"),
+                                              'Registration Error',
+                                            ),
                                             content: const Text(
-                                              "Your registration details are not recognised.\n\n"
-                                              "Please contact the research team for assistance.",
+                                              'Your registration details are not recognised.\n\n'
+                                              'Please contact the research team for assistance.',
                                             ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () =>
                                                     Navigator.pop(dialogCtx),
-                                                child: const Text("OK"),
+                                                child: const Text('OK'),
                                               ),
                                             ],
                                           );
@@ -244,7 +244,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   side: const BorderSide(
-                                      color: Colors.pink, width: 2),
+                                    color: Colors.pink,
+                                    width: 2,
+                                  ),
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
@@ -254,7 +256,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 child: const Text(
                                   'Continue   ►',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
@@ -315,14 +319,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             width: 2,
                                           ),
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 16),
+                                            vertical: 16,
+                                          ),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
                                         ),
                                         child: const Text(
-                                          "Register",
+                                          'Register',
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,

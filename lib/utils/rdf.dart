@@ -1,6 +1,6 @@
 /// Common utilities for working on RDF data.
 ///
-// Time-stamp: <Wednesday 2024-07-10 09:49:30 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 09:06:15 +1100 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -26,7 +26,6 @@
 library;
 
 import 'package:rdflib/rdflib.dart';
-
 import 'package:solidpod/solidpod.dart' show getWebId;
 
 // Namespace for keys
@@ -58,67 +57,4 @@ Future<String> genTTLStr(
   g.serialize(abbr: 'short');
 
   return g.serializedString;
-}
-
-/// Parse TTL string [ttlStr] and returns the key-value pairs from triples where
-/// Subject: Web ID
-/// Predicate: Key
-/// Object: Value
-
-Future<List<({String key, dynamic value})>> parseTTLStr(String ttlStr) async {
-  assert(ttlStr.isNotEmpty);
-  final g = Graph();
-  g.parseTurtle(ttlStr);
-  final keys = <String>{};
-  final pairs = <({String key, dynamic value})>[];
-  final webId = await getWebId();
-  assert(webId != null);
-  String extract(String str) => str.contains('#') ? str.split('#')[1] : str;
-  for (final t in g.triples) {
-    final sub = t.sub.value as String;
-    if (sub == webId) {
-      final pre = extract(t.pre.value as String);
-      final obj = extract(t.obj.value as String);
-      assert(!keys.contains(pre));
-      keys.add(pre);
-      pairs.add((key: pre, value: obj));
-    }
-  }
-  return pairs;
-}
-
-/// Parses RDF Turtle content to extract survey questions and their corresponding
-/// answers from the triples in the RDF graph.
-
-Future<Map<String, String>> listSurveyQuestions(String content) async {
-  final g = Graph();
-
-  // Parse the Turtle content.
-  g.parseTurtle(content);
-
-  // Initialize the map to hold the questions and answers.
-  final Map<String, String> surveyMap = {};
-
-  // Iterate through the triples in the graph.
-  for (Triple t in g.triples) {
-    String object = t.obj.value;
-
-    // Remove ^^xsd:string and the surrounding quotes.
-    String cleanedObject = object.replaceAll('^^xsd:string', '').trim();
-    cleanedObject = cleanedObject.replaceAll('"', '');
-
-    // The format is {question} {answer}.
-    // Split the string into question and answer based on "} {".
-    final questionAnswerPair = cleanedObject.split('} {');
-
-    if (questionAnswerPair.length == 2) {
-      String question =
-          questionAnswerPair[0].replaceAll('{', '').trim(); // Remove leading {
-      String answer =
-          questionAnswerPair[1].replaceAll('}', '').trim(); // Remove trailing }
-      surveyMap[question] = answer;
-    }
-  }
-
-  return surveyMap;
 }

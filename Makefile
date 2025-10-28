@@ -1,8 +1,8 @@
 ########################################################################
 #
-# Makefile for the MSFatigue Flutter app.
+# Generic Makefile
 #
-# Time-stamp: <Saturday 2025-02-22 05:14:32 +1100 Graham Williams>
+# Time-stamp: <Friday 2025-10-17 10:13:43 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -30,7 +30,7 @@ DEST=/var/www/html/$(APP)
 
 REPO=solidcommunity.au
 RLOC=/var/www/html/installers/
-DWLD=https://$(REPO)/installers
+DWLD=https://$(REPO)/installers/
 
 ########################################################################
 # Supported Makefile modules.
@@ -68,8 +68,9 @@ $(APP):
 
   ginstall   After a github build download bundles and upload to $(REPO)
 
-  flat		Checkout, build, install msfatigue-flat.solidcommunity.au
-  grad		Checkout, build, install msfatigue-grad.solidcommunity.au
+  local	     Install to $(HOME)/.local/share/$(APP)
+    tgz	     Upload the installer to $(REPO)
+  apk	     Upload the installer to $(REPO)
 
 endef
 export HELP
@@ -80,36 +81,25 @@ help::
 ########################################################################
 # LOCAL TARGETS
 
-locals:
-	@echo "This might be the instructions to install $(APP)"
+#
+# Manage the production install on the remote server.
+#
 
-flat:
-	git checkout zy/19_button_solid_color
-	git pull
-	cp web/index.html web/index.html.bak
-	perl -pi -e 's|^  <base href=.*$$|  <base href="/msfatigue-$@/">|' web/index.html
-	flutter build web
-	mv web/index.html.bak web/index.html
-	if [ ! -e /var/www/html/msfatigue-$@ ]; then \
-		sudo mkdir /var/www/html/msfatigue-$@; \
-	fi
-	sudo rsync -azvh build/web/ /var/www/html/msfatigue-$@
-	sudo chmod -R a+rX /var/www/html/msfatigue-$@
-	git checkout dev
+clean::
+	rm -f README.html
 
-grad:
-	git checkout zy/18_new_ui_design
-	git pull
-	cp web/index.html web/index.html.bak
-	perl -pi -e 's|^  <base href=.*$$|  <base href="/msfatigue-$@/">|' web/index.html
-	flutter build web
-	mv web/index.html.bak web/index.html
-	if [ ! -e /var/www/html/msfatigue-$@ ]; then \
-		sudo mkdir /var/www/html/msfatigue-$@; \
-	fi
-	sudo rsync -azvh build/web/ /var/www/html/msfatigue-$@
-	sudo chmod -R a+rX /var/www/html/msfatigue-$@
-	git checkout dev
+# Linux: Install locally.
+
+local: tgz
+	tar zxvf installers/$(APP).tar.gz -C $(HOME)/.local/share/
+
+# Linux: Upload the installers for general access from the repository.
+
+tgz::
+	chmod a+r installers/$(APP)*.tar.gz
+	rsync -avzh installers/$(APP)*.tar.gz $(REPO):/var/www/html/installers/
+	ssh $(REPO) chmod -R go+rX /var/www/html/installers/
+	ssh $(REPO) chmod go=x /var/www/html/installers/
 
 # Android: Upload to Solid Community installers for general access.
 
@@ -119,18 +109,35 @@ grad:
 
 apk::
 	rsync -avzh installers/$(APP).apk $(REPO):$(RLOC)
-	ssh $(REPO) chmod a+r $(RLOC)/$(APP).apk
-	mv -f installers/$(APP)-*.apk installers/ARCHIVE
+	ssh $(REPO) chmod a+r $(RLOC)$(APP).apk
+	mv -f installers/$(APP)-*.apk installers/ARCHIVE/
 	rm -f installers/$(APP).apk
 
+appbundle::
+	rsync -avzh installers/$(APP).aab $(REPO):$(RLOC)
+	ssh $(REPO) chmod a+r $(RLOC)$(APP).aab
+	mv -f installers/$(APP)-*.aab installers/ARCHIVE/
+	rm -f installers/$(APP).aab
+
 deb:
+	@echo "Build $(APP) version $(VER)"
 	(cd installers; make $@)
-	rsync -avzh installers/$(APP)_$(VER)_amd64.deb $(REPO):$(RLOC)/$(APP)_amd64.deb
-	ssh $(REPO) chmod a+r $(RLOC)/$(APP)_amd64.deb
+	rsync -avzh installers/$(APP)_$(VER)_amd64.deb $(REPO):$(RLOC)$(APP)_amd64.deb
+	ssh $(REPO) chmod a+r $(RLOC)$(APP)_amd64.deb
 	wget $(DWLD)/$(APP)_amd64.deb -O $(APP)_amd64.deb
 	wajig install $(APP)_amd64.deb
 	rm -f $(APP)_amd64.deb
-	mv -f installers/$(APP)_*.deb installers/ARCHIVE
+	mv -f installers/$(APP)_*.deb installers/ARCHIVE/
+
+dinstall:
+	wget $(DWLD)$(APP)_amd64.deb -O $(APP)_amd64.deb
+	wajig install $(APP)_amd64.deb
+	rm -f $(APP)_amd64.deb
+
+sinstall:
+	wget $(DWLD)$(APP)_amd64.snap -O $(APP)_amd64.snap
+	sudo snap install --dangerous $(APP)_amd64.snap
+	rm -f $(APP)_amd64.snap
 
 # 20250110 gjw A ginstall of the github built bundles, and the locally
 # built apk installed to the repository and moved into ARCHIVE.
@@ -144,5 +151,5 @@ deb:
 # /usr/bin/rattle. This is working so add deb into the install and now
 # utilise that for the default install on my machine.
 
-ginstall: deb apk
+ginstall: deb apk appbundle prod
 	(cd installers; make $@)

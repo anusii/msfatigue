@@ -1,6 +1,6 @@
 /// Question page used in MS Fatigue Project.
 ///
-// Time-stamp: <Friday 2025-02-16 12:34:33 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 10:04:17 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -31,14 +31,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/questionnaire/suvey_completed.dart';
+import 'package:msfatigue/questionnaire/question_helper.dart';
 import 'package:msfatigue/questionnaire/submission.dart';
+import 'package:msfatigue/questionnaire/suvey_completed.dart';
 import 'package:msfatigue/utils/pod.dart';
 import 'package:msfatigue/widgets/image/image.dart';
 
@@ -53,22 +54,6 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
   String? webId;
-  final List<String> options = [
-    "Strongly disagree",
-    "Disagree",
-    "Agree",
-    "Strongly agree",
-    "Don't know",
-    "Not applicable",
-  ];
-  final List<Color> gradientColors = [
-    const Color(0xFFFFE6EB),
-    const Color(0xFFFFD6DE),
-    const Color(0xFFFFC6D1),
-    const Color(0xFFFFB6C5),
-    const Color.fromARGB(255, 200, 195, 195),
-    const Color.fromARGB(255, 220, 215, 215),
-  ];
 
   @override
   void initState() {
@@ -88,7 +73,7 @@ class _QuestionPageState extends State<QuestionPage> {
     final data = await rootBundle
         .loadString('assets/markdown/fatigue_small_questionnaire.md');
     if (!mounted) return;
-    final List<String> loadedQuestions = _parseQuestions(data);
+    final List<String> loadedQuestions = parseQuestions(data);
 
     // Initialize the bloc with the question list.
 
@@ -112,25 +97,9 @@ class _QuestionPageState extends State<QuestionPage> {
       }
     }
     // Load last saved question index.
-    
+
     final int lastIndex = prefs.getInt('lastQuestionIndex') ?? 0;
     surveyBloc.add(SetQuestionIndex(lastIndex));
-  }
-
-  List<String> _parseQuestions(String data) {
-    final lines = data.split('\n');
-    final List<String> extracted = [];
-    bool isQuestion = false;
-    for (var line in lines) {
-      if (line.startsWith('## Questions')) {
-        isQuestion = true;
-      } else if (line.startsWith('## Answer Options')) {
-        isQuestion = false;
-      } else if (isQuestion && line.trim().isNotEmpty) {
-        extracted.add(line.substring(line.indexOf('.') + 2).trim());
-      }
-    }
-    return extracted;
   }
 
   Future<void> _showEndDialog() async {
@@ -152,16 +121,17 @@ class _QuestionPageState extends State<QuestionPage> {
               children: [
                 const SizedBox(height: 30),
                 const Text(
-                  "Are you sure you want to end now?",
+                  'Are you sure you want to end now?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black),
+                    fontSize: 28,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 40),
                 const Text(
-                  "You can return to the survey any time before midnight.",
+                  'You can return to the survey any time before midnight.',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
@@ -185,11 +155,12 @@ class _QuestionPageState extends State<QuestionPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Yes, end now",
+                        'Yes, end now',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -203,16 +174,18 @@ class _QuestionPageState extends State<QuestionPage> {
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.pink),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       padding: EdgeInsets.zero,
                     ),
                     child: const Center(
                       child: Text(
-                        "No, return to the survey",
+                        'No, return to the survey',
                         style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -230,9 +203,7 @@ class _QuestionPageState extends State<QuestionPage> {
   void _endSurvey() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => SurveyCompleted(),
-      ),
+      MaterialPageRoute(builder: (context) => const SurveyCompleted()),
     );
   }
 
@@ -264,7 +235,7 @@ class _QuestionPageState extends State<QuestionPage> {
             final int currentIndex = state.currentQuestionIndex;
             final int questionTotal = questionList.length;
             if (currentIndex >= questionTotal) {
-              return const Center(child: Text("No more questions."));
+              return const Center(child: Text('No more questions.'));
             }
             final String currentQuestion = questionList[currentIndex];
             String? selectedResponse = state.responses[currentQuestion];
@@ -282,10 +253,12 @@ class _QuestionPageState extends State<QuestionPage> {
                 final List<({String key, dynamic value})> dataRecords = [];
                 int index = 0;
                 for (var entry in dataResponses.entries) {
-                  dataRecords.add((
-                    key: index.toString(),
-                    value: '{${entry.key}} {${entry.value}}'
-                  ));
+                  dataRecords.add(
+                    (
+                      key: index.toString(),
+                      value: '{${entry.key}} {${entry.value}}'
+                    ),
+                  );
                   index++;
                 }
                 await saveToPod(dataRecords, fileName, context);
@@ -311,14 +284,7 @@ class _QuestionPageState extends State<QuestionPage> {
                           top: 16,
                           child: OutlinedButton(
                             onPressed: _showEndDialog,
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: Colors.pink, width: 1.8),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                            ),
+                            style: obStyleEndNow(),
                             child: const Text(
                               'End now',
                               style: TextStyle(color: Colors.pinkAccent),
@@ -331,7 +297,9 @@ class _QuestionPageState extends State<QuestionPage> {
                   const Gap(5),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 0.0, vertical: 8.0),
+                      horizontal: 0.0,
+                      vertical: 8.0,
+                    ),
                     child: Stack(
                       children: [
                         Container(
@@ -347,7 +315,8 @@ class _QuestionPageState extends State<QuestionPage> {
                             height: 6,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                  colors: [Colors.red, Colors.pink]),
+                                colors: [Colors.red, Colors.pink],
+                              ),
                               borderRadius: BorderRadius.circular(3),
                             ),
                           ),
@@ -389,7 +358,9 @@ class _QuestionPageState extends State<QuestionPage> {
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 12.0, horizontal: 16.0),
+                              vertical: 12.0,
+                              horizontal: 16.0,
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? (index >= gradientColors.length - 2
@@ -430,33 +401,14 @@ class _QuestionPageState extends State<QuestionPage> {
                                       .add(PreviousQuestion());
                                 }
                               : null,
-                          icon: Icon(
-                            Icons.arrow_left,
-                            color: (currentIndex > 0)
-                                ? Colors.grey[700]
-                                : Colors.grey,
-                          ),
+                          icon: leftArrow(currentIndex),
                           label: Text(
-                            "Previous  ",
+                            'Previous  ',
                             style: TextStyle(
-                              color: (currentIndex > 0)
-                                  ? Colors.grey[700]
-                                  : Colors.grey,
+                              color: darkLightGrey(currentIndex),
                             ),
                           ),
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: (currentIndex > 0)
-                                  ? Colors.grey.shade700
-                                  : Colors.grey,
-                              width: 2,
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 5),
-                            alignment: Alignment.centerLeft,
-                          ),
+                          style: obStylePrevious(currentIndex),
                         ),
                         const Text(
                           '© 2025 ANU',
@@ -468,34 +420,28 @@ class _QuestionPageState extends State<QuestionPage> {
                               ? handleNext
                               : null,
                           icon: Text(
-                            "  Next",
+                            '  Next',
                             style: TextStyle(
-                              color: (selectedResponse != null &&
-                                      selectedResponse.isNotEmpty)
-                                  ? Colors.pink
-                                  : Colors.grey,
+                              color: pinkGrey(selectedResponse),
                             ),
                           ),
                           label: Icon(
                             Icons.arrow_right,
-                            color: (selectedResponse != null &&
-                                    selectedResponse.isNotEmpty)
-                                ? Colors.pink
-                                : Colors.grey,
+                            color: pinkGrey(selectedResponse),
                             size: 25,
                           ),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
                               width: 2,
-                              color: (selectedResponse != null &&
-                                      selectedResponse.isNotEmpty)
-                                  ? Colors.pink
-                                  : Colors.grey,
+                              color: pinkGrey(selectedResponse),
                             ),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 5),
+                              vertical: 12,
+                              horizontal: 5,
+                            ),
                             alignment: Alignment.centerRight,
                           ),
                         ),

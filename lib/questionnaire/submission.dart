@@ -50,7 +50,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Show a dialog to confirm if the user really wants to end now.
-  
+
   Future<void> _showEndDialog() async {
     showDialog(
       context: context,
@@ -71,7 +71,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
               children: [
                 const SizedBox(height: 30),
                 const Text(
-                  "Are you sure you want to end now?",
+                  'Are you sure you want to end now?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
@@ -81,7 +81,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 ),
                 const SizedBox(height: 40),
                 const Text(
-                  "You can return to the survey any time before midnight.",
+                  'You can return to the survey any time before midnight.',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
@@ -92,7 +92,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SurveyCompleted(),
+                        builder: (context) => const SurveyCompleted(),
                       ),
                     );
                   },
@@ -110,7 +110,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Yes, end now",
+                        'Yes, end now',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "No, return to the survey",
+                        'No, return to the survey',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w300,
@@ -284,10 +284,12 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: MarkdownBody(
                   selectable: true,
-                  data: "Thank You.\n\nAre you ready to submit now?",
+                  data: 'Thank You.\n\nAre you ready to submit now?',
                   styleSheet: MarkdownStyleSheet(
                     p: const TextStyle(
-                        fontSize: 26, fontWeight: FontWeight.w500),
+                      fontSize: 26,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -322,7 +324,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 size: 25,
               ),
               label: Text(
-                "Previous",
+                'Previous',
                 style: TextStyle(color: Colors.grey.shade700),
               ),
               style: OutlinedButton.styleFrom(
@@ -337,7 +339,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
             OutlinedButton.icon(
               onPressed: _handleSubmit,
               icon: const Text(
-                " Submit",
+                ' Submit',
                 style: TextStyle(color: Colors.pink),
               ),
               label:

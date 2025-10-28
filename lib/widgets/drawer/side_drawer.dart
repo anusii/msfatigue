@@ -27,16 +27,15 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:package_info_plus/package_info_plus.dart';
-
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown_tooltip/markdown_tooltip.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:msfatigue/constants/layout.dart';
 import 'package:msfatigue/welcome.dart';
+import 'package:msfatigue/widgets/image/image.dart';
 import 'package:msfatigue/widgets/page/consent_settings.dart';
 import 'package:msfatigue/widgets/page/personal_settings.dart';
-import 'package:msfatigue/widgets/image/image.dart';
 
 class SideDrawer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -237,10 +236,11 @@ class _SideDrawerState extends State<SideDrawer> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const WelcomeScreen()),
+                          builder: (context) => const WelcomeScreen(),
+                        ),
                       );
                     },
-                    child: MarkdownTooltip(
+                    child: const MarkdownTooltip(
                       message: '''
 
                     You can logout from your connection to the storage.

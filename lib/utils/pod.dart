@@ -35,9 +35,12 @@ import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/utils/rdf.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
 
-Future<bool> saveToPod(List<({String key, dynamic value})> dataRecords,
-    String fileName, BuildContext context,
-    {bool isSubmit = false}) async {
+Future<bool> saveToPod(
+  List<({String key, dynamic value})> dataRecords,
+  String fileName,
+  BuildContext context, {
+  bool isSubmit = false,
+}) async {
   if (dataRecords.isEmpty) {
     return false;
   }

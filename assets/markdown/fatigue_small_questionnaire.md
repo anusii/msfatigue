@@ -2,6 +2,7 @@
 
 ## Questions
 
+<!-- markdownlint-disable MD013 -->
 1. I am feeling fatigued after physical activity.
 2. I am feeling fatigued because I have not been mobile or physically active.
 3. I am feeling fatigued after cognitive activity.
@@ -14,12 +15,13 @@
 10. Because of fatigue, I feel like I have no energy to do anything.
 11. Because of fatigue, I am having more difficulty than usual using certain muscles (e.g., lifting my feet).
 12. Because of fatigue, I am feeling clumsier and more uncoordinated than usual.
+<!-- markdownlint-enable MD013 -->
 
 ## Answer Options
 
-1. Strongly disagree  
-2. Disagree  
-3. Agree  
+1. Strongly disagree
+2. Disagree
+3. Agree
 4. Strongly agree
 
 ## Response Options

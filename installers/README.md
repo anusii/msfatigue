@@ -48,6 +48,7 @@ unzip msfatigue-dev-linux.zip -d ${HOME}/.local/share/msfatigue
 
 Then set up your local installation (only required once):
 
+<!-- markdownlint-disable MD013 -->
 ```bash
 ln -s ${HOME}/.local/share/msfatigue/msfatigue ${HOME}/.local/bin/
 wget https://raw.githubusercontent.com/anusii/msfatigue/dev/installers/msfatigue.desktop -O ${HOME}/.local/share/applications/msfatigue.desktop
@@ -55,6 +56,7 @@ sed -i "s/USER/$(whoami)/g" ${HOME}/.local/share/applications/msfatigue.desktop
 mkdir -p ${HOME}/.local/share/icons/hicolor/256x256/apps/
 wget https://github.com/anusii/msfatigue/raw/dev/installers/msfatigue.png -O ${HOME}/.local/share/icons/hicolor/256x256/apps/msfatigue.png
 ```
+<!-- markdownlint-enable MD013 -->
 
 To install for any user on the computer:
 
@@ -84,7 +86,7 @@ app should then run without the warning next time.
 ## Web -- No Installation Required
 
 No installer is required for a browser based experience of
-Msfatigue. Simply visit https://msfatigue.solidcommunity.au.
+Msfatigue. Simply visit [web](https://msfatigue.solidcommunity.au).
 
 Also, your Web browser will provide an option in its menus to install
 the app locally, which can add an icon to your home screen to start

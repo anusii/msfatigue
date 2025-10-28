@@ -25,20 +25,19 @@
 
 library;
 
-import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:solidpod/solidpod.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solidpod/solidpod.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
 import 'package:msfatigue/questionnaire/question.dart';
 import 'package:msfatigue/widgets/dialog/show_warning.dart';
+import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 import 'package:msfatigue/widgets/gradient_icon.dart';
 import 'package:msfatigue/widgets/image/image.dart';
-import 'package:msfatigue/widgets/drawer/side_drawer.dart';
 
 class WelcomeBackScreen extends StatefulWidget {
   const WelcomeBackScreen({super.key});
@@ -110,7 +109,9 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   }
 
   int _findFirstUnansweredIndex(
-      Map<String, String?> responses, List<String> questionList) {
+    Map<String, String?> responses,
+    List<String> questionList,
+  ) {
     for (int i = 0; i < questionList.length; i++) {
       final answer = responses[questionList[i]];
       if (answer == null || answer.isEmpty) {
@@ -128,9 +129,9 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     final bool hasPartialData =
         dataResponses.values.any((r) => r != null && r.isNotEmpty);
     final userNameString = (_preferredName == null || _preferredName!.isEmpty)
-        ? ""
-        : ", $_preferredName";
-    final greetingText = "Welcome back$userNameString!";
+        ? ''
+        : ', $_preferredName';
+    final greetingText = 'Welcome back$userNameString!';
 
     return Scaffold(
       key: _scaffoldKey,
@@ -172,9 +173,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 child: Text(
                   greetingText,
                   style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
                   textAlign: TextAlign.start,
                 ),
               ),
@@ -200,7 +202,9 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   final int firstUnanswered = _findFirstUnansweredIndex(
-                      dataResponses, surveyState.questionList);
+                    dataResponses,
+                    surveyState.questionList,
+                  );
                   surveyBloc.add(SetQuestionIndex(firstUnanswered));
                   Navigator.push(
                     context,
@@ -213,7 +217,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
                 ),
@@ -233,9 +238,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     child: Text(
                       'Take me to the survey',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -249,7 +255,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 onPressed: () {
                   showWarning(
                     'Take Care',
-                    "When you are ready you can always come back to the survey.",
+                    'When you are ready you can always come back to the survey.',
                     context,
                   );
                 },
@@ -257,14 +263,16 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 1),
                   side: const BorderSide(color: Colors.pink),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: const Text(
                   "I'm too tired to do the survey today",
                   style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

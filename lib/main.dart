@@ -1,12 +1,12 @@
 /// A Survey App for MS Fatigue Project.
 ///
-// Time-stamp: <Wednesday 2025-04-09 14:52:11 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 09:57:24 +1100 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Zheyuan Xu
 
@@ -27,17 +27,18 @@ library;
 
 import 'dart:io' show Platform;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:msfatigue/features/bloc/survey_bloc.dart';
-import 'package:msfatigue/welcome.dart';
-import 'package:msfatigue/utils/create_survey.dart';
 import 'package:msfatigue/questionnaire/welcome_back.dart'; // Import the WelcomeBackScreen
+
+import 'package:msfatigue/utils/create_survey.dart';
+import 'package:msfatigue/welcome.dart';
 
 // Dummy implementations for desktop support.
 
@@ -54,9 +55,9 @@ Future<void> main() async {
 
   // Check if credentials exist.
 
-  final username = prefs.getString('msfatigue_username') ?? "";
-  final password = prefs.getString('msfatigue_password') ?? "";
-  final preferredName = prefs.getString('msfatigue_preferredName') ?? "";
+  final username = prefs.getString('msfatigue_username') ?? '';
+  final password = prefs.getString('msfatigue_password') ?? '';
+  final preferredName = prefs.getString('msfatigue_preferredName') ?? '';
 
   final bool allCredentialsPresent =
       username.isNotEmpty && password.isNotEmpty && preferredName.isNotEmpty;
