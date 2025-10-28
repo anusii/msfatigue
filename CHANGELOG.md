@@ -14,8 +14,9 @@ Binaries to download latest version:
 [**MacOS**](https://solidcommunity.au/installers/msfatigue-dev-macos.zip) -
 [**Windows**](https://solidcommunity.au/installers/msfatigue-dev-windows-inno.exe).
 
-## 1.1 Backend Operational
+## 1.2 Backend Operational
 
++ Review and cleanup [1.1.0 20251029 gjw]
 + ANDROID: Support build for mobile. [1.0.1 20250409 gjw]
 
 ## 1.0 Beta Release for Participant Feedback
