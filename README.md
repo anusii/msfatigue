@@ -67,15 +67,13 @@ questions:
 
 ![Question Screen](assets/screenshots/question_iphone_border.png)
 
-
 Once the survey has been completed you will be presented with the
 Appreciation screen:
 
 ![Appreciation Screen](assets/screenshots/splash_iphone_border.png)
 
-
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-29 15:47:50 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-29 15:48:39 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
