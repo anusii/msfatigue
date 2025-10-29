@@ -30,7 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:msfatigue/constants/secrets.dart.~2~';
+import 'package:msfatigue/constants/secrets.dart';
 import 'package:msfatigue/questionnaire/welcome_back.dart';
 import 'package:msfatigue/welcome.dart';
 
