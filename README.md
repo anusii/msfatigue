@@ -14,10 +14,11 @@ MSFatigue is a demonstrator app designed to conduct surveys while
 saving personal responses to the user's Pod hosted in their Data Vault
 on any [Solid Server](https://solidproject.org/about) of choice. The
 participant can then choose to share the survey results with the
-researcher(s).  The results remain withthe participant, and could be
-shared with other researchers in the future. The app was implemented
-by the [ANU Software Innovation Institute](https://sii.anu.edu.au) and
-written by [Zheyuan Xu](https://github.com/zheyxu) and [Graham
+researcher(s).  The results remain under the control of the
+participant, and could be shared with other researchers in the
+future. The app was implemented by the [ANU Software Innovation
+Institute](https://sii.anu.edu.au) and written by [Zheyuan
+Xu](https://github.com/zheyxu) and [Graham
 Williams](https://github.com/gjwgit) with design by Susan Hansen and
 Michelle Pickrell.
 
@@ -73,7 +74,7 @@ Appreciation screen:
 ![Appreciation Screen](assets/screenshots/splash_iphone_border.png)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-29 15:48:39 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-29 15:50:01 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
