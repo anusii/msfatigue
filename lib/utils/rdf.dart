@@ -1,6 +1,6 @@
 /// Common utilities for working on RDF data.
 ///
-// Time-stamp: <Wednesday 2025-10-29 09:06:15 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-29 21:29:42 +1100 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -30,7 +30,7 @@ import 'package:solidpod/solidpod.dart' show getWebId;
 
 // Namespace for keys
 
-const String appTerms = 'https://solidcommunity.au/predicates/terms#';
+const String appTerms = 'https://solidcommunity.au/' 'predicates/terms#';
 
 /// Serialise key/value pairs [keyValuePairs] in TTL format where
 /// Subject: Web ID
