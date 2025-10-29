@@ -50,8 +50,32 @@ a Pull Request. The app is implemented in
 [solidpod](https://pub.dev/packages/solidpod) for Flutter to manage
 the Solid Pod interactions. Thank you.
 
+## Introduction
+
+On starting up the app you are greeted with the Welcome screen:
+
+![Welcome Screen](assets/screenshots/welcome_iphone_border.png)
+
+The About screen provides some of the background to the project:
+
+![About Screen](assets/screenshots/about_iphone_border.png)
+
+Questions are presented, one question per screen, with the options for
+the participant to choose the answer. The questions are sourced from a
+markdown file, allowing the survey designers to easily update the
+questions:
+
+![Question Screen](assets/screenshots/question_iphone_border.png)
+
+
+Once the survey has been completed you will be presented with the
+Appreciation screen:
+
+![Appreciation Screen](assets/screenshots/splash_iphone_border.png)
+
+
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-29 12:36:57 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-29 15:47:50 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
